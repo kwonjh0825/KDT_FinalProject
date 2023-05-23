@@ -4,12 +4,51 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, User
 from .models import Accountsbyplanet
 
 class CustomUserChangeForm(UserChangeForm):
+    password = None
+
+    last_name = forms.CharField(
+        label = "성",
+        widget = forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "홍",
+                "style": "height: 47px;",
+            }),
+    )
+
+    first_name = forms.CharField(
+        label = "이름",
+        widget = forms.TextInput(
+            attrs = {
+                "class": "form-control",
+                "placeholder": "길동",
+                "style": "height: 47px;",
+            }),
+    )
+
+    email = forms.CharField(
+        label = "이메일",
+        widget = forms.TextInput(
+            attrs = {
+                "class": "form-control",
+                "placeholder": "gildong@google.com",
+                "style": "height: 47px;",
+            }),
+    )
     class Meta(UserChangeForm.Meta):
         model = get_user_model()
-        fields = ('username', 'first_name', 'email', )
+        fields = ('username', 'first_name', 'last_name', 'email', )
 
 
 class AccountsbyplanetForm(forms.ModelForm):
+    nickname = forms.CharField(
+        label = "닉네임",
+        widget = forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "style": "height: 47px;",
+            }),
+    )
     class Meta:
         model = Accountsbyplanet
         fields = ('nickname', 'profile_image', 'backgounrd_image')
@@ -100,5 +139,4 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = get_user_model()
         fields = ('username', 'last_name', 'first_name', 'email', 'password1', 'password2',)
-
 
