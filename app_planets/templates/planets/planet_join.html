@@ -1,0 +1,14 @@
+{% extends 'base_nav.html' %}
+{% load static %}
+
+{% block title %}
+행성 이용 약관
+{% endblock title %}
+
+{% block content %}
+<div>
+  {% for termofservices in termsofservices %}
+    <h3>{{ termofservices.content|linebreaksbr }}</h3>
+  {% endfor %}
+</div>
+{% endblock content %}
