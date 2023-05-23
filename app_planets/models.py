@@ -9,7 +9,7 @@ from app_accounts.models import Accountsbyplanet
 
 
 class Planet(models.Model):
-    name             = models.CharField(max_length=20)
+    name             = models.CharField(max_length=20, unique=True)
     description      = models.TextField()
     category_choices = (('Tech','Tech'), ('Game','Game'), ('Music','Music'), ('Sprots','Sports'), ('Food','Food'), ('Hobby','Hobby'))
     category         = models.CharField(max_length=20, choices=category_choices)
@@ -22,7 +22,7 @@ class Planet(models.Model):
         null       = True,
     )
     plan_category    = (('Free', 'Free'), ('Premium', 'Primium'))
-    plan             = models.CharField(max_length=10, choices=plan_category)
+    plan             = models.CharField(max_length=10, choices=plan_category, default='Free')
     maximum_capacity = models.DecimalField(default=50, max_digits=1000, decimal_places=0)
     created_by       = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_at       = models.DateTimeField(auto_now_add=True)
