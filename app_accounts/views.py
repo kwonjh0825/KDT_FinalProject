@@ -4,10 +4,43 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from .models import Accountsbyplanet
 from app_planets.models import Planet
-from .forms import AccountsbyplanetForm
+from .forms import AccountsbyplanetForm, CustomAutentication, CustomUserCreationForm
+from django.contrib.auth import login as auth_login
+from django.contrib.auth import logout as auth_logout
+
 
 def login(request):
-    return render(request, 'accounts/login.html')
+    if request.method == 'POST':
+        form = CustomAutentication(request, request.POST)
+        if form.is_valid():
+            auth_login(request, form.get_user())
+            return redirect('planets:main')
+    else:
+        form = CustomAutentication()
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'accounts/login.html', context)
+
+
+def signup(request):
+    if request.user.is_authenticated:
+        return redirect('planets:main')
+    
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST, request.FILES)
+        if form.is_valid():
+            user = form.save()
+            auth_login(request, user)
+            return redirect('planets:main')
+    else:
+        form = CustomUserCreationForm()
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'accounts/signup.html', context)
 
 # 최상위 프로필
 def profile(request, username):
@@ -69,3 +102,4 @@ def planet_profile_update(request, planet_name, user_pk):
         'planet_user_update_form': planet_user_update_form,
     }
     return render(request, 'accounts/planet_update.html', context)
+
