@@ -1,0 +1,11 @@
+{% extends 'base_nav.html' %}
+{% block title %}
+  id 찾기 결과
+{% endblock title %}
+
+{% block content %}
+  <h1>id 찾기 결과</h1>
+
+  <p>입력하신 정보의 ID는 {{user_found.username}} 입니다. </p> 
+  <a href="accounts:login">로그인 페이지로 이동</a>
+{% endblock content %}
