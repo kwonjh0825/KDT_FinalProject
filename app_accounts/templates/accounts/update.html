@@ -8,8 +8,13 @@
 </head>
 <body>
     <div class="container">
-        <h1>최상위 프로필 업데이트 임시 페이지입니다. base 상속도 안함</h1>
+        <h1>최상위 프로필 업데이트 임시 페이지입니다.</h1>
         <h1>회원정보수정</h1>
+        <form action="{% url 'accounts:profile_update' %}" method="post">
+            {% csrf_token %}
+            {{form.as_p}}
+            <button type="submit">수정하기</button>
+        </form>
     </div>
     
 
