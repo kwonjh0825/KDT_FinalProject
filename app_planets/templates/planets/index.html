@@ -26,6 +26,7 @@ main
         <div>
           {{ post.content }}
           {{ post.created_time }}
+          {{ post.accountbyplanet.nickname }}
           {% if post.image %}
             <img src="{{ post.image.url }}" alt="{{ post.image }}">
           {% endif %}

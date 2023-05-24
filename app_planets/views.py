@@ -97,8 +97,7 @@ def index(request, planet_name):
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
-            post_account_by_planet = get_object_or_404(Accountsbyplanet, pk=request.user.pk)
-            post.accountbyplanet = post_account_by_planet
+            post.accountbyplanet = Accountsbyplanet.objects.get(planet=planet, user=request.user)
             post.planet = planet
             post.save()
             return redirect('planets:index', planet_name)

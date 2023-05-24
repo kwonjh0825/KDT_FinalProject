@@ -1,3 +1,4 @@
+import os
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
@@ -54,6 +55,7 @@ class Post(models.Model):
     updated_at      = models.DateTimeField(auto_now=True)
     tags            = TaggableManager()
 
+    # post 시간 표시
     @property
     def created_time(self):
         time = datetime.now(tz=timezone.utc) - self.created_at
@@ -69,6 +71,13 @@ class Post(models.Model):
             return str(time.days) + '일 전'
         else:
             return self.created_at.strftime('%Y-%m-%d')
+    
+    # post 삭제시 image file 삭제
+    def delete(self, *args, **kwargs):
+        if self.image:
+            if os.path.isfile(self.image.path):
+                os.remove(self.image.path)
+        super().delete(*args, **kwargs)
 
 
 class Comment(models.Model):
