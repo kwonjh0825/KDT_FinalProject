@@ -155,18 +155,18 @@ def planet_admin(request, planet_name):
 @login_required
 def planet_tos_admin(request, planet_name):
     planet = Planet.objects.get(name=planet_name)
-    TOSs = TermsOfServices.objects.filter(Planet_id=planet.pk)
+    TOSs = TermsOfService.objects.filter(Planet_id=planet.pk)
     length = TOSs.count()
     if request.method == 'POST':
         termsofservice_count = int(request.POST.get('termsofservice_count', 0))
         # 기존 약관 DB 삭제
-        old_term = TermsOfServices.objects.filter(Planet=planet)
+        old_term = TermsOfService.objects.filter(Planet=planet)
         old_term.delete()
         
         # 이용 약관 저장
         for i in range(1, termsofservice_count + 1):
             term_content = request.POST.get(f'term_content_{i}', '')
-            TermsOfServices.objects.create(Planet=planet, order=i, content=term_content)
+            TermsOfService.objects.create(Planet=planet, order=i, content=term_content)
 
         return redirect('planets:main')
     

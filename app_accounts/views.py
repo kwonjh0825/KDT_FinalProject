@@ -145,19 +145,17 @@ class find_id(View):
 
 # 계정 삭제
 @login_required
-class delete(View):
-    def post(self, request):
-        # 계정 정보 삭제 후 로그아웃
-        request.user.delete()
-        auth_logout(request)
-        return redirect('planets:main')
+def delete(request):
+    # 계정 정보 삭제 후 로그아웃
+    request.user.delete()
+    auth_logout(request)
+    return redirect('planets:main')
 
 # 로그아웃
 @login_required
-class logout(View):
-    def post(self, request):
-        auth_logout(request)
-        return redirect('planets:main')
+def logout(request):
+    auth_logout(request)
+    return redirect('planets:main')
 
 # 비밀번호 초기화 이메일 전송
 def password_reset_request(request):
