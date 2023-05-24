@@ -2,11 +2,12 @@ import os
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
+from django.utils.text import slugify
 from datetime import timedelta, datetime
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 from taggit.managers import TaggableManager
-from app_accounts.models import Accountsbyplanet
+from app_accounts.models import Accountbyplanet
 
 
 class Planet(models.Model):
@@ -15,7 +16,7 @@ class Planet(models.Model):
     category_choices = (('Tech','Tech'), ('Game','Game'), ('Music','Music'), ('Sprots','Sports'), ('Food','Food'), ('Hobby','Hobby'))
     category         = models.CharField(max_length=20, choices=category_choices)
     image            = ProcessedImageField(
-        upload_to  = 'planet/',
+        upload_to  = 'planets/',
         processors = [ResizeToFill(256,128)],
         format     = 'JPEG',
         options    = {'quality' : 100},
@@ -31,6 +32,13 @@ class Planet(models.Model):
     created_at       = models.DateTimeField(auto_now_add=True)
     updated_at       = models.DateTimeField(auto_now=True)
 
+    # planets 삭제시 image file 삭제
+    def delete(self, *args, **kwargs):
+        if self.image:
+            if os.path.isfile(self.image.path):
+                os.remove(self.image.path)
+        super().delete(*args, **kwargs)
+
 
 class TermsOfService(models.Model):
     Planet = models.ForeignKey(Planet, on_delete=models.CASCADE)
@@ -40,9 +48,15 @@ class TermsOfService(models.Model):
 
 class Post(models.Model):
     content = models.TextField()
-    emotion = models.ManyToManyField(Accountsbyplanet, related_name='emotion_post', through='Emote')
+    emotion = models.ManyToManyField(Accountbyplanet, related_name='emotion_post', through='Emote')
+
+    # 이미지 저장 위치 지정
+    def upload_to_directory(instance, filename):
+        planet_name_slug = slugify(instance.planet.name)
+        return 'planets/posts/{}/{}'.format(planet_name_slug, filename)
+
     image   = ProcessedImageField(
-        upload_to  = 'planets/posts/',
+        upload_to = upload_to_directory,
         processors = [ResizeToFill(400,400)],
         format     = 'JPEG',
         options    = {'quality' : 100},
@@ -50,7 +64,7 @@ class Post(models.Model):
         null       = True,
     )
     planet          = models.ForeignKey(Planet, on_delete=models.CASCADE)
-    accountbyplanet = models.ForeignKey(Accountsbyplanet, on_delete=models.CASCADE)
+    accountbyplanet = models.ForeignKey(Accountbyplanet, on_delete=models.CASCADE)
     created_at      = models.DateTimeField(auto_now_add=True)
     updated_at      = models.DateTimeField(auto_now=True)
     tags            = TaggableManager()
@@ -71,7 +85,7 @@ class Post(models.Model):
             return str(time.days) + '일 전'
         else:
             return self.created_at.strftime('%Y-%m-%d')
-    
+
     # post 삭제시 image file 삭제
     def delete(self, *args, **kwargs):
         if self.image:
@@ -82,11 +96,11 @@ class Post(models.Model):
 
 class Comment(models.Model):
     content    = models.TextField()
-    emotion    = models.ManyToManyField(Accountsbyplanet, related_name='emotion_comment', through='Emote')
+    emotion    = models.ManyToManyField(Accountbyplanet, related_name='emotion_comment', through='Emote')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     post       = models.ForeignKey(Post, on_delete=models.CASCADE)
-    accountsbyplanet = models.ForeignKey(Accountsbyplanet, on_delete=models.CASCADE)
+    accountsbyplanet = models.ForeignKey(Accountbyplanet, on_delete=models.CASCADE)
 
     @property
     def created_time(self):
@@ -109,5 +123,5 @@ class Comment(models.Model):
 class Emote(models.Model):
     post             = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
     comment          = models.ForeignKey(Comment, on_delete=models.CASCADE, null=True)
-    accountsbyplanet = models.ForeignKey(Accountsbyplanet, on_delete=models.CASCADE)
+    accountsbyplanet = models.ForeignKey(Accountbyplanet, on_delete=models.CASCADE)
     emotion          = models.CharField(max_length=10)

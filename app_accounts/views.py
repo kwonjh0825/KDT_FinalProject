@@ -2,9 +2,9 @@ from django.shortcuts import render, redirect
 from .forms import CustomUserChangeForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
-from .models import Accountsbyplanet, User
+from .models import Accountbyplanet, User
 from app_planets.models import Planet
-from .forms import AccountsbyplanetForm, CustomAutentication, CustomUserCreationForm, CustomSetPasswordForm
+from .forms import AccountbyplanetForm, CustomAutentication, CustomUserCreationForm, CustomSetPasswordForm
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.views import View
@@ -60,7 +60,7 @@ def signup(request):
 def profile(request, username):
     User = get_user_model()
     user = User.objects.get(username=username)
-    user_by_planets = Accountsbyplanet.objects.filter(user=user)
+    user_by_planets = Accountbyplanet.objects.filter(user=user)
 
     context = {
         'user': user,
@@ -90,7 +90,7 @@ def profile_update(request):
 # 행성별 프로필
 def planet_profile(request, planet_name, user_pk):
     planet = Planet.objects.get(name=planet_name)
-    user_by_planet = Accountsbyplanet.objects.filter(planet=planet, user=user_pk)
+    user_by_planet = Accountbyplanet.objects.filter(planet=planet, user=user_pk)
 
     context = {
         'user_by_planet':user_by_planet,
@@ -101,16 +101,16 @@ def planet_profile(request, planet_name, user_pk):
 @login_required
 def planet_profile_update(request, planet_name, user_pk):
     planet = Planet.objects.get(name=planet_name)
-    user_by_planet = Accountsbyplanet.objects.filter(planet=planet, user=user_pk)
+    user_by_planet = Accountbyplanet.objects.filter(planet=planet, user=user_pk)
 
     if user_by_planet.user == request.user:
         if request.method == 'POST':
-            planet_user_update_form = AccountsbyplanetForm(request.POST, instance=user_by_planet)
+            planet_user_update_form = AccountbyplanetForm(request.POST, instance=user_by_planet)
             if planet_user_update_form.is_valid():
                 planet_user_update_form.save()
                 return redirect('accounts:planet_profile', planet_name, user_pk)
         else:
-            planet_user_update_form = AccountsbyplanetForm(instance=user_by_planet)
+            planet_user_update_form = AccountbyplanetForm(instance=user_by_planet)
 
     context = {
         'planet_user_update_form': planet_user_update_form,
