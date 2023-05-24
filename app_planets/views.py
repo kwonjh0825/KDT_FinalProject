@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Planet, TermsOfServices, Post, Emote
-from app_accounts.models import Accountsbyplanet
+from .models import Planet, TermsOfService, Post, Emote
 from .forms import PlanetForm, PostForm
+from app_accounts.models import Accountsbyplanet
+from app_accounts.forms import AccountsbyplanetForm
 
 EMOTIONS = [
     {'label': '좋아요', 'value': 1},
@@ -41,9 +42,9 @@ def planet_create(request):
                 term_content = request.POST.get(f'term_content_{i}', '')
 
                 # 이용 약관 DB Create
-                TermsOfServices.objects.create(Planet=planet, order=i, content=term_content)
+                TermsOfService.objects.create(Planet=planet, order=i, content=term_content)
 
-            return redirect('planets:main')
+            return redirect('planets:planet_join', planet.name)
     else:
         form = PlanetForm()
     context = {
@@ -52,13 +53,32 @@ def planet_create(request):
     return render(request, 'planets/planet_create.html', context)
 
 
-# 행성 가입 시 이용 약관 페이지
+# 행성 가입
 @login_required
 def planet_join(request, planet_name):
     planet = Planet.objects.get(name=planet_name)
-    termsofservices = TermsOfServices.objects.filter(Planet_id=planet.pk)
+
+    # 이미 행성에 계정이 있는 경우
+    if Accountsbyplanet.objects.filter(planet=planet, user=request.user).exists():
+        return redirect('planets:index', planet_name)
+    
+    termsofservice = TermsOfService.objects.filter(Planet_id=planet.pk)
+
+    if request.method == 'POST':
+        form = AccountsbyplanetForm(request.POST, request.FILES)
+        if form.is_valid():
+            accountsbyplanet = form.save(commit=False)
+            accountsbyplanet.planet = planet
+            accountsbyplanet.user = request.user
+            accountsbyplanet.save()
+            return redirect('planets:index', planet_name)
+    else:
+        form = AccountsbyplanetForm()
+
     context = {
-        'termsofservices': termsofservices,
+        'form': form,
+        'termsofservice': termsofservice,
+        'planet': planet,
     }
     return render(request, 'planets/planet_join.html', context)
 
@@ -72,6 +92,7 @@ def index(request, planet_name):
         return redirect('planets:main')
     
     posts = Post.objects.filter(planet=planet).order_by('-pk')
+    
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
@@ -83,6 +104,7 @@ def index(request, planet_name):
             return redirect('planets:index', planet_name)
     else:
         form = PostForm()
+
     context = {
         'form': form,
         'planet': planet,
@@ -91,6 +113,16 @@ def index(request, planet_name):
     return render(request, 'planets/index.html', context)
 
 
+# 행성 삭제
+@login_required
+def planet_delete(request, planet_name):
+    planet = Planet.objects.get(name=planet_name)
+    if planet.created_by == request.user:
+        planet.delete()
+    return redirect('planets:main')
+
+
+# 게시글 삭제
 @login_required
 def post_delete(request, planet_name, post_pk):
     post = Post.objects.get(pk=post_pk)

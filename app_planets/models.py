@@ -31,7 +31,7 @@ class Planet(models.Model):
     updated_at       = models.DateTimeField(auto_now=True)
 
 
-class TermsOfServices(models.Model):
+class TermsOfService(models.Model):
     Planet = models.ForeignKey(Planet, on_delete=models.CASCADE)
     order = models.IntegerField()
     content = models.CharField(max_length=100, null=False, blank=False)
