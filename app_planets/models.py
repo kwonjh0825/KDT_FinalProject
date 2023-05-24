@@ -23,6 +23,8 @@ class Planet(models.Model):
     )
     plan_category    = (('Free', 'Free'), ('Premium', 'Primium'))
     plan             = models.CharField(max_length=10, choices=plan_category, default='Free')
+    is_public_category = (('Private', 'Private'), ('Public', 'Public'))
+    is_public        = models.CharField(max_length=10, choices=is_public_category, default='Private')
     maximum_capacity = models.DecimalField(default=50, max_digits=1000, decimal_places=0)
     created_by       = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_at       = models.DateTimeField(auto_now_add=True)
