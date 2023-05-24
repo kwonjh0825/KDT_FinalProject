@@ -15,6 +15,6 @@ main
   <p>{{user}}님 안녕하세요</p>
   {% endif %}
   
-  <a href="{% url 'accounts:profile' user.username %}">프로필</a>
+  <a href="{% url 'accounts:profile' user %}">프로필</a>
 </div>
 {% endblock content %}

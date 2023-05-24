@@ -4,11 +4,24 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from .models import Accountsbyplanet, User
 from app_planets.models import Planet
-from .forms import AccountsbyplanetForm, CustomAutentication, CustomUserCreationForm
+from .forms import AccountsbyplanetForm, CustomAutentication, CustomUserCreationForm, CustomSetPasswordForm
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.views import View
 from django.contrib import messages
+from django.conf import settings
+from django.urls import reverse_lazy
+
+# 이메일
+from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import send_mail, BadHeaderError
+from django.http import HttpResponse
+from django.utils.http import urlsafe_base64_encode
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes
+# 비밀번호 리셋
+from django.contrib.auth.views import PasswordResetConfirmView
 
 def login(request):
     if request.method == 'POST':
@@ -146,3 +159,53 @@ class logout(View):
         auth_logout(request)
         return redirect('planet:main')
 
+# 비밀번호 초기화 이메일 전송
+def password_reset_request(request):
+    if request.method == "POST":
+        password_reset_form = PasswordResetForm(request.POST)
+        if password_reset_form.is_valid():
+            data = password_reset_form.cleaned_data['email'] # 폼에서 이메일 추출
+            associated_users = get_user_model().objects.filter(email=data) # 유저 검색
+
+            # 유재 존재 여부
+            if associated_users.exists():                
+                for user in associated_users:
+                    subject = '[캣츠모스] 비밀번호 초기화' # 이메일 제목
+                    email_template_name = "accounts/password_reset_email.txt" #이메일 내용
+                    c = {
+                        "email": user.email,
+                        # local: '127.0.0.1:8000', prod: 'givwang.herokuapp.com'
+                        'domain': '127.0.0.1:8000', #settings.HOSTNAME
+                        'site_name': '캣츠모스',
+                        # MTE4
+                        "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                        "user": user,
+                        # Return a token that can be used once to do a password reset for the given user.
+                        'token': default_token_generator.make_token(user),
+                        # local: http, prod: https
+                        'protocol': 'http', #settings.PROTOCOL,
+                    }
+                    email = render_to_string(email_template_name, c)
+                    try:
+                        send_mail(subject, email, settings.EMAIL_HOST_USER , [user.email], fail_silently=False)
+                    except BadHeaderError:
+                        return HttpResponse('Invalid header found.')
+                    return redirect("accounts:password_reset_done")
+        
+            else: # 유저가 존재 하지 않음
+                messages.error(request, "존재하지 않는 이메일 주소입니다.")
+                
+    else:
+        password_reset_form = PasswordResetForm()
+
+    password_reset_form = PasswordResetForm()
+    return render(
+        request=request,
+        template_name='accounts/password_reset.html',
+        context={'password_reset_form': password_reset_form}
+    )
+
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    form_class = CustomSetPasswordForm
+    success_url = reverse_lazy('planets:main')
