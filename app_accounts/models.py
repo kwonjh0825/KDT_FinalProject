@@ -8,6 +8,7 @@ from imagekit.processors import ResizeToFill
 class User(AbstractUser):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    email = models.CharField(max_length=255, unique=True)
     
 
 class Accountsbyplanet(models.Model):
@@ -30,6 +31,7 @@ class Accountsbyplanet(models.Model):
     )
     followings = models.ManyToManyField('self',
                                         symmetrical=False,
+                                        blank=True,
                                         related_name='followers')
     user     = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='accountsbyplanet')
     planet   = models.ForeignKey('app_planets.Planet', on_delete=models.CASCADE)

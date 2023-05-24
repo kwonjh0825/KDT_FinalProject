@@ -150,14 +150,14 @@ class delete(View):
         # 계정 정보 삭제 후 로그아웃
         request.user.delete()
         auth_logout(request)
-        return redirect('planet:main')
+        return redirect('planets:main')
 
 # 로그아웃
 @login_required
 class logout(View):
     def post(self, request):
         auth_logout(request)
-        return redirect('planet:main')
+        return redirect('planets:main')
 
 # 비밀번호 초기화 이메일 전송
 def password_reset_request(request):

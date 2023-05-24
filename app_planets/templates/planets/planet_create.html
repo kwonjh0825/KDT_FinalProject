@@ -7,43 +7,22 @@
 
 {% block content %}
 <div>
-  <div>
-    <form action="{% url 'planets:planet_create' %}" method="POST" enctype="multipart/form-data">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <div id="terms-of-services">
-        <h3>Terms of Services</h3>
-        <input type="hidden" id="num-terms" name="num_terms" value="0">
+  <form action="{% url 'planets:planet_create' %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div id="terms-of-service">
+      <h3>Terms of Service</h3>
+      <input type="hidden" id="num-terms" name="termsofservice_count" value="0">
+  
+      <div id="term-fields-container"></div>
+  
+      <button type="button" id="add-term-btn">Add Term</button>
+    </div>
     
-        <div id="term-fields-container"></div>
-    
-        <button type="button" id="add-term-btn">Add Term</button>
-      </div>
-      
-      <input type="submit" value="행성 만들기">
-    </form>
-  </div>
+    <input type="submit" value="행성 만들기">
+  </form>
 </div>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const addTermBtn = document.getElementById('add-term-btn');
-    const termFieldsContainer = document.getElementById('term-fields-container');
-    let termCount = 0;
 
-    addTermBtn.addEventListener('click', function () {
-      termCount++;
-
-      const termField = document.createElement('div');
-      termField.innerHTML = `
-        <label for="term_content_${termCount}">Term Content:</label>
-        <input type="text" id="term_content_${termCount}" name="term_content_${termCount}">
-        <br>
-      `;
-
-      termFieldsContainer.appendChild(termField);
-      document.getElementById('num-terms').value = termCount;
-    });
-  });
-</script>
+<script src="{% static 'js/planet_create.js' %}"></script>
 {% endblock content %}
