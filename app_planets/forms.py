@@ -6,6 +6,7 @@ from taggit.forms import TagField
 class PlanetForm(forms.ModelForm):
     class Meta:
         model = Planet
+
         fields = ('name', 'description', 'category', 'is_public', 'image', 'maximum_capacity',)
         labels = {
             'name': '행성 이름', 

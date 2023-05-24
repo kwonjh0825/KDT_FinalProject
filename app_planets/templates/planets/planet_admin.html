@@ -1,0 +1,16 @@
+{% extends 'base_nav.html' %}
+
+{% block title %}
+  planet settings
+{% endblock title %}
+
+{% block content %}
+  <h1>planet settings</h1>
+  <form action="{% url 'planets:planet_admin' planet.name %}" method="POST">
+    {% csrf_token %}
+    {{form_planet.as_p}}
+    <input type="submit" value="완료">
+  </form>
+
+  <a href="{% url 'planets:planet_tos_admin' planet.name %}">약관 수정</a>
+{% endblock content %}
