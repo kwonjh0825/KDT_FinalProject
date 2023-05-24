@@ -9,7 +9,8 @@
 <div>
   {% for planet in planets %}
     {{ planet.name }}
-    <img src="{% if planet.image %} {{ planet.image.url}} {% else %} {% static 'img/no_planet_img.png' %} {% endif %}" alt="" style="width:300px;">
+    <img src="{% if planet.image %} {{ planet.image.url}} {% else %} {% static 'img/no_planet_img.png' %} {% endif %}" alt="image" style="width:300px;">
+    <a href="{% url 'planets:planet_join' planet.name %}">join</a>
   {% endfor %}
 </div>
 {% endblock content %}
