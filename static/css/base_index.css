@@ -9,3 +9,15 @@ body {
   font-family: 'LINESeedKR-Bd', 'serif';
 }
 
+.side-bar {
+  max-width: 280px;
+}
+
+.profile-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 5rem;
+  height: 5rem;
+  overflow: hidden;
+}

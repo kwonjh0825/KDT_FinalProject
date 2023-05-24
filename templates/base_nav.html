@@ -4,9 +4,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}main{% endblock title %}</title>
+  <title>{% block title %}{% endblock title %}</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/base_nav.css' %}">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet"/>
   {% block head %}{% endblock head %}
 
   <style>
@@ -16,20 +17,74 @@
 </head>
 
 <body>
-  <div class="sticky top-0 w-full z-[1]">
-    <nav class="bg-[#282c37]">
-      <div class="py-4">
-        <p>universe</p>
-        <div class="flex justify-between items-center justify-end">
-          {% comment %} <a href="{% url 'accounts:login' %}">로그인</a>
-          <a href="{% url 'accounts:signup' %}">회원가입</a> {% endcomment %}
+  <!-- nav 바-->
+  <nav class="mx-auto sticky top-0 w-full bg-[#191b22] z-[1]">
+    <div class="mx-auto flex justify-between space-between font-bold p-5 max-w-[768px]">
+      <p class='text-2xl text-[#ffd951] p-1'>Catsmos</p> <!-- 로고 위치 -->
+      <div class="flex hidden sm:block">
+        <a href="#" class="text-sm text-white p-3">서버</a>
+        <a href="#" class="text-sm text-white p-3">앱</a>
+        <!-- Dropdown button -->
+        <a id="dropdownHoverButton" data-dropdown-toggle="dropdownHover" data-dropdown-trigger="hover" class="text-white text-sm px-4 py-2.5 text-center inline-flex items-center" href="#" role="button">추가 정보<svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></a>
+        <!-- Dropdown menu -->
+        <div id="dropdownHover" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44">
+          <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownHoverButton">
+            <li>
+              <a href="#" class="block px-4 py-2 hover:bg-gray-100">블로그</a>
+            </li>
+            <li>
+              <a href="#" class="block px-4 py-2 hover:bg-gray-100">문서</a>
+            </li>
+            <li>
+              <a href="#" class="block px-4 py-2 hover:bg-gray-100">지원</a>
+            </li>
+            <li>
+              <a href="#" class="block px-4 py-2 hover:bg-gray-100">브랜딩</a>
+            </li>
+          </ul>
+        </div>
+        <a href="#" class="text-sm text-white p-3">Verification</a>
+        <!-- Dropdown button -->
+        <a id="dropdownHoverButton2" data-dropdown-toggle="dropdownHover" data-dropdown-trigger="hover" class="text-white text-sm px-4 py-2.5 text-center inline-flex items-center" href="#" role="button">추가 정보<svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></a>
+        <!-- Dropdown menu -->
+        <div id="dropdownHover" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44">
+          <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownHoverButton2">
+            <li>
+              <a href="#" class="block px-4 py-2 hover:bg-gray-100">블로그</a>
+            </li>
+            <li>
+              <a href="#" class="block px-4 py-2 hover:bg-gray-100">문서</a>
+            </li>
+            <li>
+              <a href="#" class="block px-4 py-2 hover:bg-gray-100">지원</a>
+            </li>
+            <li>
+              <a href="#" class="block px-4 py-2 hover:bg-gray-100">브랜딩</a>
+            </li>
+          </ul>
         </div>
       </div>
-    </nav>
+      <div class="sm:hidden p-1">
+        <svg viewBox="0 0 32 32" width="30" height="30" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 32 32"><path d="M4 10h24a2 2 0 0 0 0-4H4a2 2 0 0 0 0 4zm24 4H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4zm0 8H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4z" fill="#ffd951" class="fill-000000"></path></svg>
+      </div>
+    </div>
+  </nav>
+  
+<!--   <a href="{% url 'accounts:login' %}">로그인</a>
+    <a href="{% url 'accounts:signup' %}">회원가입</a> -->
+
+
+  <!-- content -->
+  <div class="max-w-[768px] h-screen">
+    <div>
+      {% block content %}
+      {% endblock content %}
+    </div>
   </div>
-    
-    {% block content %}
-    {% endblock content %}
-  </div>
+
 </body>
+<script type="text/javascript" src="/static/js/base_nav.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
+{% block script %}
+{% endblock script %}
 </html>
