@@ -1,0 +1,62 @@
+{% extends 'base_nav.html' %}
+{% block title %}
+  term of services admin
+{% endblock title %}
+
+{% block content %}
+  <h1>term of service admin</h1>
+  <form action="{% url 'planets:planet_tos_admin' planet.name %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div id="terms-of-service">
+      <h3>Terms of Service</h3>
+      <input type="hidden" id="num-terms" name="termsofservice_count" value="{{length}}">
+      <div id="term-fields-container">
+        {% for TOS in TOSs %}
+          <div>
+            <label for="term_content_{{forloop.counter}}">Term Content:</label>
+            <input type="text" id="term_content_{{forloop.counter}}" name="term_content_{{forloop.counter}}" value="{{TOS.content}}">
+            <button type="button" class="delete-term-btn" data-term-count="{{forloop.counter}}">Delete</button>
+            <br>
+          </div>
+        {% endfor %}
+        </div>
+      <button type="button" id="add-term-btn">Add Term</button>
+    </div>
+    
+    <input type="submit" value="완료">
+  </form>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const addTermBtn = document.getElementById('add-term-btn');
+      const termFieldsContainer = document.getElementById('term-fields-container');
+      let termCount = document.getElementById('num-terms').value;
+    
+      addTermBtn.addEventListener('click', function () {
+        termCount++;
+    
+        const termField = document.createElement('div');
+        termField.innerHTML = `
+          <label for="term_content_${termCount}">Term Content:</label>
+          <input type="text" id="term_content_${termCount}" name="term_content_${termCount}">
+          <button type="button" class="delete-term-btn" data-term-count="${termCount}">Delete</button>
+          <br>
+        `;
+    
+        termFieldsContainer.appendChild(termField);
+        document.getElementById('num-terms').value = termCount;
+      });
+    
+      termFieldsContainer.addEventListener('click', function (event) {
+        if (event.target.classList.contains('delete-term-btn')) {
+          const termCount = event.target.getAttribute('data-term-count');
+          const termField = document.getElementById(`term_content_${termCount}`).parentNode;
+          termField.remove();
+          document.getElementById('num-terms').value = termFieldsContainer.children.length;
+        }
+      });
+    });
+  </script>
+
+
+{% endblock content %}

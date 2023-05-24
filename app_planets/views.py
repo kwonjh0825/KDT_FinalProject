@@ -98,3 +98,51 @@ def post_delete(request, planet_name, post_pk):
     if Accountsbyplanet.objects.get(user=request.user.pk, planet=planet) == post.accountbyplanet:
         post.delete()
     return redirect('planets:index', planet_name)
+
+# 행성 관리 페이지
+@login_required
+def planet_admin(request, planet_name):
+    planet = Planet.objects.get(name=planet_name)
+    # tos = TermsOfServices.objects.filter(Planet_id=planet.pk)
+    if request.method == 'POST':
+        form_planet = PlanetForm(request.POST, instance=planet)
+        
+        if form_planet.is_valid():
+            form_planet.save()
+            
+            return redirect('planets:main')
+    else:
+        form_planet = PlanetForm(instance=planet)
+    
+    context = {
+        'form_planet': form_planet, 
+        'planet': planet,
+    }
+    return render(request, 'planets/planet_admin.html', context)
+
+# 행성 약관 관리 페이지
+@login_required
+def planet_tos_admin(request, planet_name):
+    planet = Planet.objects.get(name=planet_name)
+    TOSs = TermsOfServices.objects.filter(Planet_id=planet.pk)
+    length = TOSs.count()
+    if request.method == 'POST':
+        termsofservice_count = int(request.POST.get('termsofservice_count', 0))
+        # 기존 약관 DB 삭제
+        old_term = TermsOfServices.objects.filter(Planet=planet)
+        old_term.delete()
+        
+        # 이용 약관 저장
+        for i in range(1, termsofservice_count + 1):
+            term_content = request.POST.get(f'term_content_{i}', '')
+            TermsOfServices.objects.create(Planet=planet, order=i, content=term_content)
+
+        return redirect('planets:main')
+    
+    else:
+        context = {
+            'planet': planet,
+            'TOSs': TOSs,
+            'length': length,
+        }
+        return render(request, 'planets/planet_tos_admin.html', context)

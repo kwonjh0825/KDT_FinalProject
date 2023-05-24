@@ -10,4 +10,6 @@ urlpatterns = [
     path('planets/<str:planet_name>/join/', views.planet_join, name='planet_join'),
     path('planets/<str:planet_name>/', views.index, name='index'),
     path('planets/<str:planet_name>/<int:post_pk>/delete/', views.post_delete, name='post_delete'),
+    path('planets/<str:planet_name>/admin/', views.planet_admin, name='planet_admin'),
+    path('planets/<str:planet_name>/admin/tos/', views.planet_tos_admin, name='planet_tos_admin'),
 ]
