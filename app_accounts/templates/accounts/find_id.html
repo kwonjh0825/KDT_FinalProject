@@ -1,0 +1,37 @@
+{% extends 'base_nav.html' %}
+{% load static %}
+
+{% block title %}
+ID 찾기
+{% endblock title %}
+
+{% block content %}
+<h1>ID 찾기</h1>
+
+{% if message %}
+  <script>
+    alert('{{message}}')
+  </script>
+{% endif %}
+
+<form action={% url 'accounts:find_id' %} method="POST">
+  {% csrf_token %}
+  <div>
+    <label for="email">이메일</label>
+    <input type="text" name="email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+  </div>
+
+  <div>
+    <label for="first_name">성</label>
+    <input type="text" name="first_name" required>
+  </div>
+  
+  <div>
+    <label for="last_name">이름</label>
+    <input type="text" name="last_name" required>
+  </div>
+  <input type="submit" value="찾기">
+</form>
+
+{% endblock content %}
+

@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_nav.html' %}
 {% load static %}
 
 {% block title %}
@@ -6,5 +6,11 @@
 {% endblock title %}
 
 {% block content %}
-<h1>login</h1>
+<div class="form-login">
+  <form action="{% url 'accounts:login' %}" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="로그인">
+  </form>
+</div>
 {% endblock content %}

@@ -1,0 +1,38 @@
+{% extends 'base_nav.html' %}
+{% load static %}
+
+{% block title %}
+행성 프로필 생성
+{% endblock title %}
+
+{% block content %}
+<div>
+  {% for termofservice in termsofservice %}
+    <h3>{{ termofservice.order }} {{ termofservice.content|linebreaksbr }}</h3>
+  {% endfor %}
+  <h3>위 이용 약관에 동의하십니까?</h3>
+  <input type="checkbox" id="terms-checkbox"> 이용 약관에 동의합니다.
+</div>
+<div>
+  <form id="profile-form" action="{% url 'planets:planet_join' planet.name %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button id="create-profile-btn" type="submit">행성 프로필 생성</button>
+  </form>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const termsCheckbox = document.getElementById('terms-checkbox');
+    const profileForm = document.getElementById('profile-form');
+
+    profileForm.addEventListener('submit', function(e) {
+      if (!termsCheckbox.checked) {
+        e.preventDefault();
+        alert('이용 약관에 동의해야 합니다.');
+      }
+    });
+  });
+</script>
+
+{% endblock content %}

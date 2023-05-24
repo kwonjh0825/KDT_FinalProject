@@ -1,0 +1,28 @@
+{% extends 'base_nav.html' %}
+{% load static %}
+
+{% block title %}
+행성 생성
+{% endblock title %}
+
+{% block content %}
+<div>
+  <form action="{% url 'planets:planet_create' %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div id="terms-of-service">
+      <h3>Terms of Service</h3>
+      <input type="hidden" id="num-terms" name="termsofservice_count" value="0">
+  
+      <div id="term-fields-container"></div>
+  
+      <button type="button" id="add-term-btn">Add Term</button>
+    </div>
+    
+    <input type="submit" value="행성 만들기">
+  </form>
+</div>
+
+
+<script src="{% static 'js/planet_create.js' %}"></script>
+{% endblock content %}

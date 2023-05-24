@@ -11,6 +11,9 @@ main
 
 {% block content %}
 <div>
-
+  {% if request.user.is_authenticated %}
+  <p>{{user}}님 안녕하세요</p>
+  <a href="{% url 'accounts:profile' user %}">프로필</a>
+  {% endif %}
 </div>
 {% endblock content %}
