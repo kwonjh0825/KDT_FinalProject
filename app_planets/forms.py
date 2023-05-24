@@ -1,5 +1,5 @@
 from django import forms
-from .models import Planet
+from .models import Planet, Post
 from taggit.forms import TagField
 
 
@@ -15,3 +15,15 @@ class PlanetForm(forms.ModelForm):
             'maximum_capacity': '행성 최대 인원',
         }
 
+
+class PostForm(forms.ModelForm):
+    tags = TagField(required=False)
+    class Meta:
+        model = Post
+        fields = ('content', 'image', 'tags',)
+        labels = {
+            'content': '내용',
+            'image': '사진',
+            'tags': '태그',
+        }
+        

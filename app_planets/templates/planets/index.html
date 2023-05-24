@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_nav.html' %}
 {% load static %}
 
 {% block title %}
@@ -14,7 +14,28 @@ main
     
   </div>
   <div>
-
+    <form action="{% url 'planets:index' planet.name %}" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" value="게시글 작성">
+    </form>
+  </div>
+  <div>
+    {% if posts %}
+      {% for post in posts %}
+        <div>
+          {{ post.content }}
+          {{ post.created_time }}
+          {% if post.image %}
+            <img src="{{ post.image.url }}" alt="{{ post.image }}">
+          {% endif %}
+        </div>
+        <form action="{% url 'planets:post_delete' planet.name post.pk %}" method="POST">
+          {% csrf_token %}
+          <button type='submit'>삭제</button>
+        </form>
+      {% endfor %}
+    {% endif %}
   </div>
   <div class="right-side-bar">
     
