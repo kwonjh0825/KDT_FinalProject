@@ -1,4 +1,4 @@
-{% extends 'base_nav.html' %}
+{% extends 'base_index.html' %}
 {% load static %}
 
 {% block title %}
@@ -6,6 +6,8 @@
 {% endblock title %}
 
 {% block content %}
+<h2 class="title mb-5">상품 등록하기</h2>
+
 <div>
   <form action="{% url 'planets:planet_create' %}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
