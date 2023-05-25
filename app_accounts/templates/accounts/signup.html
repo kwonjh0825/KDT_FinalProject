@@ -1,4 +1,4 @@
-{% extends 'base_nav.html' %}
+{% extends 'base_accounts.html' %}
 {% load static %}
 
 {% block title %}
@@ -7,7 +7,7 @@
 
 {% block content %}
 <div>
-  <div>
+  <div class="text-black">
     <form action="{% url 'accounts:signup' %}" method="POST" enctype="multipart/form-data">
       {% csrf_token %}
       {{ form.as_p }}

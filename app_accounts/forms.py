@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm, PasswordChangeForm
-from .models import Accountsbyplanet
+from .models import Accountbyplanet
 from django.contrib.auth.forms import SetPasswordForm
 
 # 새 비밀번호 변경 form
@@ -57,7 +57,7 @@ class CustomUserChangeForm(UserChangeForm):
         fields = ('username', 'first_name', 'last_name', 'email', )
 
 
-class AccountsbyplanetForm(forms.ModelForm):
+class AccountbyplanetForm(forms.ModelForm):
     nickname = forms.CharField(
         label = "닉네임",
         widget = forms.TextInput(
@@ -67,7 +67,7 @@ class AccountsbyplanetForm(forms.ModelForm):
             }),
     )
     class Meta:
-        model = Accountsbyplanet
+        model = Accountbyplanet
         fields = ('nickname', 'profile_image', 'backgounrd_image')
 
 class CustomAutentication(AuthenticationForm):

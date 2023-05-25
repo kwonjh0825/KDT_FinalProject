@@ -1,3 +1,4 @@
+import os
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
@@ -11,7 +12,7 @@ class User(AbstractUser):
     email = models.CharField(max_length=255, unique=True)
     
 
-class Accountsbyplanet(models.Model):
+class Accountbyplanet(models.Model):
     nickname = models.CharField(max_length=15, blank=False, null=False)
     profile_image  = ProcessedImageField(
         upload_to  = 'accounts/',
@@ -35,4 +36,16 @@ class Accountsbyplanet(models.Model):
                                         related_name='followers')
     user     = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='accountsbyplanet')
     planet   = models.ForeignKey('app_planets.Planet', on_delete=models.CASCADE)
+
+    # accountbyplanet 삭제시 image file 삭제
+    def delete(self, *args, **kwargs):
+        if self.profile_image:
+            path = self.profile_image.path
+            if os.path.isfile(path):
+                os.remove(path)
+        if self.background_image:
+            path = self.background_image.path
+            if os.path.isfile(path):
+                os.remove(path)
+        super().delete(*args, **kwargs)
 

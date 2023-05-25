@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Planet, TermsOfService, Post, Emote
 from .forms import PlanetForm, PostForm
-from app_accounts.models import Accountsbyplanet
-from app_accounts.forms import AccountsbyplanetForm
+from app_accounts.models import Accountbyplanet
+from app_accounts.forms import AccountbyplanetForm
 
 EMOTIONS = [
     {'label': '좋아요', 'value': 1},
@@ -59,21 +59,21 @@ def planet_join(request, planet_name):
     planet = Planet.objects.get(name=planet_name)
 
     # 이미 행성에 계정이 있는 경우
-    if Accountsbyplanet.objects.filter(planet=planet, user=request.user).exists():
+    if Accountbyplanet.objects.filter(planet=planet, user=request.user).exists():
         return redirect('planets:index', planet_name)
     
     termsofservice = TermsOfService.objects.filter(Planet_id=planet.pk)
 
     if request.method == 'POST':
-        form = AccountsbyplanetForm(request.POST, request.FILES)
+        form = AccountbyplanetForm(request.POST, request.FILES)
         if form.is_valid():
-            accountsbyplanet = form.save(commit=False)
-            accountsbyplanet.planet = planet
-            accountsbyplanet.user = request.user
-            accountsbyplanet.save()
+            accountbyplanet = form.save(commit=False)
+            accountbyplanet.planet = planet
+            accountbyplanet.user = request.user
+            accountbyplanet.save()
             return redirect('planets:index', planet_name)
     else:
-        form = AccountsbyplanetForm()
+        form = AccountbyplanetForm()
 
     context = {
         'form': form,
@@ -88,7 +88,7 @@ def index(request, planet_name):
     planet = Planet.objects.get(name=planet_name)
 
     # 행성에 계정이 없는 경우
-    if not request.user.is_authenticated or not Accountsbyplanet.objects.filter(planet=planet, user=request.user).exists():
+    if not request.user.is_authenticated or not Accountbyplanet.objects.filter(planet=planet, user=request.user).exists():
         return redirect('planets:main')
     
     posts = Post.objects.filter(planet=planet).order_by('-pk')
@@ -97,7 +97,7 @@ def index(request, planet_name):
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
-            post.accountbyplanet = Accountsbyplanet.objects.get(planet=planet, user=request.user)
+            post.accountbyplanet = Accountbyplanet.objects.get(planet=planet, user=request.user)
             post.planet = planet
             post.save()
             return redirect('planets:index', planet_name)
@@ -126,9 +126,10 @@ def planet_delete(request, planet_name):
 def post_delete(request, planet_name, post_pk):
     post = Post.objects.get(pk=post_pk)
     planet = Planet.objects.get(name=planet_name)
-    if Accountsbyplanet.objects.get(user=request.user.pk, planet=planet) == post.accountbyplanet:
+    if Accountbyplanet.objects.get(user=request.user.pk, planet=planet) == post.accountbyplanet:
         post.delete()
     return redirect('planets:index', planet_name)
+
 
 # 행성 관리 페이지
 @login_required
@@ -150,6 +151,7 @@ def planet_admin(request, planet_name):
         'planet': planet,
     }
     return render(request, 'planets/planet_admin.html', context)
+
 
 # 행성 약관 관리 페이지
 @login_required
@@ -177,3 +179,4 @@ def planet_tos_admin(request, planet_name):
             'length': length,
         }
         return render(request, 'planets/planet_tos_admin.html', context)
+

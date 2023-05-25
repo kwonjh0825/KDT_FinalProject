@@ -1,0 +1,11 @@
+{% extends 'base_nav.html' %}
+{% block title %}
+계정 활성화
+{% endblock title %}
+
+{% block content %}
+<h2>계정 활성화</h2>
+<p>계정 활성화가 완료되었습니다.</p>
+
+<button><a href="{% url 'accounts:login' %}">로그인</a></button>
+{% endblock content %}
