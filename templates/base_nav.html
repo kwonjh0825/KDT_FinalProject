@@ -16,7 +16,7 @@
   </style>
 </head>
 
-<body class="bg-cover" style="background-image: url('static/img/catsmos.png');">
+<body>
   <!-- nav 바-->
   <nav class="sticky top-0 w-full bg-[#191b22] z-[1]">
     <div class="mx-auto flex justify-between font-bold p-5 max-w-[768px]">
@@ -74,38 +74,27 @@
       </div>
     </div>
   </nav>
-  
-<!--   <a href="{% url 'accounts:login' %}">로그인</a>
-    <a href="{% url 'accounts:signup' %}">회원가입</a> -->
 
 
-
-  <div class="mx-auto h-screen">
+  <main class="mx-auto h-screen">
     {% block content %}
     {% endblock content %}
-    <footer class="ps-5 bg-[#191b22] sm:hidden p-1">
-      <div class='border-b-2 border-[#ffffff] w-full text-base text-[#ffffff] p-3'>
-        <p class='text-xl text-[#ffd951] p-1'>Catsmos</p>
-      </div>
-      <div class='text-sm text-[#ffffff] p-3'>
-        <p class="text-xs text-[#bcbdbf]">#Copyright © 2023 Catsmos. 상표 정책 • 개인정보처리방침 • 상태</p>
-      </div>
-    </footer>
-  </div>
+  </main>
 
-
-  <!-- footer -->
-  <footer class="p-5 bg-[#191b22] hidden sm:block">
-    <div class="mx-auto max-w-[768px]">
-      <div class='border-b-2 border-[#ffffff] w-full text-base text-[#ffffff] p-3'>
-        <p class='text-xl text-[#ffd951] p-1'>Catsmos</p>
-      </div>
-      <div class='text-base text-[#ffffff] p-3'>
-        <p class="text-sm text-[#bcbdbf]">#Copyright © 2023 Catsmos. 상표 정책 • 개인정보처리방침 • 상태</p>
+  <footer class="h-full bg-[#191b22]">
+    <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
+      <div class="md:flex md:justify-between">
+        <div class="mx-auto max-w-[768px]">
+          <div class='border-b-2 border-[#ffffff] w-full text-base text-[#ffffff] p-3'>
+            <p class='text-xl text-[#ffd951] p-1'>Catsmos</p>
+          </div>
+          <div class='text-base text-[#ffffff] p-3'>
+            <p class="text-sm text-[#bcbdbf]">#Copyright © 2023 Catsmos. 상표 정책 • 개인정보처리방침 • 상태</p>
+          </div>
+        </div>
       </div>
     </div>
   </footer>
-
 
 
 </body>

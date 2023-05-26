@@ -10,42 +10,42 @@ main
 {% endblock head %}
 
 {% block content %}
-<div class="flex flex-col justify-center max-w-768 items-center pt-40 p-20"> 
-  <p class="text-4xl text-[#ffffff]">"Create your own world</p>
+<div class="flex flex-col justify-center max-w-768 items-center pt-40 p-20 bg-cover bg-center" style="background-image: url('static/img/catsmos.png');"> 
+  <p class="text-4xl text-[#ffffff]">"Create your own world"</p>
   <p class="text-4xl text-[#ffffff]">"within the confines of Space."</p>
   <p class="text-2xl text-[#ffffff] mt-20">Our service is built with a focus on selective sharing,</p>
   <p class="text-2xl text-[#ffffff]">privacy protection, aligned interests, a closed network, and enhanced security.</p>
-</div>
-<div class="flex justify-center items-center">
-  {% if request.user.is_authenticated %}
-  <div class='flex flex-col'>
-    <div class='flex'>
+  <div class="flex justify-center items-center">
+    {% if request.user.is_authenticated %}
+    <div class='flex flex-col'>
+      <div class='flex'>
+        <a href="{% url 'planets:planet_list' %}">
+          <button class="button-setting m-5">
+            <p class="text-base">행성 둘러보기</p>
+          </button>
+        </a>
+        <a href="{% url 'accounts:profile' user %}">
+          <button class="button-setting m-5">
+            <p class="text-base">프로필</p>
+          </button>
+        </a>
+      </div>
+    </div>
+    {% else %}
+    <div class='flex mb-20'>
       <a href="{% url 'planets:planet_list' %}">
         <button class="button-setting m-5">
           <p class="text-base">행성 둘러보기</p>
         </button>
       </a>
-      <a href="{% url 'accounts:profile' user %}">
+      <a href="{% url 'accounts:login' %}">
         <button class="button-setting m-5">
-          <p class="text-base">프로필</p>
+          <p class="text-base">로그인</p>
         </button>
       </a>
     </div>
-  </div>
-  {% else %}
-  <div class='flex mb-20'>
-    <a href="{% url 'planets:planet_list' %}">
-      <button class="button-setting m-5">
-        <p class="text-base">행성 둘러보기</p>
-      </button>
-    </a>
-    <a href="{% url 'accounts:login' %}">
-      <button class="button-setting m-5">
-        <p class="text-base">로그인</p>
-      </button>
-    </a>
-  </div>
   {% endif %}
+  </div>
 </div>
 {% endblock content %}
 
