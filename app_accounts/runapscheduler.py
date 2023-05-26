@@ -64,6 +64,7 @@ def start():
         
 
     try:
-        scheduler.start() #[주의] 마이그레이트, 마이그레이션 시 주석처리하고 진행해야함!
+        # scheduler.start() #[주의] 마이그레이트, 마이그레이션 시 주석처리하고 진행해야함!
+        pass
     except KeyboardInterrupt:
         scheduler.shutdown()

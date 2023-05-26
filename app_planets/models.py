@@ -2,12 +2,29 @@ import os
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
+from django.utils.timezone import make_aware
 from django.utils.text import slugify
 from datetime import timedelta, datetime
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 from taggit.managers import TaggableManager
 from app_accounts.models import Accountbyplanet
+
+# 시간 표시
+def get_time_difference(created_at):
+    time = datetime.now(tz=timezone.utc) - make_aware(created_at)
+
+    if time < timedelta(minutes=1):
+        return '방금 전'
+    elif time < timedelta(hours=1):
+        return str(int(time.seconds / 60)) + '분 전'
+    elif time < timedelta(days=1):
+        return str(int(time.seconds / 3600)) + '시간 전'
+    elif time < timedelta(days=7):
+        time = datetime.now(tz=timezone.utc).date() - created_at.date()
+        return str(time.days) + '일 전'
+    else:
+        return created_at.strftime('%Y-%m-%d')
 
 
 # 행성
@@ -78,19 +95,7 @@ class Post(models.Model):
     # post 시간 표시
     @property
     def created_time(self):
-        time = datetime.now(tz=timezone.utc) - self.created_at
-
-        if time < timedelta(minutes=1):
-            return '방금 전'
-        elif time < timedelta(hours=1):
-            return str(int(time.seconds / 60)) + '분 전'
-        elif time < timedelta(days=1):
-            return str(int(time.seconds / 3600)) + '시간 전'
-        elif time < timedelta(days=7):
-            time = datetime.now(tz=timezone.utc).date() - self.created_at.date()
-            return str(time.days) + '일 전'
-        else:
-            return self.created_at.strftime('%Y-%m-%d')
+        return get_time_difference(self.created_at)
 
     # post 삭제시 image file 삭제
     def delete(self, *args, **kwargs):
@@ -109,21 +114,10 @@ class Comment(models.Model):
     post       = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     accountbyplanet = models.ForeignKey(Accountbyplanet, on_delete=models.CASCADE)
 
+    # comment 시간 표시
     @property
     def created_time(self):
-        time = datetime.now(tz=timezone.utc) - self.created_at
-
-        if time < timedelta(minutes=1):
-            return '방금 전'
-        elif time < timedelta(hours=1):
-            return str(int(time.seconds / 60)) + '분 전'
-        elif time < timedelta(days=1):
-            return str(int(time.seconds / 3600)) + '시간 전'
-        elif time < timedelta(days=7):
-            time = datetime.now(tz=timezone.utc).date() - self.created_at.date()
-            return str(time.days) + '일 전'
-        else:
-            return self.created_at.strftime('%Y-%m-%d')
+        return get_time_difference(self.created_at)
 
 
 # 행성 내 게시글의 대댓글
@@ -134,21 +128,10 @@ class Recomment(models.Model):
     comment    = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='recomments')
     accountbyplanet = models.ForeignKey(Accountbyplanet, on_delete=models.CASCADE)
 
+    # recomment 시간 표시
     @property
     def created_time(self):
-        time = datetime.now(tz=timezone.utc) - self.created_at
-
-        if time < timedelta(minutes=1):
-            return '방금 전'
-        elif time < timedelta(hours=1):
-            return str(int(time.seconds / 60)) + '분 전'
-        elif time < timedelta(days=1):
-            return str(int(time.seconds / 3600)) + '시간 전'
-        elif time < timedelta(days=7):
-            time = datetime.now(tz=timezone.utc).date() - self.created_at.date()
-            return str(time.days) + '일 전'
-        else:
-            return self.created_at.strftime('%Y-%m-%d')
+        return get_time_difference(self.created_at)
 
 
 # 게시글, 댓글 포함 감정표현
