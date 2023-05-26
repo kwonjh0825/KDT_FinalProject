@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-
+from app_accounts import views as accounts_views
 app_name = 'planets'
 
 urlpatterns = [
@@ -13,4 +13,7 @@ urlpatterns = [
     path('planets/<str:planet_name>/<int:post_pk>/delete/', views.post_delete, name='post_delete'),
     path('planets/<str:planet_name>/admin/', views.planet_admin, name='planet_admin'),
     path('planets/<str:planet_name>/admin/tos/', views.planet_tos_admin, name='planet_tos_admin'),
+    # 행성별 프로필
+    path('planets/<str:planet_name>/profile/<int:user_pk>/', accounts_views.planet_profile, name='planet_profile'),
+    path('planets/<str:planet_name>/profile/<int:user_pk>/update/', accounts_views.planet_profile_update, name='planet_profile_update'),
 ]
