@@ -190,8 +190,13 @@ def comment_delete(request, planet_name, post_pk, comment_pk):
     comment = Comment.objects.get(pk=comment_pk)
     planet = Planet.objects.get(name=planet_name)
     if Accountbyplanet.objects.get(user=request.user.pk, planet=planet) == comment.accountbyplanet:
-        comment.delete()
-        return JsonResponse({'success': True})
+        if Recomment.objects.filter(comment=comment).exists():
+            comment.content = '이미 삭제된 댓글입니다.'
+            comment.save()
+            return JsonResponse({'success': 'Change', 'comment_content': comment.content})
+        else:
+            comment.delete()
+            return JsonResponse({'success': True})
     else:
         return JsonResponse({'success': False})
 
