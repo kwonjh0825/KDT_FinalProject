@@ -1,5 +1,5 @@
 from django import forms
-from .models import Planet, Post
+from .models import Planet, Post, Comment, Recomment
 from taggit.forms import TagField
 
 
@@ -29,3 +29,21 @@ class PostForm(forms.ModelForm):
             'tags': '태그',
         }
         
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('content',)
+        labels = {
+            'content': '내용',
+        }
+
+
+class RecommentForm(forms.ModelForm):
+    class Meta:
+        model = Recomment
+        fields = ('content',)
+        labels = {
+            'content': '내용',
+        }
+

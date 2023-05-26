@@ -21,3 +21,18 @@ body {
   height: 5rem;
   overflow: hidden;
 }
+
+/* 임시 */
+.post-container {
+  background-color: green;
+}
+
+/* 임시 */
+.comment-container {
+  background-color: blue;
+}
+
+/* 임시 */
+.recomment-container {
+  background-color: yellow;
+}
