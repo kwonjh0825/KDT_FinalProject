@@ -191,6 +191,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
           var content = document.createElement('div');
           content.textContent = response.data.content;
+          content.id = 'comment-content';
 
           var createdTime = document.createElement('div');
           createdTime.textContent = response.data.created_time;
@@ -296,7 +297,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       })
       .then(function(response) {
-        if (response.data.success) {
+        if (response.data.success == "Change") {
+          var commentContent = commentContainer.querySelector('#comment-content');
+          commentContent.innerHTML = response.data.comment_content;
+        } else if (response.data.success) {
           commentContainer.remove();
         } else {
           console.error('Comment deletion failed.');

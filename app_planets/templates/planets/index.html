@@ -45,7 +45,7 @@ main
         <div id="comment-list">
           {% for comment in post.comments.all reversed %}
             <div class="comment-container">
-              <div>{{ comment.content }}</div>
+              <div id="comment-content">{{ comment.content }}</div>
               <div>{{ comment.created_time }}</div>
               <div>{{ comment.accountbyplanet.nickname }}</div>
               {% if request.user == comment.accountbyplanet.user %}
