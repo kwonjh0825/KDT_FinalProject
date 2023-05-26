@@ -1,7 +1,10 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
-from .models import Planet, TermsOfService, Post, Emote
-from .forms import PlanetForm, PostForm
+from django.views.decorators.http import require_POST
+from .models import Planet, TermsOfService, Post, Comment, Recomment, Emote
+from .forms import PlanetForm, PostForm, CommentForm, RecommentForm
 from app_accounts.models import Accountbyplanet
 from app_accounts.forms import AccountbyplanetForm
 
@@ -87,25 +90,18 @@ def planet_join(request, planet_name):
 def index(request, planet_name):
     planet = Planet.objects.get(name=planet_name)
 
-    # 행성에 계정이 없는 경우
     if not request.user.is_authenticated or not Accountbyplanet.objects.filter(planet=planet, user=request.user).exists():
         return redirect('planets:main')
     
+    postform = PostForm()
+    commentform = CommentForm()
+    recommentform = RecommentForm()
     posts = Post.objects.filter(planet=planet).order_by('-pk')
-    
-    if request.method == 'POST':
-        form = PostForm(request.POST, request.FILES)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.accountbyplanet = Accountbyplanet.objects.get(planet=planet, user=request.user)
-            post.planet = planet
-            post.save()
-            return redirect('planets:index', planet_name)
-    else:
-        form = PostForm()
 
     context = {
-        'form': form,
+        'postform': postform,
+        'commentform': commentform,
+        'recommentform': recommentform,
         'planet': planet,
         'posts': posts,
     }
@@ -121,14 +117,111 @@ def planet_delete(request, planet_name):
     return redirect('planets:main')
 
 
+# 게시글 생성
+@require_POST
+def post_create(request, planet_name):
+    planet = Planet.objects.get(name=planet_name)
+    form = PostForm(request.POST, request.FILES)
+    if form.is_valid():
+        post = form.save(commit=False)
+        post.accountbyplanet = Accountbyplanet.objects.get(planet=planet, user=request.user)
+        post.planet = planet
+        post.save()
+        form.save_m2m()
+        response_data = {
+            'success': True,
+            'post_pk': post.pk,
+            'content': post.content,
+            'created_time': post.created_time,
+            'nickname': post.accountbyplanet.nickname,
+            'image_url': post.image.url if post.image else None
+        }
+        return JsonResponse(response_data)
+    else:
+        return JsonResponse({'success': False, 'message': 'Form is invalid'})
+
+
 # 게시글 삭제
-@login_required
+@require_POST
 def post_delete(request, planet_name, post_pk):
     post = Post.objects.get(pk=post_pk)
     planet = Planet.objects.get(name=planet_name)
     if Accountbyplanet.objects.get(user=request.user.pk, planet=planet) == post.accountbyplanet:
         post.delete()
-    return redirect('planets:index', planet_name)
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False})
+
+
+# 댓글 생성
+@require_POST
+def comment_create(request, planet_name, post_pk):
+    planet = Planet.objects.get(name=planet_name)
+    post = Post.objects.get(pk=post_pk, planet=planet)
+    form = CommentForm(request.POST)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.post = post
+        comment.accountbyplanet = Accountbyplanet.objects.get(planet=planet, user=request.user)
+        comment.save()
+        response_data = {
+            'success': True,
+            'comment_pk': comment.pk,
+            'content': comment.content,
+            'created_time': comment.created_time,
+            'nickname': comment.accountbyplanet.nickname,
+        }
+        return JsonResponse(response_data)
+    else:
+        return JsonResponse({'success': False, 'message': 'Form is invalid'})
+
+
+# 댓글 삭제
+@require_POST
+def comment_delete(request, planet_name, post_pk, comment_pk):
+    comment = Comment.objects.get(pk=comment_pk)
+    planet = Planet.objects.get(name=planet_name)
+    if Accountbyplanet.objects.get(user=request.user.pk, planet=planet) == comment.accountbyplanet:
+        comment.delete()
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False})
+
+
+# 대댓글 생성
+@require_POST
+def recomment_create(request, planet_name, post_pk, comment_pk):
+    planet = Planet.objects.get(name=planet_name)
+    post = Post.objects.get(pk=post_pk, planet=planet)
+    comment = Comment.objects.get(pk=comment_pk, post=post)
+    form = RecommentForm(request.POST)
+    if form.is_valid():
+        recomment = form.save(commit=False)
+        recomment.comment = comment
+        recomment.accountbyplanet = Accountbyplanet.objects.get(planet=planet, user=request.user)
+        recomment.save()
+        response_data = {
+            'success': True,
+            'recomment_pk': recomment.pk,
+            'content': recomment.content,
+            'created_time': recomment.created_time,
+            'nickname': recomment.accountbyplanet.nickname,
+        }
+        return JsonResponse(response_data)
+    else:
+        return JsonResponse({'success': False, 'message': 'Form is invalid'})
+
+
+# 대댓글 삭제
+@require_POST
+def recomment_delete(request, planet_name, post_pk, comment_pk, recomment_pk):
+    recomment = Recomment.objects.get(pk=recomment_pk)
+    planet = Planet.objects.get(name=planet_name)
+    if Accountbyplanet.objects.get(user=request.user.pk, planet=planet) == recomment.accountbyplanet:
+        recomment.delete()
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False})
 
 
 # 행성 관리 페이지
