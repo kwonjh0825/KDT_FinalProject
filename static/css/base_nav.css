@@ -20,3 +20,8 @@ footer{
   position : relative;
   transform : translateY(-100%);
 }
+
+.bg-color {
+  background-color: #1E2129;
+  color: aliceblue;
+}

@@ -1,23 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <div class="container">
-        <h1>최상위 프로필 업데이트 임시 페이지입니다.</h1>
-        <h1>회원정보수정</h1>
-        <form action="{% url 'accounts:profile_update' %}" method="post">
-            {% csrf_token %}
-            {{form.as_p}}
-            <button type="submit">수정하기</button>
-        </form>
-    </div>
-    
+{% extends 'base_nav.html' %}
+{% load static %}
 
+{% block title %}
+회원정보 수정
+{% endblock title %}
+
+{% block content %}
+<div class="container p-5 mx-auto">
+    <p class="text-4xl">회원정보 수정</p>
+    <form action="{% url 'accounts:profile_update' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="grid my-4 gap-y-3">
+          <label for="last_name" class="block text-sm font-medium text-slate-300">Last Name</label>
+          <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}" class="form-input mt-1 block w-1/2 rounded-md bg-[#101013]">
+      
+          <label for="first_name" class="block text-sm font-medium text-slate-300">First Name</label>
+          <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}" class="form-input mt-1 block w-1/2 rounded-md bg-[#101013]">
+      
+          <label for="email" class="block text-sm font-medium text-slate-300">E-mail</label>
+          <input type="text" id="email" name="email" value="{{ user.email }}" class="form-input mt-1 block w-1/2 rounded-md bg-[#101013]">
+        </div>
+        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">수정하기</button>
+        
+    </form>
+    <hr class="my-4 ">
     
-</body>
-</html>
+    <form action="{% url 'accounts:delete' %}" method="POST" id="delete">
+        {% csrf_token %}
+        <label class="" for="delete">Delete account</label>
+        <br>
+        <input type="hidden" name="next" value="{{ request.path }}" />
+        <p class="text-slate-400">If you wish to delete your account, you can <button onclick="confirmDelete(event)" type="submit" class="text-yellow-500 hover:text-yellow-600 underline">proceed here</button>. You will be asked for confirmation.</p>
+        {% comment %} <button onclick="confirmDelete(event)" type="submit" />회원 탈퇴</button> {% endcomment %}
+    </form>
+</div>
+
+
+{% endblock content %}
+{% block script %}
+<script>
+    function confirmDelete(event) {
+      event.preventDefault()
+  
+      if (confirm("정말로 탈퇴하시겠습니까?")) {
+        document.querySelector("#delete").submit()
+      }
+    }
+  </script>
+{% endblock script %}

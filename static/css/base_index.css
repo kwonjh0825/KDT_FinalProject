@@ -21,3 +21,10 @@ body {
   height: 5rem;
   overflow: hidden;
 }
+
+.bg-color {
+  background-color: #1E2129;
+  color: aliceblue;
+
+}
+
