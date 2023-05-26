@@ -17,9 +17,11 @@ from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse
-from django.utils.http import urlsafe_base64_encode
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
+# from base64 import urlsafe_base64_decode
+from django.urls import reverse
 # 비밀번호 리셋
 from django.contrib.auth.views import PasswordResetConfirmView
 
@@ -37,7 +39,68 @@ def login(request):
     }
     return render(request, 'accounts/login.html', context)
 
+# 메일 주소 인증(회원가입 중)
+def send_verification_email(request, user):
+    token = default_token_generator.make_token(user) # 유저 토큰
+    uid = urlsafe_base64_encode(force_bytes(user.pk)) # uid는 유저pk를 암호화
 
+    # /accounts/activate/MQ/borepp-32ccf88de00baaeff2e47ba38cfea0de/
+    verification_link = reverse('accounts:activate', kwargs={'uidb64': uid, 'token': token})
+    # http://127.0.0.1/accounts/activate/MQ/borepp-32ccf88de00baaeff2e47ba38cfea0de/
+    verification_url = request.build_absolute_uri(verification_link)
+
+    subject = '[캣츠모스] 계정 활성화'
+
+    # 이메일 템플릿에 전달할 컨텍스트 생성
+    context = {
+        'user': user,
+        'verification_url': verification_url,
+    }
+
+    # 이메일 내용을 렌더링
+    email_text = render_to_string('accounts/verification_email.txt', context)
+
+    # 이메일 전송
+    try:
+        send_mail(
+            subject,
+            email_text,
+            settings.EMAIL_HOST_USER,
+            [user.email],
+        )
+    except BadHeaderError:
+        return HttpResponse('Invalid header.')
+
+# 메일 인증 페이지(메일에 담긴 링크)
+def activation_view(request, uidb64, token):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode('utf-8') # 유저 pk
+        user = User.objects.get(pk=int(uid))
+
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        # 유효하지 않은 uidb64 값이거나 해당하는 유저가 없는 경우 처리
+        return redirect('accounts:activation_failed')
+    
+    # 토큰이 유효한 경우
+    if default_token_generator.check_token(user, token):
+        # 계정 활성화
+        user.is_active = True
+        user.save()
+        
+        return render(request, 'accounts/activation.html')
+    else:
+        # 토큰이 유효하지 않은 경우 처리
+        return redirect('accounts:activation_failed')
+
+# 토큰이 유효하지 않을경우. (ex: 이미 인증했는데 또 메일 링크를 누를경우)
+def activation_failed_view(request):
+    return render(request, 'accounts/activation_failed.html')
+
+# 계정활성화 메일 보냈다는 view
+def verification_sent_view(request):
+    return render(request, 'accounts/verification_sent.html')
+
+# 회원가입
 def signup(request):
     if request.user.is_authenticated:
         return redirect('planets:main')
@@ -45,9 +108,13 @@ def signup(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST, request.FILES)
         if form.is_valid():
-            user = form.save()
-            auth_login(request, user)
-            return redirect('planets:main')
+            # 회원가입 O, 계정활성화 X
+            user = form.save(commit=False)
+            user.is_active = False
+            user.save()
+            
+            send_verification_email(request, user)
+            return redirect('accounts:verification_sent')
     else:
         form = CustomUserCreationForm()
 

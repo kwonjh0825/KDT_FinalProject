@@ -10,6 +10,7 @@ from taggit.managers import TaggableManager
 from app_accounts.models import Accountbyplanet
 
 
+# 행성
 class Planet(models.Model):
     name             = models.CharField(max_length=20, unique=True)
     description      = models.TextField()
@@ -43,12 +44,14 @@ class Planet(models.Model):
         super().delete(*args, **kwargs)
 
 
+# 행성별 이용약관
 class TermsOfService(models.Model):
     Planet = models.ForeignKey(Planet, on_delete=models.CASCADE)
     order = models.IntegerField()
     content = models.CharField(max_length=100, null=False, blank=False)
 
 
+# 행성 내 게시글
 class Post(models.Model):
     content = models.TextField()
     emotion = models.ManyToManyField(Accountbyplanet, related_name='emotion_post', through='Emote')
@@ -97,13 +100,39 @@ class Post(models.Model):
         super().delete(*args, **kwargs)
 
 
+# 행성 내 게시글의 댓글
 class Comment(models.Model):
     content    = models.TextField()
     emotion    = models.ManyToManyField(Accountbyplanet, related_name='emotion_comment', through='Emote')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    post       = models.ForeignKey(Post, on_delete=models.CASCADE)
-    accountsbyplanet = models.ForeignKey(Accountbyplanet, on_delete=models.CASCADE)
+    post       = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    accountbyplanet = models.ForeignKey(Accountbyplanet, on_delete=models.CASCADE)
+
+    @property
+    def created_time(self):
+        time = datetime.now(tz=timezone.utc) - self.created_at
+
+        if time < timedelta(minutes=1):
+            return '방금 전'
+        elif time < timedelta(hours=1):
+            return str(int(time.seconds / 60)) + '분 전'
+        elif time < timedelta(days=1):
+            return str(int(time.seconds / 3600)) + '시간 전'
+        elif time < timedelta(days=7):
+            time = datetime.now(tz=timezone.utc).date() - self.created_at.date()
+            return str(time.days) + '일 전'
+        else:
+            return self.created_at.strftime('%Y-%m-%d')
+
+
+# 행성 내 게시글의 대댓글
+class Recomment(models.Model):
+    content    = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    comment    = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='recomments')
+    accountbyplanet = models.ForeignKey(Accountbyplanet, on_delete=models.CASCADE)
 
     @property
     def created_time(self):
@@ -126,5 +155,5 @@ class Comment(models.Model):
 class Emote(models.Model):
     post             = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
     comment          = models.ForeignKey(Comment, on_delete=models.CASCADE, null=True)
-    accountsbyplanet = models.ForeignKey(Accountbyplanet, on_delete=models.CASCADE)
+    accountbyplanet = models.ForeignKey(Accountbyplanet, on_delete=models.CASCADE)
     emotion          = models.CharField(max_length=10)
