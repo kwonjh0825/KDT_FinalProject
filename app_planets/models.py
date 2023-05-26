@@ -27,6 +27,9 @@ class Planet(models.Model):
     plan             = models.CharField(max_length=10, choices=plan_category, default='Free')
     is_public_category = (('Private', 'Private'), ('Public', 'Public'))
     is_public        = models.CharField(max_length=10, choices=is_public_category, default='Private')
+    # 가입 요청 확인 필요
+    need_confirm_category = ((True, 'Yes'), (False, 'No'))
+    need_confirm     = models.BooleanField(choices=need_confirm_category, default=False)
     maximum_capacity = models.DecimalField(default=50, max_digits=1000, decimal_places=0)
     created_by       = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_at       = models.DateTimeField(auto_now_add=True)

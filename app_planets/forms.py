@@ -7,7 +7,7 @@ class PlanetForm(forms.ModelForm):
     class Meta:
         model = Planet
 
-        fields = ('name', 'description', 'category', 'is_public', 'image', 'maximum_capacity',)
+        fields = ('name', 'description', 'category', 'is_public', 'image', 'maximum_capacity', 'need_confirm',)
         labels = {
             'name': '행성 이름', 
             'description': '행성 설명', 
@@ -15,6 +15,7 @@ class PlanetForm(forms.ModelForm):
             'is_public': '공개 여부',
             'image': '행성 사진', 
             'maximum_capacity': '행성 최대 인원',
+            'need_confirm': '가입 승인 필요'
         }
 
 
