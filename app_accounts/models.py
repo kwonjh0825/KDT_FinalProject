@@ -36,6 +36,8 @@ class Accountbyplanet(models.Model):
                                         related_name='followers')
     user     = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='accountsbyplanet')
     planet   = models.ForeignKey('app_planets.Planet', on_delete=models.CASCADE)
+    
+    is_confirmed = models.BooleanField(default=False)
 
     # accountbyplanet 삭제시 image file 삭제
     def delete(self, *args, **kwargs):
@@ -43,8 +45,8 @@ class Accountbyplanet(models.Model):
             path = self.profile_image.path
             if os.path.isfile(path):
                 os.remove(path)
-        if self.background_image:
-            path = self.background_image.path
+        if self.backgounrd_image:
+            path = self.backgounrd_image.path
             if os.path.isfile(path):
                 os.remove(path)
         super().delete(*args, **kwargs)

@@ -10,36 +10,90 @@ main
 {% endblock head %}
 
 {% block content %}
-  <div class="left-side-bar">
-    
-  </div>
-  <div>
-    <form action="{% url 'planets:index' planet.name %}" method="POST" enctype="multipart/form-data">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <input type="submit" value="게시글 작성">
-    </form>
-  </div>
-  <div>
-    {% if posts %}
-      {% for post in posts %}
-        <div>
-          {{ post.content }}
-          {{ post.created_time }}
-          {{ post.accountbyplanet.nickname }}
-          {% if post.image %}
-            <img src="{{ post.image.url }}" alt="{{ post.image }}">
-          {% endif %}
+<div class="left-side-bar">
+  
+</div>
+<div>
+  <form id="post-form" data-planet-name="{{ planet.name }}">
+    {% csrf_token %}
+    {{ postform.as_p }}
+    <input type="submit" value="게시글 작성">
+  </form>
+</div>
+<hr>
+<div id="post-list">
+  {% if posts %}
+    {% for post in posts %}
+      <div class="post-container">
+        <div id="post-content">{{ post.content }}</div>
+        <div id="post-createdtime">{{ post.created_time }}</div>
+        <div id="post-nickname">{{ post.accountbyplanet.nickname }}</div>
+        <div id="post-tags">
+          {% for tag in post.tags.all %}
+            <span class="tag">#{{ tag.name }}</span>
+          {% endfor %}
         </div>
-        <form action="{% url 'planets:post_delete' planet.name post.pk %}" method="POST">
-          {% csrf_token %}
-          <button type='submit'>삭제</button>
-        </form>
-      {% endfor %}
-    {% endif %}
-  </div>
-  <div class="right-side-bar">
-    
-  </div>
+        {% if post.image %}
+          <img src="{{ post.image.url }}" alt="{{ post.image }}">
+        {% endif %}
+        {% if request.user == post.accountbyplanet.user %}
+          <form class="delete-post-form" data-planet-name="{{ planet.name }}" data-post-pk="{{ post.pk }}">
+            {% csrf_token %}
+            <input type="submit" class="delete-post-button" value="게시글 삭제">
+          </form>
+        {% endif %}
+        <div id="comment-list">
+          {% for comment in post.comments.all reversed %}
+            <div class="comment-container">
+              <div id="comment-content">{{ comment.content }}</div>
+              <div>{{ comment.created_time }}</div>
+              <div>{{ comment.accountbyplanet.nickname }}</div>
+              {% if request.user == comment.accountbyplanet.user %}
+                <form class="delete-comment-form" data-planet-name="{{ planet.name }}" data-post-pk="{{ post.pk }}" data-comment-pk="{{ comment.pk }}">
+                  {% csrf_token %}
+                  <input type="submit" class="delete-comment-button" value="댓글 삭제">
+                </form>
+              {% endif %}
+              <div id="recomment-list">
+                {% for recomment in comment.recomments.all reversed %}
+                  <div class="recomment-container">
+                    <div>{{ recomment.content }}</div>
+                    <div>{{ recomment.created_time }}</div>
+                    <div>{{ recomment.accountbyplanet.nickname }}</div>
+                    {% if request.user == recomment.accountbyplanet.user %}
+                      <form class="delete-recomment-form" data-planet-name="{{ planet.name }}" data-post-pk="{{ post.pk }}" data-comment-pk="{{ comment.pk }}" data-recomment-pk="{{ recomment.pk }}">
+                        {% csrf_token %}
+                        <input type="submit" class="delete-recomment-button" value="대댓글 삭제">
+                      </form>
+                    {% endif %}
+                  </div>
+                {% endfor %}
+                <form id="recomment-form" data-planet-name="{{ planet.name }}" data-post-pk="{{ post.pk }}" data-comment-pk="{{ comment.pk }}">
+                  {% csrf_token %}
+                  {{ recommentform.as_p }}
+                  <input type="submit" value="대댓글 작성">
+                </form>
+              </div>
+            </div>
+          {% endfor %}
 
-  {% endblock content %}
+          <form id="comment-form" data-planet-name="{{ planet.name }}" data-post-pk="{{ post.pk }}">
+            {% csrf_token %}
+            {{ commentform.as_p }}
+            <input type="submit" value="댓글 작성">
+          </form>
+        </div>
+        <hr>
+      </div>
+    {% endfor %}
+  {% endif %}
+</div>
+<div class="right-side-bar">
+  
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="{% static 'js/planet_index.js' %}"></script>
+
+{% endblock content %}
