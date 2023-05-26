@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'app_planets',
     'imagekit',
     'taggit',
+    'django_apscheduler', # 스케쥴러
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -119,7 +120,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False  # False 로 설정해야 DB에 변경 된 TIME_ZONE 이 반영 됨 
 
 
 # Static files (CSS, JavaScript, Images)
@@ -165,3 +166,14 @@ EMAIL_USE_TLS = True
 
 # 사이트와 관련한 자동응답을 받을 이메일 주소
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+#스케쥴러
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"  # Default
+
+APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
+
+SCHEDULER_DEFAULT = True
+
+
+PASSWORD_RESET_TIMEOUT=1800 # 메일 토큰 유효기간 30분(회원가입시 인증, 비밀번호 초기화)

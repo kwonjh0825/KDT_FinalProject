@@ -26,7 +26,10 @@ from django.urls import reverse
 from django.contrib.auth.views import PasswordResetConfirmView
 
 def login(request):
-    if request.method == 'POST':
+    if request.user.is_authenticated:
+        return redirect('planets:main')
+    
+    elif request.method == 'POST':
         form = CustomAutentication(request, request.POST)
         if form.is_valid():
             auth_login(request, form.get_user())
@@ -102,6 +105,7 @@ def verification_sent_view(request):
 
 # 회원가입
 def signup(request):
+    # 이미 로그인한 경우
     if request.user.is_authenticated:
         return redirect('planets:main')
     
