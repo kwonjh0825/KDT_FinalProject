@@ -12,5 +12,8 @@
     <input type="submit" value="완료">
   </form>
 
+  {% if planet.need_confirm == True %}
+    <a href="{% url 'planets:planet_join_admin' planet.name %}">가입 관리</a>
+  {% endif %}
   <a href="{% url 'planets:planet_tos_admin' planet.name %}">약관 수정</a>
 {% endblock content %}
