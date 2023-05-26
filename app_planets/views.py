@@ -3,9 +3,10 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
+from django.http import JsonResponse
 from .models import Planet, TermsOfService, Post, Comment, Recomment, Emote
 from .forms import PlanetForm, PostForm, CommentForm, RecommentForm
-from app_accounts.models import Accountbyplanet
+from app_accounts.models import Accountbyplanet, User
 from app_accounts.forms import AccountbyplanetForm
 
 EMOTIONS = [
@@ -73,6 +74,11 @@ def planet_join(request, planet_name):
             accountbyplanet = form.save(commit=False)
             accountbyplanet.planet = planet
             accountbyplanet.user = request.user
+            
+            # 관리자의 가입 승인이 필요 없는 경우
+            if planet.need_confirm == False:
+                accountbyplanet.is_confirmed = True
+            
             accountbyplanet.save()
             return redirect('planets:index', planet_name)
     else:
@@ -90,7 +96,9 @@ def planet_join(request, planet_name):
 def index(request, planet_name):
     planet = Planet.objects.get(name=planet_name)
 
-    if not request.user.is_authenticated or not Accountbyplanet.objects.filter(planet=planet, user=request.user).exists():
+    # 행성에 계정이 없는 경우 또는 가입 승인 대기 중인 경우
+    if not request.user.is_authenticated or not Accountbyplanet.objects.filter(planet=planet, user=request.user).exists() or Accountbyplanet.objects.get(planet=planet, user=request.user).is_confirmed == False: 
+
         return redirect('planets:main')
     
     postform = PostForm()
@@ -228,7 +236,7 @@ def recomment_delete(request, planet_name, post_pk, comment_pk, recomment_pk):
 @login_required
 def planet_admin(request, planet_name):
     planet = Planet.objects.get(name=planet_name)
-    # tos = TermsOfServices.objects.filter(Planet_id=planet.pk)
+    confirms = Accountbyplanet.objects.filter(planet=planet, is_confirmed=False)
     if request.method == 'POST':
         form_planet = PlanetForm(request.POST, instance=planet)
         
@@ -240,8 +248,9 @@ def planet_admin(request, planet_name):
         form_planet = PlanetForm(instance=planet)
     
     context = {
-        'form_planet': form_planet, 
+        'form_planet': form_planet,
         'planet': planet,
+        'confirms': confirms,
     }
     return render(request, 'planets/planet_admin.html', context)
 
@@ -272,4 +281,36 @@ def planet_tos_admin(request, planet_name):
             'length': length,
         }
         return render(request, 'planets/planet_tos_admin.html', context)
+
+@login_required
+def planet_join_admin(request, planet_name):
+    planet = Planet.objects.get(name=planet_name)
+    confirms = Accountbyplanet.objects.filter(planet=planet, is_confirmed=False)
+
+    context = {
+        'planet': planet,
+        'confirms': confirms,
+    }
+    return render(request, 'planets/planet_join_admin.html', context)
+
+@login_required
+def planet_join_confirm(request, planet_name, user_pk):
+    planet = Planet.objects.get(name=planet_name)
+    user = User.objects.get(pk=user_pk)
+
+    account = Accountbyplanet.objects.get(planet=planet, user=user)
+    account.is_confirmed = True
+    account.save()
+
+    return JsonResponse({'success': True})
+
+@login_required
+def planet_join_reject(request, planet_name, user_pk):
+    planet = Planet.objects.get(name=planet_name)
+    user = User.objects.get(pk=user_pk)
+    
+    account = Accountbyplanet.objects.get(planet=planet, user=user)
+    account.delete()
+
+    return JsonResponse({'success': True})    
 

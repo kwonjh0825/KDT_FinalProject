@@ -18,4 +18,7 @@ urlpatterns = [
     path('planets/<str:planet_name>/<int:post_pk>/<int:comment_pk>/<int:recomment_pk>/delete/', views.recomment_delete, name='recomment_delete'),
     path('planets/<str:planet_name>/admin/', views.planet_admin, name='planet_admin'),
     path('planets/<str:planet_name>/admin/tos/', views.planet_tos_admin, name='planet_tos_admin'),
+    path('planets/<str:planet_name>/admin/join', views.planet_join_admin, name='planet_join_admin'),
+    path('planets/<str:planet_name>/admin/join/<int:user_pk>/confirm/', views.planet_join_confirm, name='planet_join_confirm'),
+    path('planets/<str:planet_name>/admin/join/<int:user_pk>/reject/', views.planet_join_reject, name='planet_join_reject'),
 ]
