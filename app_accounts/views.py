@@ -145,6 +145,7 @@ def profile(request, username):
 def profile_update(request):
     if request.method == 'POST':
         form = CustomUserChangeForm(request.POST, instance=request.user)
+        print(request.method)
         if form.is_valid():
             form.save()
             return redirect('accounts:profile', username=request.user)

@@ -23,38 +23,39 @@ class CustomSetPasswordForm(SetPasswordForm):
 class CustomUserChangeForm(UserChangeForm):
     password = None
 
-    last_name = forms.CharField(
-        label = "성",
-        widget = forms.TextInput(
-            attrs={
-                "class": "form-control",
-                "placeholder": "홍",
-                "style": "height: 47px;",
-            }),
-    )
+    # last_name = forms.CharField(
+    #     label = "성",
+    #     widget = forms.TextInput(
+    #         attrs={
+    #             "class": "form-control",
+    #             "placeholder": "홍",
+    #             "style": "height: 47px;",
+    #         }),
+    # )
 
-    first_name = forms.CharField(
-        label = "이름",
-        widget = forms.TextInput(
-            attrs = {
-                "class": "form-control",
-                "placeholder": "길동",
-                "style": "height: 47px;",
-            }),
-    )
+    # first_name = forms.CharField(
+    #     label = "이름",
+    #     widget = forms.TextInput(
+    #         attrs = {
+    #             "class": "form-control",
+    #             "placeholder": "길동",
+    #             "style": "height: 47px;",
+    #         }),
+    # )
 
-    email = forms.CharField(
-        label = "이메일",
-        widget = forms.TextInput(
-            attrs = {
-                "class": "form-control",
-                "placeholder": "gildong@google.com",
-                "style": "height: 47px;",
-            }),
-    )
+    # email = forms.CharField(
+    #     label = "이메일",
+    #     widget = forms.TextInput(
+    #         attrs = {
+    #             "class": "form-control",
+    #             "placeholder": "gildong@google.com",
+    #             "style": "height: 47px;",
+    #         }),
+    # )
+
     class Meta(UserChangeForm.Meta):
         model = get_user_model()
-        fields = ('username', 'first_name', 'last_name', 'email', )
+        fields = ('first_name', 'last_name', 'email',)
 
 
 class AccountbyplanetForm(forms.ModelForm):

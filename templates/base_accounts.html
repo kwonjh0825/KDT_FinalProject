@@ -8,6 +8,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="{% static 'css/base_accounts.css' %}">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
   {% block head %}{% endblock head %}
 
   <style>
@@ -18,13 +19,8 @@
 
 <body>
   <!-- content -->
-  <div class="max-w-[500px] h-screen mx-auto">
-    <div class="border">
-      {% block content %}
-      {% endblock content %}
-    </div>
-  </div>
-
+  {% block content %}
+  {% endblock content %}
 
 </body>
 <script type="text/javascript" src="/static/js/base_nav.js"></script>
