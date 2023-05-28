@@ -32,9 +32,12 @@ def planet_list(request):
 # 행성 생성 페이지
 @login_required
 def planet_create(request):
+    print('???? 뭔데')
     if request.method == 'POST':
+        print('=====이건 들오니?===')
         form = PlanetForm(request.POST, request.FILES)
         if form.is_valid():
+            print('=====!!!!===')
             planet = form.save(commit=False)
             planet.created_by = request.user
             planet.save()
