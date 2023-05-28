@@ -19,18 +19,18 @@
     <div class=" relative" style="height:180px; background-color: #181A20;"></div>
     <!-- 프로필 사진 -->
     <div class="absolute -mt-12 ml-5">
-        {% if user.profile_image %}
-        <img src="{{ user.profile_image.url }}" alt="post_image" class="inline-block" width="100">
+        {% if user_by_planet.profile_image %}
+        <img src="{{ user_by_planet.profile_image.url }}" alt="post_image" class="inline-block rounded-md" width="100">
         {% else %}
         <img id="imgDino" src="https://i.pinimg.com/originals/fe/c1/6c/fec16c6f886c5d684da5ddcdacd21ffb.gif" alt="no_image" class="inline-block" width="100">
         {% endif %}
     </div>
     <!-- 내용 -->
     <div class="my-3 mr-5" style="float: right;">
-        <!-- 팔로우 버튼 -->
+        <!-- 팔로우 버튼 --> 
         {% if request.user.is_authenticated %}
         {% comment %} {% if user.username != .username %} {% endcomment %}
-            {% if request.user in user.followers.all %}
+            {% if request.user in user_by_planet.followers.all %}
             <button class="rounded-md bg-[#ab9203] hovor:bg-[#d1cb1d] px-4 py-2">Folloing</button>
             {% else %}
             <button class="rounded-md bg-[#d1cb1d] hover:bg-[#ab9203] px-4 py-2">Follow</button>
@@ -41,10 +41,9 @@
     <div class="container mx-auto ml-5">
         <!-- 개인정보 -->
         <div class="mt-12 pt-3 mb-5">
-            <p>{{ user.username }}</p>
-            <p class="text-slate-200">{{ planet.user_by_planet.nickname }}</p>
+            <p class="text-slate-200">{{ user_by_planet.nickname }}</p>
 
-            <p class="text-slate-500">{{ user.email }}</p>
+            {% comment %} <p class="text-slate-500">{{ user.email }}</p> {% endcomment %}
         </div>
         
         <!-- 회원가입한 날짜 -->
@@ -55,7 +54,7 @@
         
         <!-- 개수 -->
         <div class="flex gap-3 my-4">
-            <p>{{ user_by_planet.planet_list.all|length }} <span class="text-slate-500">Posts</span> </p>
+            <p>{{ user_by_planet.post_set.all|length }} <span class="text-slate-500">Posts</span> </p>
             <p>{{ user_by_planet.followings.all|length }} <span class="text-slate-500">Followings</span> </p>
             <p>{{ user_by_planet.followers.all|length }} <span class="text-slate-500">Followers</span> </p>
         </div>
