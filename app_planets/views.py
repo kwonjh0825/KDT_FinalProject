@@ -4,6 +4,7 @@ from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
+from django.contrib import messages
 from .models import Planet, TermsOfService, Post, Comment, Recomment, Emote
 from .forms import PlanetForm, PostForm, CommentForm, RecommentForm
 from app_accounts.models import Accountbyplanet, User
@@ -68,6 +69,10 @@ def planet_join(request, planet_name):
     # 이미 행성에 계정이 있는 경우
     if Accountbyplanet.objects.filter(planet=planet, user=request.user).exists():
         return redirect('planets:index', planet_name)
+    
+    if Accountbyplanet.objects.filter(planet=planet).count() >= planet.maximum_capacity:
+        messages.info(request, '서버 최대 인원을 초과하여 가입을 진행할 수 없습니다. ')
+        return redirect('planets:planets')
     
     termsofservice = TermsOfService.objects.filter(Planet_id=planet.pk)
 
