@@ -19,7 +19,7 @@
 
 <body>
   <!-- nav 바, md:hidden -->
-  <nav class="sticky top-0 w-full z-[1] md:hidden">
+  <nav class="sticky top-0 w-full z-[1] lg:hidden">
     <div class="flex justify-between border-b-2  border-[#393f4f] bg-[#191b22] text-[#ffd951] font-bold p-5 w-full">
       <p class='text-2xl p-1'>Catsmos</p> <!-- 로고 위치 -->
       <div class="p-1">
@@ -60,8 +60,8 @@
           <div class="flex flex-row">
             <img src="https://i.pinimg.com/564x/d2/98/4e/d2984ec4b65a8568eab3dc2b640fc58e.jpg" alt="no_image" class="w-1/6 h-1/6 m-5">
             <div class="flex flex-col">
-              <p class="mt-5 text-sm">@bat522</p>
-              <p class="mt-1 text-xs text-[#bcbdbf]">Edit profile</p>
+              <p class="mt-5 text-sm">@{{ user.username }}</p>
+              <p class="mt-1 text-xs text-[#bcbdbf]"><a href="{% url 'accounts:profile_update' %}">Edit profile</a></p>
             </div>
             <div class="mt-8 ms-auto me-4">
               <svg viewBox="0 0 32 32" width="20" height="20" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" fill="none" r="2" stroke="#bcbdbf" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" class="stroke-000000"></circle><circle cx="16" cy="26" fill="none" r="2" stroke="#bcbdbf" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" class="stroke-000000"></circle><circle cx="16" cy="6" fill="none" r="2" stroke="#bcbdbf" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" class="stroke-000000"></circle></svg>
@@ -106,7 +106,7 @@
     </div>
 
     <!-- 우측 side 바, md:block -->
-    <nav class="sticky top-0 w-full h-screen z-[1] max-w-[250px] hidden md:block">
+    <nav class="sticky top-0 w-full h-screen z-[1] max-w-[250px] hidden lg:block">
       <div class="border-b-2 border-[#393f4f] text-[#ffd951] font-bold p-5 w-full">
         <p class='text-2xl'>Catsmos</p> <!-- 로고 위치 -->
       </div>
