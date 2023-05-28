@@ -23,7 +23,7 @@
   <!-- nav 바-->
   <nav class="sticky top-0 w-full bg-[#191b22] z-[1]">
     <div class="mx-auto flex justify-between font-bold px-2 py-3">
-      <p class='text-2xl text-[#ffd951] p-1'>Catsmos</p> <!-- 로고 위치 -->
+      <a href="{% url 'planets:main' %}" class='text-2xl p-1 text-[#ffd951]'>Catsmos</a> <!-- 로고 위치 -->
       <div class="border flex text-sm text-white p-3 gap-5">
         {% if user.is_authenticated %}
         <a href="{% url 'accounts:profile' user %}">{{ user.username }}</a>
@@ -99,7 +99,7 @@
     {% endblock content %}
   </div>
 
-  <footer class="h-full bg-[#191b22]">
+  {% comment %} <footer class="h-full bg-[#191b22]">
     <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
       <div class="md:flex md:justify-between">
         <div class="mx-auto max-w-[768px]">
@@ -112,7 +112,7 @@
         </div>
       </div>
     </div>
-  </footer>
+  </footer> {% endcomment %}
 
 
 </body>

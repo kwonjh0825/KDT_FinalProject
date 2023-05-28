@@ -6,7 +6,7 @@
 {% endblock title %}
 
 {% block content %}
-<div class="container p-5 mx-auto">
+<div class="container p-5 mx-auto ">
     <p class="text-4xl">회원정보 수정</p>
     <form action="{% url 'accounts:profile_update' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}

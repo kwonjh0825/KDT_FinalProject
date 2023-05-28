@@ -1,18 +1,86 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <div class="container">
-        <h1>행성 프로필 임시 페이지</h1>
-        <p>닉네임 {{user_by_planet.nickname}}</p>
-        <p>프로필 이미지 {{user_by_planet.nickname}}</p>
-        <p>팔로워 {{user_by_planet.nickname}}</p>
-        
+{% extends 'base_nav.html' %}
+{% load static %}
+
+{% block title %}
+프로필
+{% endblock title %}
+
+{% block content %}
+
+<div class="container mx-auto max-w-[900px]">
+    <a href="javascript:history.back()" class="block  flex items-center pl-5  text-[#ffd951] " style="height: 50px;">
+        <span class="material-symbols-outlined">
+            chevron_left
+        </span>
+        Back
+    </a>
+
+
+    <div class=" relative" style="height:180px; background-color: #181A20;"></div>
+    <!-- 프로필 사진 -->
+    <div class="absolute -mt-12 ml-5">
+        {% if user.profile_image %}
+        <img src="{{ user.profile_image.url }}" alt="post_image" class="inline-block" width="100">
+        {% else %}
+        <img id="imgDino" src="https://i.pinimg.com/originals/fe/c1/6c/fec16c6f886c5d684da5ddcdacd21ffb.gif" alt="no_image" class="inline-block" width="100">
+        {% endif %}
     </div>
-</body>
-</html>
+    <!-- 내용 -->
+    <div class="my-3 mr-5" style="float: right;">
+        <!-- 팔로우 버튼 -->
+        {% if request.user.is_authenticated %}
+        {% comment %} {% if user.username != .username %} {% endcomment %}
+            {% if request.user in user.followers.all %}
+            <button class="rounded-md bg-[#ab9203] hovor:bg-[#d1cb1d] px-4 py-2">Folloing</button>
+            {% else %}
+            <button class="rounded-md bg-[#d1cb1d] hover:bg-[#ab9203] px-4 py-2">Follow</button>
+            {% endif %}
+        {% comment %} {% endif %} {% endcomment %}
+        {% endif %}
+    </div>
+    <div class="container mx-auto ml-5">
+        <!-- 개인정보 -->
+        <div class="mt-12 pt-3 mb-5">
+            <p>{{ user.username }}</p>
+            <p class="text-slate-200">{{ planet.user_by_planet.nickname }}</p>
+
+            <p class="text-slate-500">{{ user.email }}</p>
+        </div>
+        
+        <!-- 회원가입한 날짜 -->
+        <div class="pl-5 py-3 ml-1 rounded-lg bg-[#181A20] max-w-[700px] ">
+            <p class="text-slate-700">JOINED</p>
+            <p class="text-slate-400">{{ user_by_planet.planet.created_at|date:'m d, Y' }}</p>
+        </div>
+        
+        <!-- 개수 -->
+        <div class="flex gap-3 my-4">
+            <p>{{ user_by_planet.planet_list.all|length }} <span class="text-slate-500">Posts</span> </p>
+            <p>{{ user_by_planet.followings.all|length }} <span class="text-slate-500">Followings</span> </p>
+            <p>{{ user_by_planet.followers.all|length }} <span class="text-slate-500">Followers</span> </p>
+        </div>
+    </div>
+    
+    {% for user_by_planet in user_by_planets %}
+    user_by_planet.planet.name
+    {% endfor %}
+    
+</div>
+
+{% endblock content %}
+
+{% block script %}
+<script>
+    $(function() {
+        $("#imgDino").hover(
+            function() {
+                $(this).attr("src", "animated.gif");
+            },
+            function() {
+                $(this).attr("src", "static.gif");
+            }                         
+        );                  
+    });
+</script>
+
+{% endblock script %}
