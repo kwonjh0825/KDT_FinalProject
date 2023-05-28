@@ -160,9 +160,9 @@ def profile_update(request):
 
 
 # 행성별 프로필
-def planet_profile(request, planet_name, user_pk):
+def planet_profile(request, planet_name, nickname):
     planet = Planet.objects.get(name=planet_name)
-    user_by_planet = Accountbyplanet.objects.filter(planet=planet, user=user_pk)
+    user_by_planet = Accountbyplanet.objects.filter(planet=planet, nickname=nickname)
 
     context = {
         'user_by_planet':user_by_planet,
@@ -171,16 +171,16 @@ def planet_profile(request, planet_name, user_pk):
 
 # 행성별 프로필 업데이트
 @login_required
-def planet_profile_update(request, planet_name, user_pk):
+def planet_profile_update(request, planet_name, nickname):
     planet = Planet.objects.get(name=planet_name)
-    user_by_planet = Accountbyplanet.objects.filter(planet=planet, user=user_pk)
+    user_by_planet = Accountbyplanet.objects.filter(planet=planet, nickname=nickname)
 
     if user_by_planet.user == request.user:
         if request.method == 'POST':
             planet_user_update_form = AccountbyplanetForm(request.POST, instance=user_by_planet)
             if planet_user_update_form.is_valid():
                 planet_user_update_form.save()
-                return redirect('accounts:planet_profile', planet_name, user_pk)
+                return redirect('accounts:planet_profile', planet_name, nickname)
         else:
             planet_user_update_form = AccountbyplanetForm(instance=user_by_planet)
 
