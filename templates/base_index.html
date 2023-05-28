@@ -21,7 +21,7 @@
   <!-- nav 바, md:hidden -->
   <nav class="sticky top-0 w-full z-[1] lg:hidden">
     <div class="flex justify-between border-b-2  border-[#393f4f] bg-[#191b22] text-[#ffd951] font-bold p-5 w-full">
-      <p class='text-2xl p-1'>Catsmos</p> <!-- 로고 위치 -->
+      <a href="{% url 'planets:main' %}" class='text-2xl p-1 text-[#ffd951]'>Catsmos</a> <!-- 로고 위치 -->
       <div class="p-1">
         <svg viewBox="0 0 32 32" width="30" height="30" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 32 32"><path d="M4 10h24a2 2 0 0 0 0-4H4a2 2 0 0 0 0 4zm24 4H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4zm0 8H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4z" fill="#ffd951" class="fill-000000"></path></svg>
       </div>
@@ -108,7 +108,7 @@
     <!-- 우측 side 바, md:block -->
     <nav class="sticky top-0 w-full h-screen z-[1] max-w-[250px] hidden lg:block">
       <div class="border-b-2 border-[#393f4f] text-[#ffd951] font-bold p-5 w-full">
-        <p class='text-2xl'>Catsmos</p> <!-- 로고 위치 -->
+        <a href="{% url 'planets:main' %}" class='text-2xl p-1 text-[#ffd951]'>Catsmos</a> <!-- 로고 위치 -->
       </div>
       <div id="accordion-collapse" data-accordion="collapse" data-active-classes="bg-transparent" class="ms-3 border-b-2 border-[#393f4f]">
         <h2 id="accordion-collapse-heading-1">
