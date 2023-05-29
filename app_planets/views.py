@@ -33,12 +33,9 @@ def planet_list(request):
 # 행성 생성 페이지
 @login_required
 def planet_create(request):
-    print('???? 뭔데')
     if request.method == 'POST':
-        print('=====이건 들오니?===')
         form = PlanetForm(request.POST, request.FILES)
         if form.is_valid():
-            print('=====!!!!===')
             planet = form.save(commit=False)
             planet.created_by = request.user
             planet.save()
@@ -51,6 +48,14 @@ def planet_create(request):
 
                 # 이용 약관 DB Create
                 TermsOfService.objects.create(Planet=planet, order=i, content=term_content)
+
+            # guide accountbyplanet 생성
+            accountbyplanet = Accountbyplanet.objects.create(nickname='Guide', user=User.objects.get(pk=1), planet=planet)
+
+            # 게시글, 댓글, 대댓글 생성
+            post = Post.objects.create(content='이곳은 게시글입니다. 꿈을 마음 껏 펼치세요!', planet=planet, accountbyplanet=accountbyplanet)
+            comment = Comment.objects.create(content='이곳은 댓글입니다. 게시글에 대한 의견을 작성하세요!', post=post, accountbyplanet=accountbyplanet)
+            Recomment.objects.create(content='이곳은 대댓글입니다. 댓글에 대한 생각을 알려주세요!', comment=comment, accountbyplanet=accountbyplanet)
 
             return redirect('planets:planet_join', planet.name)
     else:
@@ -106,7 +111,6 @@ def index(request, planet_name):
 
     # 행성에 계정이 없는 경우 또는 가입 승인 대기 중인 경우
     if not request.user.is_authenticated or not Accountbyplanet.objects.filter(planet=planet, user=request.user).exists() or Accountbyplanet.objects.get(planet=planet, user=request.user).is_confirmed == False: 
-
         return redirect('planets:main')
     
     postform = PostForm()
