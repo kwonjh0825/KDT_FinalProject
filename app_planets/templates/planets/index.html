@@ -23,6 +23,7 @@ main
       </button>
     </form>
   </div>
+</div>
 
 {% if messages %}
   {% for message in messages %}
@@ -32,7 +33,7 @@ main
   {% endfor %}
 {% endif %}
 <div class="left-side-bar">
-
+</div>
 
 
 
@@ -109,7 +110,14 @@ main
               </a>
             </li>
             <li>
-              <a href="#" class="block px-4 py-2 hover:bg-gray-100">게시글 신고</a>
+              <a href="#" class="block px-4 py-2 hover:bg-gray-100">
+                {% if request.user.is_authenticated %}
+                  <form action="{% url 'planets:post_report' planet.name post.pk %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit">게시글 신고</button>
+                  </form>
+                {% endif %}
+              </a>
             </li>
             <li>
               <a href="#" class="block px-4 py-2 hover:bg-gray-100">게시글 수정</a>
@@ -121,20 +129,6 @@ main
       </div>
       
       <!-- 댓글 작성 -->
-
-      {% if request.user == post.accountbyplanet.user %}
-        <form id="delete-post-form" data-planet-name="{{ planet.name }}" data-post-pk="{{ post.pk }}">
-          {% csrf_token %}
-          <input type="submit" id="delete-post-button" value="게시글 삭제">
-        </form>
-      {% endif %}
-      {% if request.user.is_authenticated %}
-        <form action="{% url 'planets:post_report' planet.name post.pk %}" method="POST">
-          {% csrf_token %}
-          <input type="submit" value="게시글 신고">
-        </form>
-      {% endif %}
-
       <div id="comment-list">
         {% for comment in post.comments.all reversed %}
           <div class="comment-container">
