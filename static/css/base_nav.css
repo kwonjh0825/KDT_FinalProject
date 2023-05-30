@@ -7,6 +7,8 @@
 
 body {
   font-family: 'LINESeedKR-Bd', 'serif';
+  background-color: #1E2129;
+
 }
 
 
@@ -26,11 +28,10 @@ main {
 footer{
   height: 40px;
   position : relative;
-  transform : translateY(-100%);
 }
 
 .bg-color {
-  background-color: #1E2129;
   color: aliceblue;
 
 }
+

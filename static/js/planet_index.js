@@ -1,139 +1,110 @@
 // csrf
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
 
-// 게시글 생성
-document.addEventListener('DOMContentLoaded', function() {
-  var postForm = document.getElementById('post-form');
-
-  postForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    var form = e.target;
-    var planetName = form.dataset.planetName;
-    var url = "/planets/" + planetName + "/create/";
-
-    var formData = new FormData(form);
-    formData.append('csrfmiddlewaretoken', csrftoken);
-
-    axios({
-      method: 'post',
-      url: url,
-      data: formData,
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    })
-    .then(function(response) {
-      if (response.data.success) {
-        var postPk = response.data.post_pk;
-        var newPostContainer = document.createElement('div');
-        newPostContainer.classList.add('post-container');
-        newPostContainer.setAttribute('data-post-pk', postPk);
-
-        var content = document.createElement('div');
-        content.textContent = response.data.content;
-
-        var createdTime = document.createElement('div');
-        createdTime.textContent = response.data.created_time;
-
-        var nickname = document.createElement('div');
-        nickname.textContent = response.data.nickname;
-
-        var image = null;
-        if (response.data.image_url) {
-          image = document.createElement('img');
-          image.setAttribute('src', response.data.image_url);
-          image.setAttribute('alt', 'Image');
-        }
-
-        if (image) {
-          newPostContainer.append(content, createdTime, nickname, image);
-        } else {
-          newPostContainer.append(content, createdTime, nickname);
-        }
-
-
-
-        var deletePostForm = document.createElement('form');
-        deletePostForm.classList.add('delete-post-form');
-        deletePostForm.dataset.planetName = planetName;
-        deletePostForm.dataset.postPk = postPk;
-
-        var csrfTokenInput = document.createElement('input');
-        csrfTokenInput.type = 'hidden';
-        csrfTokenInput.name = 'csrfmiddlewaretoken';
-        csrfTokenInput.value = csrftoken;
-
-        var deletePostButton = document.createElement('input');
-        deletePostButton.type = 'submit';
-        deletePostButton.classList.add('delete-post-button');
-        deletePostButton.value = '게시글 삭제';
-
-        deletePostForm.append(csrfTokenInput, deletePostButton);
-        newPostContainer.appendChild(deletePostForm);
-
-        var commentList = document.createElement('div');
-        commentList.id = 'comment-list';
-
-        var commentForm = document.createElement('form');
-        commentForm.id = 'comment-form';
-        commentForm.dataset.planetName = planetName;
-        commentForm.dataset.postPk = postPk;
-
-        var csrfTokenInput2 = document.createElement('input');
-        csrfTokenInput2.type = 'hidden';
-        csrfTokenInput2.name = 'csrfmiddlewaretoken';
-        csrfTokenInput2.value = csrftoken;
-
-        var commentTextarea = document.createElement('textarea');
-        commentTextarea.name = 'content';
-        commentTextarea.cols = '40';
-        commentTextarea.rows = '10';
-        commentTextarea.required = true;
-        commentTextarea.id = 'id_content';
-
-        var commentLabel = document.createElement('label');
-        commentLabel.textContent = '내용:';
-        commentLabel.htmlFor = 'id_content';
-
-        var commentParagraph = document.createElement('p');
-        commentParagraph.appendChild(commentLabel);
-        commentParagraph.appendChild(commentTextarea);
-
-        var submitButton = document.createElement('input');
-        submitButton.type = 'submit';
-        submitButton.value = '댓글 작성';
-
-        commentForm.append(csrfTokenInput2, commentParagraph, submitButton);
-        commentList.appendChild(commentForm);
-
-        newPostContainer.appendChild(commentList);
-
-        var postList = document.getElementById('post-list');
-        postList.insertBefore(newPostContainer, postList.firstChild);
-
-        form.reset();
-      } else {
-        console.error(response.data.message);
-      }
-    })
-    .catch(function(error) {
-      console.error('AJAX request failed:', error);
-    });
-  });
-});
-
-// 게시글 삭제
 document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('body').addEventListener('submit', function(e) {
     var target = e.target;
 
-    if (target.matches('.delete-post-form')) {
+    // 게시글 생성
+    if (target.matches('#post-form')) {
+      e.preventDefault();
+
+      var form = e.target;
+      var planetName = form.dataset.planetName;
+      var url = "/planets/" + planetName + "/create/";
+
+      var formData = new FormData(form);
+      formData.append('csrfmiddlewaretoken', csrftoken);
+
+      axios({
+        method: 'post',
+        url: url,
+        data: formData,
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      .then(function(response) {
+        if (response.data.success) {
+          var postPk = response.data.post_pk;
+          var newPostContainer = document.createElement('div');
+          newPostContainer.id = 'post-container';
+
+          var newPostSection = document.getElementById('post-section').cloneNode(true);
+          newPostSection.querySelector('#post-nickname').innerHTML = response.data.nickname;
+          newPostSection.querySelector('#post-createdtime').innerHTML = response.data.created_time;
+          newPostSection.querySelector('#post-content').innerHTML = response.data.content;
+
+          var image = null;
+          if (response.data.image_url) {
+            image = document.createElement('img');
+            image.setAttribute('src', response.data.image_url);
+            image.setAttribute('alt', 'Image');
+          }
+
+          if (image) {
+            newPostContainer.append(newPostSection, image);
+          } else {
+            newPostContainer.append(newPostSection);
+          }
+
+          var deletePostForm = document.createElement('form');
+          deletePostForm.id = 'delete-post-form';
+          deletePostForm.dataset.planetName = planetName;
+          deletePostForm.dataset.postPk = postPk;
+
+          var csrfTokenInput = document.createElement('input');
+          csrfTokenInput.type = 'hidden';
+          csrfTokenInput.name = 'csrfmiddlewaretoken';
+          csrfTokenInput.value = csrftoken;
+
+          var deletePostButton = document.createElement('input');
+          deletePostButton.type = 'submit';
+          deletePostButton.id = 'delete-post-button';
+          deletePostButton.value = '게시글 삭제';
+
+          deletePostForm.append(csrfTokenInput, deletePostButton);
+          newPostContainer.appendChild(deletePostForm);
+
+          var commentList = document.createElement('div');
+          commentList.id = 'comment-list';
+
+          var commentcreate = document.createElement('div');
+          commentcreate.id = 'comment-create';
+
+          var button = document.createElement('button');
+          button.id = 'show-comment-form-button';
+          button.textContent = '댓글 작성';
+
+          var newCommentForm = document.getElementById('comment-form').cloneNode(true);
+          newCommentForm.setAttribute('data-post-pk', postPk);
+
+          commentcreate.appendChild(button);
+          commentcreate.appendChild(newCommentForm);
+          commentList.appendChild(commentcreate);
+          newPostContainer.appendChild(commentList);
+          newPostContainer.appendChild(document.createElement('hr'));
+
+          var postList = document.getElementById('post-list');
+          postList.insertBefore(newPostContainer, postList.firstChild);
+
+          form.reset();
+        } else {
+          console.error(response.data.message);
+        }
+      })
+      .catch(function(error) {
+        console.error('AJAX request failed:', error);
+      });
+    }
+
+    // 게시글 삭제
+    else if (target.matches('#delete-post-form')) {
       e.preventDefault();
 
       var deleteForm = target;
-      var deleteButton = deleteForm.querySelector('.delete-post-button');
-      var postContainer = deleteButton.closest('.post-container');
+      var deleteButton = deleteForm.querySelector('#delete-post-button');
+      var postContainer = deleteButton.closest('#post-container');
       var planetName = deleteForm.dataset.planetName;
       var postPk = deleteForm.dataset.postPk;
       var url = "/planets/" + planetName + "/" + postPk + "/delete/";
@@ -156,20 +127,13 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('AJAX request failed:', error);
       });
     }
-  });
-});
 
-
-// 댓글 생성
-document.addEventListener('DOMContentLoaded', function() {
-  document.querySelector('body').addEventListener('submit', function(e) {
-    var target = e.target;
-
-    if (target.matches('#comment-form')) {
+    // 댓글 생성
+    else if (target.matches('#comment-form')) {
       e.preventDefault();
 
       var form = target;
-      var commentContainer = form.closest('.post-container');
+      var commentContainer = form.closest('#post-container');
       var planetName = form.dataset.planetName;
       var postPk = form.dataset.postPk;
       var url = "/planets/" + planetName + "/" + postPk + "/create/";
@@ -202,7 +166,7 @@ document.addEventListener('DOMContentLoaded', function() {
           newCommentContainer.append(content, createdTime, nickname);
 
           var deleteCommentForm = document.createElement('form');
-          deleteCommentForm.classList.add('delete-comment-form');
+          deleteCommentForm.id = 'delete-comment-form';
           deleteCommentForm.dataset.planetName = planetName;
           deleteCommentForm.dataset.postPk = postPk;
           deleteCommentForm.dataset.commentPk = response.data.comment_pk;
@@ -213,8 +177,8 @@ document.addEventListener('DOMContentLoaded', function() {
           csrfTokenInput.value = csrftoken;
 
           var deleteCommentButton = document.createElement('input');
+          deleteCommentButton.id = 'delete-comment-button';
           deleteCommentButton.type = 'submit';
-          deleteCommentButton.classList.add('delete-comment-button');
           deleteCommentButton.value = '댓글 삭제';
 
           deleteCommentForm.append(csrfTokenInput, deleteCommentButton);
@@ -223,8 +187,16 @@ document.addEventListener('DOMContentLoaded', function() {
           var recommentList = document.createElement('div');
           recommentList.id = 'recomment-list';
 
+          var recommentcreate = document.createElement('div');
+          recommentcreate.id = 'recomment-create';
+
+          var button = document.createElement('button');
+          button.id = 'show-recomment-form-button';
+          button.textContent = '대댓글 작성';
+
           var recommentForm = document.createElement('form');
           recommentForm.id = 'recomment-form';
+          recommentForm.style.display = 'none';
           recommentForm.dataset.planetName = planetName;
           recommentForm.dataset.postPk = postPk;
           recommentForm.dataset.commentPk = response.data.comment_pk;
@@ -254,12 +226,16 @@ document.addEventListener('DOMContentLoaded', function() {
           submitButton.value = '대댓글 작성';
 
           recommentForm.append(csrfTokenInput2, recommentParagraph, submitButton);
-          recommentList.appendChild(recommentForm);
-
+          recommentcreate.appendChild(button);
+          recommentcreate.appendChild(recommentForm);
+          recommentList.appendChild(recommentcreate);
           newCommentContainer.appendChild(recommentList);
 
           commentList.insertBefore(newCommentContainer, commentList.firstChild);
 
+          target.previousElementSibling.textContent = '댓글 작성';
+
+          target.style.display = "none";
           form.reset();
         } else {
           console.error(response.data.message);
@@ -269,20 +245,12 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('AJAX request failed:', error);
       });
     }
-  });
-});
 
-// 댓글 삭제
-document.addEventListener('DOMContentLoaded', function() {
-  var deleteForms = document.querySelector('body');
-
-  deleteForms.addEventListener('submit', function(e) {
-    var target = e.target;
-
-    if (target.matches('.delete-comment-form')) {
+    // 댓글 삭제
+    else if (target.matches('#delete-comment-form')) {
       e.preventDefault();
 
-      var deleteButton = target.querySelector('.delete-comment-button');
+      var deleteButton = target.querySelector('#delete-comment-button');
       var commentContainer = deleteButton.closest('.comment-container');
       var planetName = target.dataset.planetName;
       var postPk = target.dataset.postPk;
@@ -310,15 +278,9 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('AJAX request failed:', error);
       });
     }
-  });
-});
 
-// 대댓글 생성
-document.addEventListener('DOMContentLoaded', function() {
-  document.querySelector('body').addEventListener('submit', function(e) {
-    var target = e.target;
-
-    if (target.matches('#recomment-form')) {
+    // 대댓글 생성
+    else if (target.matches('#recomment-form')) {
       e.preventDefault();
 
       var form = target;
@@ -355,7 +317,7 @@ document.addEventListener('DOMContentLoaded', function() {
           newRecommentContainer.append(content, createdTime, nickname);
 
           var deleteRecommentForm = document.createElement('form');
-          deleteRecommentForm.classList.add('delete-recomment-form');
+          deleteRecommentForm.id = 'delete-recomment-form';
           deleteRecommentForm.dataset.planetName = planetName;
           deleteRecommentForm.dataset.postPk = postPk;
           deleteRecommentForm.dataset.commentPk = commentPk;
@@ -367,8 +329,8 @@ document.addEventListener('DOMContentLoaded', function() {
           csrfTokenInput.value = csrftoken;
 
           var deleteRecommentButton = document.createElement('input');
+          deleteRecommentButton.id = 'delete-recomment-button';
           deleteRecommentButton.type = 'submit';
-          deleteRecommentButton.classList.add('delete-recomment-button');
           deleteRecommentButton.value = '대댓글 삭제';
 
           deleteRecommentForm.append(csrfTokenInput, deleteRecommentButton);
@@ -376,6 +338,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
           recommentList.insertBefore(newRecommentContainer, recommentList.firstChild);
 
+          target.previousElementSibling.textContent = '대댓글 작성';
+
+          target.style.display = 'none';
           form.reset();
         } else {
           console.error(response.data.message);
@@ -385,21 +350,12 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('AJAX request failed:', error);
       });
     }
-  });
-});
 
-
-// 대댓글 삭제
-document.addEventListener('DOMContentLoaded', function() {
-  var deleteForms = document.querySelector('body');
-
-  deleteForms.addEventListener('submit', function(e) {
-    var target = e.target;
-
-    if (target.matches('.delete-recomment-form')) {
+    // 대댓글 삭제
+    else if (target.matches('#delete-recomment-form')) {
       e.preventDefault();
 
-      var deleteButton = target.querySelector('.delete-recomment-button');
+      var deleteButton = target.querySelector('#delete-recomment-button');
       var recommentContainer = deleteButton.closest('.recomment-container');
       var planetName = target.dataset.planetName;
       var postPk = target.dataset.postPk;
@@ -424,6 +380,55 @@ document.addEventListener('DOMContentLoaded', function() {
       .catch(function(error) {
         console.error('AJAX request failed:', error);
       });
+    }
+  });
+
+  document.querySelector('body').addEventListener('click', function(e) {
+    var target = e.target;
+
+    // 게시 버튼
+    if (target.id.startsWith('show-post-form-button')) {
+      e.preventDefault();
+
+      var postForm = document.querySelector('#post-form');
+
+      if (postForm.style.display === 'none') {
+        postForm.style.display = 'block';
+      } else {
+        postForm.style.display = 'none';
+      }
+    }
+
+    // 댓글 버튼
+    if (target.id.startsWith('show-comment-form-button')) {
+      e.preventDefault();
+
+      var commentForm = target.nextElementSibling;
+      var button = target;
+
+      if (commentForm.style.display === 'none') {
+        commentForm.style.display = 'block';
+        button.innerHTML = '댓글 작성 취소';
+      } else {
+        commentForm.style.display = 'none';
+        button.innerHTML = '댓글 작성';
+      }
+    }
+
+    // 대댓글 버튼
+    else if (target.id.startsWith('show-recomment-form-button')) {
+      e.preventDefault();
+
+      var recommentForm = target.nextElementSibling;
+      var button = target;
+
+      if (recommentForm.style.display === 'none') {
+        recommentForm.style.display = 'block';
+        button.innerHTML = '대댓글 작성 취소';
+      } else {
+        recommentForm.style.display = 'none';
+        button.innerHTML = '대댓글 작성';
+      }
     }
   });
 });

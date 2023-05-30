@@ -80,7 +80,7 @@ class Post(models.Model):
 
     image   = ProcessedImageField(
         upload_to = upload_to_directory,
-        processors = [ResizeToFill(400,400)],
+        # processors = [ResizeToFill(800,400)],
         format     = 'JPEG',
         options    = {'quality' : 100},
         blank      = True,
