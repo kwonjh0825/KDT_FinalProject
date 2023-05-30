@@ -7,12 +7,39 @@
 
 {% block content %}
 <div>
-  <div class="text-black">
-    <form action="{% url 'accounts:signup' %}" method="POST" enctype="multipart/form-data">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <input type="submit" value="가입하기">
-    </form>
-  </div>
+  <form action="{% url 'accounts:signup' %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="grid">
+      <!-- id -->
+      <label for="username" class="ml-1 mt-2 block text-lg font-medium text-slate-300">ID</label>
+      <input type="text" id="username" name="username" value="{{ user.username }}" class="form-input mt-1 rounded-md bg-[#101013] " required>
+      <!-- last_name -->
+      <label for="last_name" class="ml-1 mt-2 block text-lg font-medium text-slate-300">Last_name</label>
+      <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}" class="form-input mt-1 rounded-md bg-[#101013] " required>
+      <!-- first_name -->
+      <label for="first_name" class="ml-1 mt-2 block text-lg font-medium text-slate-300">First_name</label>
+      <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}" class="form-input mt-1 rounded-md bg-[#101013] " required>
+      <!-- email -->
+      <label for="email" class="ml-1 mt-2 block text-lg font-medium text-slate-300">E-mail</label>
+      <input type="text" id="email" name="email" value="{{ user.email }}" class="form-input mt-1 rounded-md bg-[#101013] " required>
+      <!-- password1 -->
+      <label for="password1" class="ml-1 mt-2 block text-lg font-medium text-slate-300">Password</label>
+      <input type="password" id="password1" name="password1" value="{{ user.password1 }}" class="form-input mt-1 rounded-md bg-[#101013] " required>
+      <!-- password2 -->
+      <label for="password2" class="ml-1 mt-2 block text-lg font-medium text-slate-300">Confirm password</label>
+      <input type="password" id="password2" name="password2" value="{{ user.password2 }}" class="form-input mt-1 rounded-md bg-[#101013] " required>
+    
+      <!-- checkbox -->
+      <div class="flex items-center my-4 ml-2">
+        <input id="signup-checkbox" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" required>
+        <label for="signup-checkbox" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">I have read and agree to the privacy policy</label>
+      </div>
+      <!-- 버튼 -->
+      <input type="submit" value="Sign-Up" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" />
+    </div>
+  </form>
 </div>
 {% endblock content %}
+{% block script %}
+
+{% endblock script %}

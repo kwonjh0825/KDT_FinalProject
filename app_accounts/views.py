@@ -11,13 +11,17 @@ from django.views import View
 from django.contrib import messages
 from django.conf import settings
 from django.urls import reverse_lazy
+
+from django.core import signing #암호화
+from django.utils.crypto import get_random_string # 토큰
 from django.shortcuts import get_object_or_404
+
 
 # 이메일
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail, BadHeaderError
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
@@ -25,6 +29,9 @@ from django.utils.encoding import force_bytes
 from django.urls import reverse
 # 비밀번호 리셋
 from django.contrib.auth.views import PasswordResetConfirmView
+
+def contract(request):
+    return render(request, 'accounts/contract.html')
 
 def login(request):
     if request.user.is_authenticated:
@@ -100,9 +107,43 @@ def activation_view(request, uidb64, token):
 def activation_failed_view(request):
     return render(request, 'accounts/activation_failed.html')
 
+
+
+
 # 계정활성화 메일 보냈다는 view
-def verification_sent_view(request):
-    return render(request, 'accounts/verification_sent.html')
+def verification_sent(request, signed_email, token):
+    try:
+        # 이메일 복호화
+        user_email = signing.loads(signed_email)
+        context = { 'user_email': user_email }
+
+        type = request.GET.get('type')
+        
+        user = get_user_model()
+        user = user.objects.get(email=user_email)
+        
+        session_token = request.session.get('temp_token')
+        
+        if type == 're':
+            send_verification_email(request, user)
+            return render(request, 'accounts/verification_sent.html', context)
+        elif session_token and session_token == token:
+            del request.session['temp_token']  # 세션에서 임시 토큰 삭제
+            send_verification_email(request, user)
+            return render(request, 'accounts/verification_sent.html', context)
+        else:
+            # return render(request, 'accounts/not_found.html')
+            return render(request, 'accounts/verification_sent.html', context)
+
+    except signing.BadSignature:
+        # 암호화된 이메일 주소가 올바르지 않은 경우 처리
+        return render(request, 'accounts/not_found.html')
+
+
+def generate_temp_token(user):
+    # 임시 토큰 생성 로직을 구현합니다.
+    # 예시로 랜덤한 문자열을 사용하고, 이를 임시 토큰으로 반환합니다.
+    return get_random_string(length=20)
 
 # 회원가입
 def signup(request):
@@ -118,8 +159,13 @@ def signup(request):
             user.is_active = False
             user.save()
             
-            send_verification_email(request, user)
-            return redirect('accounts:verification_sent')
+            temp_token = generate_temp_token(user)  # 임시 토큰 생성
+            request.session['temp_token'] = temp_token
+            # 이메일 주소 암호화
+            signed_email = signing.dumps(user.email)
+
+            # send_verification_email(request, user)
+            return redirect('accounts:verification_sent', signed_email=signed_email, token=temp_token)
     else:
         form = CustomUserCreationForm()
 
@@ -146,7 +192,7 @@ def profile(request, username):
 def profile_update(request):
     if request.method == 'POST':
         form = CustomUserChangeForm(request.POST, instance=request.user)
-        print(request.method)
+
         if form.is_valid():
             form.save()
             return redirect('accounts:profile', username=request.user)

@@ -1,0 +1,22 @@
+{% extends 'base_nav.html' %}
+{% block title %}
+  게시글 신고 관리
+{% endblock title %}
+{% block content %}
+  
+  <h1>게시글 신고 관리</h1>
+  <div>
+  {% for report in reports %}
+    <div id="report-form-{{report.post}}">
+      게시글 번호: {{report.post}},
+      신고 수: {{report.pk__count}}
+      <form class="delete-post-form" data-post-pk="{{report.post}}" data-planet-name="{{planet.name}}">
+        {% csrf_token %}
+        <input type="submit" value="게시글 삭제">
+      </form>
+    </div>
+  {% endfor %}
+  </div>
+  <script src="{% static 'js/admin_report.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+{% endblock content %}

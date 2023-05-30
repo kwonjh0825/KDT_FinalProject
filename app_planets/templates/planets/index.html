@@ -11,7 +11,7 @@ main
 {% endblock head %}
 
 {% block content %}
-<!-- 게시글 작성 -->
+
 <div id="accordion-collapse-body-6" class="hidden" aria-labelledby="accordion-collapse-heading-6">
   <p class="border-b-2 border-[#393f4f] text-2xl text-white p-5">게시글 작성하기</p>
   <div class="p-5 border-b-2 border-[#393f4f]">
@@ -23,7 +23,16 @@ main
       </button>
     </form>
   </div>
-</div>
+
+{% if messages %}
+  {% for message in messages %}
+    <script>
+      alert('{{message}}')
+    </script>
+  {% endfor %}
+{% endif %}
+<div class="left-side-bar">
+
 
 
 
@@ -56,6 +65,7 @@ main
           <img src="{{ post.image.url }}" alt="{{ post.image }}" class="rounded-lg">
         {% endif %}
       </div>
+
       
       <!-- 감정표현 및 더보기 -->
       <div class="border-b-2 border-[#393f4f]">
@@ -111,6 +121,20 @@ main
       </div>
       
       <!-- 댓글 작성 -->
+
+      {% if request.user == post.accountbyplanet.user %}
+        <form id="delete-post-form" data-planet-name="{{ planet.name }}" data-post-pk="{{ post.pk }}">
+          {% csrf_token %}
+          <input type="submit" id="delete-post-button" value="게시글 삭제">
+        </form>
+      {% endif %}
+      {% if request.user.is_authenticated %}
+        <form action="{% url 'planets:post_report' planet.name post.pk %}" method="POST">
+          {% csrf_token %}
+          <input type="submit" value="게시글 신고">
+        </form>
+      {% endif %}
+
       <div id="comment-list">
         {% for comment in post.comments.all reversed %}
           <div class="comment-container">

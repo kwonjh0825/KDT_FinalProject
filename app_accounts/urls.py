@@ -7,9 +7,10 @@ app_name = 'accounts'
 urlpatterns = [
     path("login/", views.login, name="login"),
     path("signup/", views.signup, name="signup"),
+    path("contract/", views.contract, name="contract"),
     path('activate/<str:uidb64>/<str:token>/', views.activation_view, name='activate'), # 이메일 인증
     path('activation-failed/', views.activation_failed_view, name='activation_failed'), # 유효하지 않은 접근일떄
-    path('verification-sent/', views.verification_sent_view, name='verification_sent'), # 메일 보내고 나서!
+    path('verification-sent/<str:signed_email>/<str:token>/', views.verification_sent, name='verification_sent'), # 메일 보내고 나서!
     # 최상위 프로필
     path('profile/update/', views.profile_update, name='profile_update'),
     path('profile/<str:username>/', views.profile, name='profile'),

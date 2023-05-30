@@ -5,7 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 from django.contrib import messages
-from .models import Planet, TermsOfService, Post, Comment, Recomment, Emote
+from django.db.models import Count
+from .models import Planet, TermsOfService, Post, Comment, Recomment, Emote, Report
 from .forms import PlanetForm, PostForm, CommentForm, RecommentForm
 from app_accounts.models import Accountbyplanet, User
 from app_accounts.forms import AccountbyplanetForm
@@ -77,7 +78,7 @@ def planet_join(request, planet_name):
     
     if Accountbyplanet.objects.filter(planet=planet).count() >= planet.maximum_capacity:
         messages.info(request, '서버 최대 인원을 초과하여 가입을 진행할 수 없습니다. ')
-        return redirect('planets:planets')
+        return redirect('planets:main')
     
     termsofservice = TermsOfService.objects.filter(Planet_id=planet.pk)
 
@@ -299,6 +300,7 @@ def planet_tos_admin(request, planet_name):
         }
         return render(request, 'planets/planet_tos_admin.html', context)
 
+# 행성 가입 관리
 @login_required
 def planet_join_admin(request, planet_name):
     planet = Planet.objects.get(name=planet_name)
@@ -310,6 +312,7 @@ def planet_join_admin(request, planet_name):
     }
     return render(request, 'planets/planet_join_admin.html', context)
 
+# 행성 가입 승인
 @login_required
 def planet_join_confirm(request, planet_name, user_pk):
     planet = Planet.objects.get(name=planet_name)
@@ -321,6 +324,7 @@ def planet_join_confirm(request, planet_name, user_pk):
 
     return JsonResponse({'success': True})
 
+# 행성 가입 거절
 @login_required
 def planet_join_reject(request, planet_name, user_pk):
     planet = Planet.objects.get(name=planet_name)
@@ -331,3 +335,24 @@ def planet_join_reject(request, planet_name, user_pk):
 
     return JsonResponse({'success': True})    
 
+# 게시글 신고 기능
+def post_report(request, planet_name, post_pk):
+    post = Post.objects.get(pk=post_pk)
+    if not Report.objects.filter(user=request.user, post=post):
+        Report.objects.create(user=request.user, post=post)
+        messages.info(request, '신고가 완료되었습니다.')
+    
+    else:
+        messages.info(request, '이미 신고한 게시글입니다. ')
+
+    return redirect('planets:index', planet_name)
+
+def admin_report(request, planet_name):
+    planet = Planet.objects.get(name=planet_name)
+
+    reports = Report.objects.values('post').annotate(Count('pk'))
+    context = {
+        'planet': planet,
+        'reports': reports,
+    }
+    return render(request, 'planets/admin_report.html', context)

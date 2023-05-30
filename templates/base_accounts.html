@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}{% endblock title %}</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="./jquery-3.4.1.min.js"></script>
   <link rel="stylesheet" href="{% static 'css/base_accounts.css' %}">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
@@ -19,12 +20,20 @@
 
 <body>
   <!-- content -->
+  
+  <div class="max-w-[540px] h-screen mx-auto">
+  <!-- 로고 -->
+  <div class="py-14 flex justify-center">
+    <a href="{% url 'planets:main' %}" class='font-bold text-2xl p-1 text-[#ffd951]'>Catsmos</a> <!-- 로고 위치 -->
+  </div>
   {% block content %}
   {% endblock content %}
-
+  </div>
 </body>
 <script type="text/javascript" src="/static/js/base_nav.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+
 {% block script %}
 {% endblock script %}
 </html>

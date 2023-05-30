@@ -16,4 +16,5 @@
     <a href="{% url 'planets:planet_join_admin' planet.name %}">가입 관리</a>
   {% endif %}
   <a href="{% url 'planets:planet_tos_admin' planet.name %}">약관 수정</a>
+  <a href="{% url 'planets:admin_report' planet.name %}">게시글 신고 관리</a>
 {% endblock content %}
