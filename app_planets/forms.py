@@ -32,15 +32,15 @@ class PlanetForm(forms.ModelForm):
         self.fields['maximum_capacity'].label = "행성 최대 인원"
         self.fields['maximum_capacity'].help_text = ''
         
-        labels = {
-            'name': '행성 이름', 
-            'description': '행성 설명', 
-            'category': '카테고리', 
-            'is_public': '공개 여부',
-            'image': '행성 사진', 
-            'maximum_capacity': '행성 최대 인원',
-            'need_confirm': '가입 승인 필요'
-        }
+        # labels = {
+        #     'name': '행성 이름', 
+        #     'description': '행성 설명', 
+        #     'category': '카테고리', 
+        #     'is_public': '공개 여부',
+        #     'image': '행성 사진', 
+        #     'maximum_capacity': '행성 최대 인원',
+        #     'need_confirm': '가입 승인 필요'
+        # }
 
 
 class PostForm(forms.ModelForm):
@@ -48,11 +48,30 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ('content', 'image', 'tags',)
-        labels = {
-            'content': '내용',
-            'image': '사진',
-            'tags': '태그',
-        }
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        self.fields['content'].widget.attrs['class'] = 'text-black'
+        self.fields['content'].widget.attrs['placeholder'] = " "
+        self.fields['content'].label = '<span class="text-base text-white">내용</span>'
+        self.fields['content'].help_text = ''
+        
+        self.fields['image'].label = '<span class="text-base text-white">행성 사진</span>'
+        self.fields['image'].help_text = ''
+        
+        self.fields['tags'].widget.attrs['class'] = 'text-black'
+        self.fields['tags'].widget.attrs['placeholder'] = " "
+        self.fields['tags'].label = '<span class="text-base text-white">태그</span>'
+        self.fields['tags'].help_text = ''
+
+
+        
+        # labels = {
+        #     'content': '내용',
+        #     'image': '사진',
+        #     'tags': '태그',
+        # }
         
 
 class CommentForm(forms.ModelForm):
