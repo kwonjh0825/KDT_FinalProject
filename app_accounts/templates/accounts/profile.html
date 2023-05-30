@@ -12,54 +12,50 @@
     </span>
     Back
 </a>
-<div class=" relative" style="height:180px; background-color: #181A20;"></div>
-<!-- 프로필 사진 -->
-<div class="absolute -mt-12 ml-5">
-    {% if user.profile_image %}
-        <img src="{{ user.profile_image.url }}" alt="post_image" class="inline-block" width="100">
-    {% else %}
-        <img src="https://i.pinimg.com/564x/d2/98/4e/d2984ec4b65a8568eab3dc2b640fc58e.jpg" alt="no_image" class="inline-block" width="100">
-    {% endif %}
-</div>
-<!-- 내용 -->
-<div class="container mx-auto ml-5">
-    <div class="flex justify-end my-3">
+<div class="mx-auto w-[500px]">
+    <!-- 내용 -->
+    <div class="border container ml-5 pl-8">
+        <!-- 개인정보 -->
+        <table class="my-3">
+            <tr>
+                <td>
+                    <div class="border-r-2 pr-4 mr-4">
+                        <p>{{ user.username }}</p>
+                        <p class="text-slate-500">{{ user.email }}</p>
+                    </div>
+                </td>
+                <td>
+                    <p class="">Joined</p>
+                    <p class="text-slate-500">{{ user.created_at|date:'m d, Y' }}</p>
+                </td>
+            </tr>
+        </table>
         
-        <!-- 팔로우 버튼 -->
-        {% if request.user.is_authenticated %}
-            {% comment %} {% if user.username != .username %} {% endcomment %}
-                {% if request.user in person.followers.all %}
-                <button class="rounded-md bg-[#ab9203] hovor:bg-[#d1cb1d] px-4 py-2">Folloing</button>
+            
+        
+        <!-- 개수 -->
+        <div class="my-4">
+            <p class="text-3xl">Planet Lists</p>
+            {% for user_by_planet in user_by_planets %}
+            <a type="button" href="{% url 'planets:index' user_by_planet.planet.name %}" class="pl-5 py-2 my-3 rounded-lg bg-[#181A20] hover:bg-[161a24] max-w-[400px] flex gap-4 relative">
+                {% if user_by_planet.profile_image %}
+                <img src="{{ user_by_planet.profile_image.url }}" alt="post_image" class="inline-block rounded-md" width="50" height="50">
                 {% else %}
-                <button class="rounded-md bg-[#d1cb1d] hover:bg-[#ab9203] px-4 py-2">Follow</button>
+                <img src="https://i.pinimg.com/originals/fe/c1/6c/fec16c6f886c5d684da5ddcdacd21ffb.gif" alt="no_image" class="inline-block rounded-md" width="50" height="50">
                 {% endif %}
-            {% comment %} {% endif %} {% endcomment %}
-        {% endif %}
-    </div>
-
-    <!-- 개인정보 -->
-    <div class="mt-8 mb-5">
-        <p>{{ user.username }}</p>
-        <p class="text-slate-500">{{ user.email }}</p>
-    </div>
-
-    <!-- 회원가입한 날짜 -->
-    <div class="pl-5 py-3 ml-1 rounded-lg bg-[#181A20] ">
-        <p class="text-slate-700">JOINED</p>
-        <p class="text-slate-400">{{ user.created_at|date:'m d, Y' }}</p>
-    </div>
-
-    <!-- 개수 -->
-    <div class="flex gap-3 my-4">
-        <p>{{ user.planet_list.all|length }} <span class="text-slate-500">Posts</span> </p>
-        <p>{{ person.followings.all|length }} <span class="text-slate-500">Followings</span> </p>
-        <p>{{ person.followers.all|length }} <span class="text-slate-500">Followers</span> </p>
+                <div>
+                    <p class="text-slate-200">{{ user_by_planet.planet.name }}</p>
+                    <p class="text-slate-400">{{ user_by_planet.nickname }}</p>
+                </div>
+                <p class="absolute right-2 bottom-2 text-slate-400 text-xs">{{ user_by_planet.planet.created_at|date:'m d, Y' }}</p>
+            </a>
+        
+            {% endfor %}
+        </div>
+        
     </div>
     
+
+    
 </div>
-
-{% for user_by_planet in user_by_planets %}
-    user_by_planet.planet.name
-{% endfor %}
-
-{% endblock content %}
+    {% endblock content %}

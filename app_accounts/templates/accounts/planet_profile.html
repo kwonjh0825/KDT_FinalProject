@@ -1,18 +1,194 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <div class="container">
-        <h1>행성 프로필 임시 페이지</h1>
-        <p>닉네임 {{user_by_planet.nickname}}</p>
-        <p>프로필 이미지 {{user_by_planet.nickname}}</p>
-        <p>팔로워 {{user_by_planet.nickname}}</p>
-        
+{% extends 'base_nav.html' %}
+{% load static %}
+
+{% block title %}
+프로필
+{% endblock title %}
+
+{% block style %}
+.tag_crop {
+
+}
+
+  .tag_img {
+    width: 98%;
+    height: 100%;
+    object-fit: cover;
+    {% comment %} object-position: 20% 10%; {% endcomment %}
+    vertical-align: middle;
+  
+  }
+  .v-line {
+    border-left : 1px solid gray;
+    height : auto;
+  }
+{% endblock style %}
+{% block content %}
+
+<div class="container mx-auto max-w-[900px]">
+    <a href="javascript:history.back()" class="block  flex items-center pl-5  text-[#ffd951] " style="height: 50px;">
+        <span class="material-symbols-outlined">
+            chevron_left
+        </span>
+        Back
+    </a>
+
+{% comment %} 
+    <div class=" relative" style="height:180px; background-color: #181A20;"> {% endcomment %}
+        {% if user_by_planet.profile_image %}
+        <img class=" relative" style="height:200px;" src="{{ user_by_planet.backgounrd_image.url }}" alt="#">
+        {% else %}
+        <img class=" relative" style="height:200px;" src="https://www.macmillandictionary.com/external/slideshow/thumb/Grey_thumb.png" alt="no_image">
+        {% endif %}
+    {% comment %} </div> {% endcomment %}
+    <!-- 프로필 사진 -->
+    <div class="absolute -mt-12 ml-5">
+        {% if user_by_planet.profile_image %}
+        <img src="{{ user_by_planet.profile_image.url }}" alt="post_image" class="inline-block rounded-md" width="100">
+        {% else %}
+        <img id="imgDino" src="https://i.pinimg.com/originals/fe/c1/6c/fec16c6f886c5d684da5ddcdacd21ffb.gif" alt="no_image" class="inline-block" width="100">
+        {% endif %}
     </div>
-</body>
-</html>
+    <!-- 내용 -->
+    <div class="my-3 mr-5 flex gap-3" style="float: right;">
+
+        <button data-modal-target="defaultModal" data-modal-toggle="defaultModal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700" type="button">
+            <span class="material-symbols-outlined">
+                groups
+                </span>
+        </button> 
+
+        <!-- 팔로우 버튼 --> 
+        {% if request.user.is_authenticated %}
+        {% comment %} {% if user.username != .username %} {% endcomment %}
+            {% if request.user in user_by_planet.followers.all %}
+            <button class="rounded-md bg-[#ab9203] hovor:bg-[#d1cb1d] px-4 py-2">Folloing</button>
+            {% else %}
+            <button class="rounded-md bg-[#d1cb1d] hover:bg-[#ab9203] px-4 py-2">Follow</button>
+            {% endif %}
+        {% comment %} {% endif %} {% endcomment %}
+        {% endif %}
+    </div>
+    <!-- 개인정보 -->
+    <div class=" ml-20 pl-12 pt-3 mb-5 flex items-end gap-4">
+        <p class="text-slate-200 text-2xl">{{ user_by_planet.nickname }}</p>
+        <p class="text-xs text-center">{{ user_by_planet.post_set.all|length }} <br> <span class="text-slate-500">게시물</span> </p>
+        <p class="text-xs text-center">{{ user_by_planet.followings.all|length }} <br> <span class="text-slate-500">팔로잉</span> </p>
+        <p class="text-xs text-center">{{ user_by_planet.followers.all|length }} <br> <span class="text-slate-500">팔로워</span> </p>
+
+        {% comment %} <p class="text-slate-500">{{ user.email }}</p> {% endcomment %}
+        {% comment %} <!-- 회원가입한 날짜 -->
+        <div class="text-xs flex items-end">
+            <p class="text-slate-700">JOINED : </p>
+            <p class="text-slate-400 text-xs">{{ user_by_planet.planet.created_at|date:'m d, Y' }}</p>
+        </div> {% endcomment %}
+    </div>
+
+
+    <div class="mx-auto pt-6">
+        <!-- 개수 -->
+        {% comment %} <div class="my-4 ml-2">
+            <p>{{ user_by_planet.post_set.all|length }} <span class="text-slate-500">Posts</span> </p>
+            <p>{{ user_by_planet.followings.all|length }} <span class="text-slate-500">Followings</span> </p>
+            <p>{{ user_by_planet.followers.all|length }} <span class="text-slate-500">Followers</span> </p>
+        </div>  {% endcomment %}
+
+          <!--  1. posts - planet.user 가 작성한 postslists 나열
+                2. 팔로잉 중인 유저들 나열
+                3. user 를 팔로우 하는 another users 나열
+        
+            -->
+
+            
+        {% for post in user_by_planet.post_set.all %}
+        <div class="pl-5 py-3 my-3 rounded-lg bg-[#181A20] relative tag_crop">
+            <div class="flex gap-3">
+                <!-- 프로필 이미지 -->
+                {% if user_by_planet.profile_image %}
+                <img src="{{ user_by_planet.profile_image.url }}" alt="post_image" class="inline-block rounded-md" width="50">
+                {% else %}
+                <img id="imgDino" src="https://i.pinimg.com/originals/fe/c1/6c/fec16c6f886c5d684da5ddcdacd21ffb.gif" alt="no_image" class="inline-block" width="50">
+                {% endif %}
+                <div>
+                    <p class="text-slate-200 text-ml">{{ user_by_planet.nickname }}</p>
+                    <p class="text-slate-500 text-sm">@{{ user_by_planet.nickname }}.@{{ user_by_planet.planet.name }}</p>
+                </div>
+            </div>
+            <p class="my-3">{{ post.content }}</p>
+            {% if post.image %}
+            <img class="tag_img rounded-md" src="{{ post.image.url }}" alt="#">
+            {% endif %}
+            <p class="absolute right-4 top-3 text-slate-400 text-xs">{{ post.created_at|date:'m d' }}</p>
+            
+            <!-- 게시글 삭제 -->
+            {% comment %} 
+            {% if request.user == post.accountbyplanet.user %}
+            <form class="delete-post-form" data-planet-name="{{ planet.name }}" data-post-pk="{{ post.pk }}">
+              {% csrf_token %}
+              <input type="submit" class="delete-post-button" value="게시글 삭제">
+            </form>
+            <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="defaultModal">
+                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                <span class="sr-only">Close modal</span>
+            </button>
+            {% endif %} 
+            {% endcomment %}
+        </div>
+
+        {% endfor %}
+    </div>
+    
+
+</div>
+  <!-- Main modal -->
+  <div id="defaultModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative w-full max-w-2xl max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <!-- Modal header -->
+            <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                    목록
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="defaultModal">
+                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="p-6 flex justify-around">
+                <div class="w-2/5 text-base leading-relaxed">
+                    <p class="text-2xl">팔로워</p>
+                    <div class="my-2 flex p-2 text-ml border-0 rounded-md bg-[#181A20]">
+                        <!-- 프로필 이미지 -->
+                        {% if user_by_planet.profile_image %}
+                        <img src="{{ user_by_planet.profile_image.url }}" alt="post_image" class="inline-block rounded-md" width="40">
+                        {% else %}
+                        <img id="imgDino" src="https://i.pinimg.com/originals/fe/c1/6c/fec16c6f886c5d684da5ddcdacd21ffb.gif" alt="no_image" class="inline-block" width="40">
+                        {% endif %}
+                        <p class="text-slate-200 text-ml flex items-center ml-4">{{ user_by_planet.nickname }}</p>
+                    </div>
+                </div>
+                <div class='v-line'></div>
+                <div class="w-2/5 text-base leading-relaxed">
+                    <p class="text-2xl">팔로우</p>
+                    <div class="my-2 flex p-2 text-ml border-0 rounded-md bg-[#181A20]">
+                        <!-- 프로필 이미지 -->
+                        {% if user_by_planet.profile_image %}
+                        <img src="{{ user_by_planet.profile_image.url }}" alt="post_image" class="inline-block rounded-md" width="40">
+                        {% else %}
+                        <img id="imgDino" src="https://i.pinimg.com/originals/fe/c1/6c/fec16c6f886c5d684da5ddcdacd21ffb.gif" alt="no_image" class="inline-block" width="40">
+                        {% endif %}
+                        <p class="text-slate-200 text-ml flex items-center ml-4">{{ user_by_planet.nickname }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block script %}
+
+{% endblock script %}

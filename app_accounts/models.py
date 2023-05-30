@@ -51,3 +51,19 @@ class Accountbyplanet(models.Model):
                 os.remove(path)
         super().delete(*args, **kwargs)
 
+    # 업로드 가능한 profile image formats
+    def get_profile_image_formats(self):
+        return [
+            ('JPEG', 'JPEG'),
+            ('PNG', 'PNG'),
+            ('GIF', 'GIF'),
+        ]
+    
+    # 업로드 가능한 background image formats
+    def get_background_image_formats(self):
+        return [
+            ('JPEG', 'JPEG'),
+            ('PNG', 'PNG'),
+            ('GIF', 'GIF'),
+        ]
+

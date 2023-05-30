@@ -4,7 +4,9 @@ from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
-from .models import Planet, TermsOfService, Post, Comment, Recomment, Emote
+from django.contrib import messages
+from django.db.models import Count
+from .models import Planet, TermsOfService, Post, Comment, Recomment, Emote, Report
 from .forms import PlanetForm, PostForm, CommentForm, RecommentForm
 from app_accounts.models import Accountbyplanet, User
 from app_accounts.forms import AccountbyplanetForm
@@ -48,6 +50,14 @@ def planet_create(request):
                 # 이용 약관 DB Create
                 TermsOfService.objects.create(Planet=planet, order=i, content=term_content)
 
+            # guide accountbyplanet 생성
+            accountbyplanet = Accountbyplanet.objects.create(nickname='Guide', user=User.objects.get(pk=1), planet=planet)
+
+            # 게시글, 댓글, 대댓글 생성
+            post = Post.objects.create(content='이곳은 게시글입니다. 꿈을 마음 껏 펼치세요!', planet=planet, accountbyplanet=accountbyplanet)
+            comment = Comment.objects.create(content='이곳은 댓글입니다. 게시글에 대한 의견을 작성하세요!', post=post, accountbyplanet=accountbyplanet)
+            Recomment.objects.create(content='이곳은 대댓글입니다. 댓글에 대한 생각을 알려주세요!', comment=comment, accountbyplanet=accountbyplanet)
+
             return redirect('planets:planet_join', planet.name)
     else:
         form = PlanetForm()
@@ -65,6 +75,10 @@ def planet_join(request, planet_name):
     # 이미 행성에 계정이 있는 경우
     if Accountbyplanet.objects.filter(planet=planet, user=request.user).exists():
         return redirect('planets:index', planet_name)
+    
+    if Accountbyplanet.objects.filter(planet=planet).count() >= planet.maximum_capacity:
+        messages.info(request, '서버 최대 인원을 초과하여 가입을 진행할 수 없습니다. ')
+        return redirect('planets:main')
     
     termsofservice = TermsOfService.objects.filter(Planet_id=planet.pk)
 
@@ -98,7 +112,6 @@ def index(request, planet_name):
 
     # 행성에 계정이 없는 경우 또는 가입 승인 대기 중인 경우
     if not request.user.is_authenticated or not Accountbyplanet.objects.filter(planet=planet, user=request.user).exists() or Accountbyplanet.objects.get(planet=planet, user=request.user).is_confirmed == False: 
-
         return redirect('planets:main')
     
     postform = PostForm()
@@ -287,6 +300,7 @@ def planet_tos_admin(request, planet_name):
         }
         return render(request, 'planets/planet_tos_admin.html', context)
 
+# 행성 가입 관리
 @login_required
 def planet_join_admin(request, planet_name):
     planet = Planet.objects.get(name=planet_name)
@@ -298,6 +312,7 @@ def planet_join_admin(request, planet_name):
     }
     return render(request, 'planets/planet_join_admin.html', context)
 
+# 행성 가입 승인
 @login_required
 def planet_join_confirm(request, planet_name, user_pk):
     planet = Planet.objects.get(name=planet_name)
@@ -309,6 +324,7 @@ def planet_join_confirm(request, planet_name, user_pk):
 
     return JsonResponse({'success': True})
 
+# 행성 가입 거절
 @login_required
 def planet_join_reject(request, planet_name, user_pk):
     planet = Planet.objects.get(name=planet_name)
@@ -319,3 +335,24 @@ def planet_join_reject(request, planet_name, user_pk):
 
     return JsonResponse({'success': True})    
 
+# 게시글 신고 기능
+def post_report(request, planet_name, post_pk):
+    post = Post.objects.get(pk=post_pk)
+    if not Report.objects.filter(user=request.user, post=post):
+        Report.objects.create(user=request.user, post=post)
+        messages.info(request, '신고가 완료되었습니다.')
+    
+    else:
+        messages.info(request, '이미 신고한 게시글입니다. ')
+
+    return redirect('planets:index', planet_name)
+
+def admin_report(request, planet_name):
+    planet = Planet.objects.get(name=planet_name)
+
+    reports = Report.objects.values('post').annotate(Count('pk'))
+    context = {
+        'planet': planet,
+        'reports': reports,
+    }
+    return render(request, 'planets/admin_report.html', context)
