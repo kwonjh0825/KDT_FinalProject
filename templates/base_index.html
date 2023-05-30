@@ -23,8 +23,21 @@
   <nav class="sticky top-0 w-full z-[1] lg:hidden">
     <div class="flex justify-between border-b-2  border-[#393f4f] bg-[#191b22] text-[#ffd951] font-bold p-5 w-full">
       <a href="{% url 'planets:main' %}" class='text-2xl p-1 text-[#ffd951]'>Catsmos</a> <!-- 로고 위치 -->
-      <div class="p-1">
-        <svg viewBox="0 0 32 32" width="30" height="30" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 32 32"><path d="M4 10h24a2 2 0 0 0 0-4H4a2 2 0 0 0 0 4zm24 4H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4zm0 8H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4z" fill="#ffd951" class="fill-000000"></path></svg>
+      
+      <div class="flex flex-row">
+        <div class="button-chatting bg-[#282c37]">
+          <div id="accordion-collapse" data-accordion="collapse" data-active-classes="bg-transparent">
+            <h2 id="accordion-collapse-heading-6">
+              <button type="button" class="flex items-center justify-between p-3 text-xs text-left text-white bg-transparent" data-accordion-target="#accordion-collapse-body-6" aria-expanded="true" aria-controls="accordion-collapse-body-6">
+                <p class="text-white">게시글 작성하기</p>
+              </button>
+            </h2>
+          </div>
+        </div>
+  
+        <div class="ms-3 p-1">
+          <svg viewBox="0 0 32 32" width="30" height="30" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 32 32"><path d="M4 10h24a2 2 0 0 0 0-4H4a2 2 0 0 0 0 4zm24 4H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4zm0 8H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4z" fill="#ffd951" class="fill-000000"></path></svg>
+        </div>
       </div>
     </div>
   </nav>
@@ -52,7 +65,7 @@
   <div class="flex flex-row justify-center items-center bg-[#191b22]">
   
     <!-- 좌측 사이드 바, sm:block -->
-    <div class="side-bar max-w-[280px] w-full h-screen text-[#d9e1e8] hidden sm:block">
+    <div class="side-bar sticky top-0 max-w-[280px] w-full h-screen mb-auto text-[#d9e1e8] hidden sm:block">
       <div class="flex flex-row">
         <div class="w-full">
           <div class="bg-[#282c37] h-10 justify-center items-center text-center m-3 p-2">
@@ -81,7 +94,7 @@
           </div>
         </div>
       </div>
-      <div class="fixed bottom-0 p-5 ps-20 hidden md:block">
+      <div class="fixed bottom-0 p-5 ps-20 hidden lg:block">
         <div class='ms-auto'>
           <p class="text-sm text-[#bcbdbf]">Creators of Catsmos:</p>
           <p class="mt-1 text-xs text-[#bcbdbf]">
@@ -99,18 +112,40 @@
 
     <!-- content -->
 
-    <div class="side-bar max-w-[540px] w-full h-screen bg-[#282c37] text-[#191b22] bg-color">
-      <div>
+    <div class="main-bar max-w-[540px] bg-[#191b22] text-white bg-color">
+      <div class="w-full mt-3">
+        <div class="bg-[#282c37] h-10 justify-center items-center text-white m-3 p-2">
+          <p class="text-sm p-1">#Explore</p>
+        </div>
+        <div class="flex flex-row w-full bg-[#191b22] text-center text-[#bcbdbf] p-3">
+          <p class="w-1/4">Posts</p>
+          <p class="w-1/4">Hashtags</p>
+          <p class="w-1/4">People</p>
+          <p class="w-1/4">News</p>
+        </div>
+      </div>
+      <div class="mb-auto" style="overflow-y: auto;">
         {% block content %}
         {% endblock content %}
       </div>
     </div>
 
     <!-- 우측 side 바, md:block -->
-    <nav class="sticky top-0 w-full h-screen z-[1] max-w-[250px] hidden lg:block">
+    <nav class="sticky top-0 mb-auto w-full z-[1] max-w-[250px] hidden lg:block">
       <div class="border-b-2 border-[#393f4f] text-[#ffd951] font-bold p-5 w-full">
         <a href="{% url 'planets:main' %}" class='text-2xl p-1 text-[#ffd951]'>Catsmos</a> <!-- 로고 위치 -->
       </div>
+
+      <div class="button-chatting bg-[#282c37]">
+        <div id="accordion-collapse" data-accordion="collapse" data-active-classes="bg-transparent">
+          <h2 id="accordion-collapse-heading-6">
+            <button type="button" class="flex items-center justify-between w-full p-5 font-medium text-left text-white bg-transparent" data-accordion-target="#accordion-collapse-body-6" aria-expanded="true" aria-controls="accordion-collapse-body-6">
+              <p class="text-white">게시글 작성하기</p>
+            </button>
+          </h2>
+        </div>
+      </div>
+
       <div id="accordion-collapse" data-accordion="collapse" data-active-classes="bg-transparent" class="ms-3 border-b-2 border-[#393f4f]">
         <h2 id="accordion-collapse-heading-1">
           <button type="button" class="flex items-center justify-between w-full p-5 font-medium text-left text-white bg-transparent" data-accordion-target="#accordion-collapse-body-1" aria-expanded="true" aria-controls="accordion-collapse-body-1">
