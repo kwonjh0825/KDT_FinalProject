@@ -1,0 +1,126 @@
+{% extends 'base_accounts.html' %}
+{% load static %}
+
+{% block title %}
+이용약관
+{% endblock title %}
+
+{% block content %}
+	<div class="my-4">
+	  <p>이용자는 서비스를 이용함으로써 본 이용약관에 동의한 것으로 간주됩니다.</p>
+	  <div class="text-right my-4">
+		<input id="ck1"  type="checkbox" class="mr-2 order2_chks">
+		<label for="ck1">동의합니다</label>
+	  </div>
+	</div>
+	<div class="my-4">
+	  <p>서비스 이용 중 발생하는 모든 활동의 책임은 이용자에게 있으며, 이용자는 법률과 윤리에 따라 서비스를 이용해야 합니다.</p>
+	  <div class="text-right my-4">
+		<input id="ck2" type="checkbox" class="mr-2 order2_chks">
+		<label for="ck2">동의합니다</label>
+	  </div>
+	</div>
+	<div class="my-4">
+		<p>서비스의 이용은 개인정보 보호 정책에 따라 수집된 정보를 활용할 수 있음을 동의하는 것으로 간주됩니다.</p>
+		<div class="text-right my-4">
+			<input id="ck3" type="checkbox" class="mr-2 order2_chks">
+			<label for="ck3">동의합니다</label>
+		</div>
+	</div>
+  
+	<div class="my-8">
+		<div class="text-right">
+			<input type="checkbox" id="order2_chk" class="mr-2 ">
+		<label for="order2_chk">모든 이용약관에 동의합니다</label>
+	  </div>
+	</div>
+	<div class="btnArea grid">
+		<button onclick="redirectToSignupPage();" disabled="disabled" class="btn bg-gray-500 text-white font-bold py-2 px-4 rounded">Accept</button>
+	</div>
+
+
+	<!-- 이거 carousel 사용해서 바꿔볼 수 있을 듯 -->
+	<!-- 나중에 해보는걸로 -->
+	<!-- 참고 :  https://flowbite.com/docs/components/carousel/ -->
+
+
+
+{% comment %} <button type="button" id="btn1">1번 체크/언체크</button>
+<button type="button" id="btn2">2번 체크/언체크</button>
+<button type="button" id="btn3">3번 체크/언체크</button> {% endcomment %}
+{% endblock content %}
+
+{% block script %}
+<script>
+	function redirectToSignupPage() {
+		window.location.href = "{% url 'accounts:signup' %}";
+	  }
+	$(document).ready(function(){
+
+		//전체 체크 클릭 시, 나머지 체크 
+		$("#order2_chk").click(function(){
+		var order2Chk=$("#order2_chk").prop("checked");
+		
+			if(order2Chk){
+				$(".order2_chks").prop("checked",true);
+				$(".btnArea button").css({"backgroundColor":"#3b82f6","cursor":"pointer","color":"#fff"}).prop("disabled",false);
+			}
+			else{
+				$(".order2_chks").prop("checked",false);
+				$(".btnArea button").css({"backgroundColor":"#6b7280","cursor":"auto","color":"#fff"}).prop("disabled",true);
+			}
+		});
+		
+		// 모든 체크박스를 클릭하면 버튼 활성화시키기
+		$('.order2_chks').click(function(){
+			var tmpp = $(this).prop('checked'); 
+			//자식 체크 전체 체크시, 부모 체크박스 체크 됨
+			var tt = $(".order2_chks").length;
+			var ss = $(".order2_chks:checked").length;
+			
+			//선택한 체크박스 값이 true 이거나 체크박스 1개 이상 체크시 버튼 활성화시키기
+			if(tmpp==true || ss>0){
+			$(".btnArea button").css({"backgroundColor":"#3b82f6","cursor":"pointer","color":"#fff"}).prop("disabled",false);
+			}
+			else{
+			$(".btnArea button").css({"backgroundColor":"#6b7280","cursor":"auto","color":"#fff"}).prop("disabled",true);
+			}
+			
+			
+			// 체크박스가 모두 선택되었을 때 상위 체크박스 선택되도록 설정
+			if(tt == ss){
+				$("#order2_chk").prop("checked",true);
+			}else{
+				$("#order2_chk").prop("checked",false);
+			}
+			
+			});
+		  
+		  
+		});
+	{% comment %} $('#btn1').click(function(){
+        var checked = $('#ck1').is(':checked');
+		$('#ck1').prop('checked',!checked);
+	});
+	
+	$('#btn2').click(function(){
+        var checked = $('#ck2').is(':checked');
+		$('#ck2').prop('checked',!checked);
+	});
+	
+	$('#btn3').click(function(){
+        var checked = $('#ck3').is(':checked');
+		$('#ck3').prop('checked',!checked);
+	});
+	
+	$('#allCk').click(function(){
+        var checked = $('#allCk').is(':checked');
+		alert("체크박스 체크했음!");
+		if(checked)
+        $('input:checkbox').prop('checked',true);
+        else
+        $('input:checkbox').prop('checked', false);
+        
+	}); {% endcomment %}
+</script>
+{% endblock script %}

@@ -6,43 +6,37 @@
 {% endblock title %}
 
 {% block content %}
-<div class="max-w-[500px] h-screen mx-auto">
-  <div class="border">
-    <div class="m-4">
-      <!-- 로고 -->
-      <div class="border py-14 flex justify-center">
-        <p class='text-2xl text-[#ffd951] p-1'>Catsmos</p> <!-- 로고 위치 -->
-      </div>
-      
-      <!-- 설명 -->
-      <div>
-        <p class="my-3 text-3xl font-bold">Login to Catsmos.social</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos ea excepturi vel et temporibus labore consequuntur dicta non possimus porro?</p>
-      </div>
+<div class="">
+  <div class="m-4">
+    <!-- 설명 -->
+    <div>
+      <p class="my-3 text-3xl font-bold">Login to Catsmos.social</p>
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos ea excepturi vel et temporibus labore consequuntur dicta non possimus porro?</p>
+    </div>
 
-      <!-- 로그인 폼 -->
-      <div class="form-login">
-        <form action="{% url 'accounts:login' %}" method="POST">
-          {% csrf_token %}
-          <label for="username" class="block">
-            <span class="block text-white text-sm font-medium text-slate-700 py-3">ID</span>
-            <input class="placeholder:italic placeholder:text-slate-700 block bg-black border-black w-full rounded-md py-2 pl-4 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="id" type="text" name="username" id="username" />
-          </label>
-          <label for="password">
-            <span class="block text-white text-sm font-medium text-slate-700 py-3">Password</span>
-            <input class="placeholder:italic placeholder:text-slate-700 block bg-black border-black w-full rounded-md py-2 pl-4 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="********" type="password" name="password" id="password" />
-          </label>
-          <input type="submit" value="LOG IN" class="text-lg my-4 py-1 w-full bg-indigo-500 rounded-md">
-        </form>
-      </div>
+    <!-- 로그인 폼 -->
+    <div class="form-login">
+      <form action="{% url 'accounts:login' %}" method="POST">
+        {% csrf_token %}
+        <label for="username" class="block">
+          <span class="block text-white text-sm font-medium text-slate-700 py-3">ID</span>
+          <input class="placeholder:italic placeholder:text-slate-700 block bg-black border-black w-full rounded-md py-2 pl-4 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="id" type="text" name="username" id="username" />
+        </label>
+        <label for="password">
+          <span class="block text-white text-sm font-medium text-slate-700 py-3">Password</span>
+          <input class="placeholder:italic placeholder:text-slate-700 block bg-black border-black w-full rounded-md py-2 pl-4 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="********" type="password" name="password" id="password" />
+        </label>
+        <input type="submit" value="LOG IN" class="text-lg my-4 py-1 w-full bg-indigo-500 rounded-md font-bold">
+      </form>
+    </div>
 
-      <!-- 도움 -->
-      <div class="me-5 my-3 text-[#889cbb] flex justify-end gap-x-4" style="font-size:12px">
-        <a href="">Sign up</a>
-        <a href="">Forgot your password?</a>
-        <a href="">Didn't receive a confirmation link?</a>
-      </div>
+    <!-- 도움 -->
+    <div class="me-5 my-3 text-[#889cbb] flex justify-end gap-x-4" style="font-size:12px">
+      <a href="">Sign up</a>
+      <a href="">Forgot your password?</a>
+      <a href="">Didn't receive a confirmation link?</a>
     </div>
   </div>
 </div>
+
 {% endblock content %}
