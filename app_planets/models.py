@@ -138,5 +138,10 @@ class Recomment(models.Model):
 class Emote(models.Model):
     post             = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
     comment          = models.ForeignKey(Comment, on_delete=models.CASCADE, null=True)
-    accountbyplanet = models.ForeignKey(Accountbyplanet, on_delete=models.CASCADE)
+    accountbyplanet  = models.ForeignKey(Accountbyplanet, on_delete=models.CASCADE)
     emotion          = models.CharField(max_length=10)
+
+# 게시글 신고 
+class Report(models.Model):
+    post    = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='reported_post')
+    user    = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

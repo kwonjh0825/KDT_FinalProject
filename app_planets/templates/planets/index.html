@@ -42,6 +42,12 @@ main
             <input type="submit" class="delete-post-button" value="게시글 삭제">
           </form>
         {% endif %}
+        {% if request.user.is_authenticated %}
+          <form action="{% url 'planets:post_report' planet.name post.pk %}" method="POST">
+            {% csrf_token %}
+            <input type="submit" value="게시글 신고">
+          </form>
+        {% endif %}
         <div id="comment-list">
           {% for comment in post.comments.all reversed %}
             <div class="comment-container">
