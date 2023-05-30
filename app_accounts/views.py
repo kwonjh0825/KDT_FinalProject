@@ -26,6 +26,9 @@ from django.urls import reverse
 # 비밀번호 리셋
 from django.contrib.auth.views import PasswordResetConfirmView
 
+def contract(request):
+    return render(request, 'accounts/contract.html')
+
 def login(request):
     if request.user.is_authenticated:
         return redirect('planets:main')
