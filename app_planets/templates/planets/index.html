@@ -10,6 +10,13 @@ main
 {% endblock head %}
 
 {% block content %}
+{% if messages %}
+  {% for message in messages %}
+    <script>
+      alert('{{message}}')
+    </script>
+  {% endfor %}
+{% endif %}
 <div class="left-side-bar">
   
 </div>
@@ -42,6 +49,12 @@ main
         <form id="delete-post-form" data-planet-name="{{ planet.name }}" data-post-pk="{{ post.pk }}">
           {% csrf_token %}
           <input type="submit" id="delete-post-button" value="게시글 삭제">
+        </form>
+      {% endif %}
+      {% if request.user.is_authenticated %}
+        <form action="{% url 'planets:post_report' planet.name post.pk %}" method="POST">
+          {% csrf_token %}
+          <input type="submit" value="게시글 신고">
         </form>
       {% endif %}
       <div id="comment-list">
