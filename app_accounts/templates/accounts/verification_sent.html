@@ -6,6 +6,25 @@
 {% block content %}
 <h2>계정활성화 메일을 전송하였습니다!</h2>
 
+<p>이메일 주소: {{ user_email }}</p>
 <p>계정을 활성화 하지 않으면 로그인을 할 수 없습니다.</p>
 
+
+<button id="resend-button">재전송</button>
+
 {% endblock content %}
+
+
+{% block script %}
+<script>
+    document.getElementById("resend-button").addEventListener("click", function(event) {
+      event.preventDefault();  // 기본 동작(링크 이동) 방지
+  
+      var currentUrl = new URL(window.location.href);
+      currentUrl.searchParams.set("type", "re");
+      window.location.href = currentUrl.href;
+  
+      this.disabled = true;
+    });
+</script>
+{% endblock script %}
