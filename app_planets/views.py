@@ -331,15 +331,13 @@ def planet_join_reject(request, planet_name, user_pk):
 # 게시글 신고 기능
 def post_report(request, planet_name, post_pk):
     post = Post.objects.get(pk=post_pk)
-    print(Report.objects.filter(user=request.user, post=post))
     if not Report.objects.filter(user=request.user, post=post):
         Report.objects.create(user=request.user, post=post)
-    else:
-        # 신고 중복
-        print(1)
-        # pass
+        messages.info(request, '신고가 완료되었습니다.')
     
-    # messages.info(request, '신고가 완료되었습니다.')
+    else:
+        messages.info(request, '이미 신고한 게시글입니다. ')
+
     return redirect('planets:index', planet_name)
 
 def admin_report(request, planet_name):
