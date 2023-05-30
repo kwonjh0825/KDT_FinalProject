@@ -66,12 +66,9 @@ def planet_create(request):
     }
     return render(request, 'planets/planet_create.html', context)
 
-
-# 행성 가입
 @login_required
-def planet_join(request, planet_name):
+def planet_contract(request,planet_name):
     planet = Planet.objects.get(name=planet_name)
-
     # 이미 행성에 계정이 있는 경우
     if Accountbyplanet.objects.filter(planet=planet, user=request.user).exists():
         return redirect('planets:index', planet_name)
@@ -82,6 +79,18 @@ def planet_join(request, planet_name):
     
     termsofservice = TermsOfService.objects.filter(Planet_id=planet.pk)
 
+    context = {
+        'termsofservice': termsofservice,
+        'planet': planet,
+
+    }
+    return render(request, 'planets/planet_contract.html', context )
+
+# 행성 가입
+@login_required
+def planet_join(request, planet_name):
+    planet = Planet.objects.get(name=planet_name)
+    
     if request.method == 'POST':
         form = AccountbyplanetForm(request.POST, request.FILES)
         if form.is_valid():
@@ -100,7 +109,6 @@ def planet_join(request, planet_name):
 
     context = {
         'form': form,
-        'termsofservice': termsofservice,
         'planet': planet,
     }
     return render(request, 'planets/planet_join.html', context)

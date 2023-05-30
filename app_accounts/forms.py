@@ -63,13 +63,13 @@ class AccountbyplanetForm(forms.ModelForm):
         label = "닉네임",
         widget = forms.TextInput(
             attrs={
-                "class": "form-control",
+                "class": "form-input mt-1 rounded-md bg-[#101013]",
                 "style": "height: 47px;",
             }),
     )
     class Meta:
         model = Accountbyplanet
-        fields = ('nickname', 'profile_image', 'backgounrd_image')
+        fields = ('nickname', 'profile_image', 'background_image')
 
 class CustomAutentication(AuthenticationForm):
     username = forms.CharField(
