@@ -1,5 +1,6 @@
 import logging
 import pytz
+from app_accounts.models import Accountbyplanet
 from apscheduler.schedulers.background import BackgroundScheduler
 from django.conf import settings
 from django_apscheduler.jobstores import DjangoJobStore
@@ -9,7 +10,7 @@ from django.contrib.auth import get_user_model
 
 logger = logging.getLogger(__name__)
 
-# 비활성화 유저 삭제
+# 비활성화 유저 및 오랫동안 행성 컨펌 받지 못한 유저 삭제
 def delete_inactive_users():
     User = get_user_model()
     
@@ -30,6 +31,24 @@ def delete_inactive_users():
         print(f"삭제할 유저: {user}")
         user.delete()
 
+    # Accountbyplanet 삭제
+    # 현재 시간
+    current_datetime = datetime.now()
+
+    # 삭제할 기준 시간 (7일 이전)
+    threshold_datetime     = current_datetime - timedelta(days=7)
+    threshold_datetime_str = threshold_datetime.strftime('%Y-%m-%d %H:%M:%S')
+
+    # 기준 시간과 is_confirmed=False인 객체 필터링
+    accountbyplanet_to_delete = Accountbyplanet.objects.filter(
+        created_at__lt=threshold_datetime,
+        is_confirmed=False
+    )
+
+    # 객체 삭제
+    for accountbyplanet in accountbyplanet_to_delete:
+        print(f"삭제할 Accountbyplanet: {accountbyplanet.nickname}")
+        accountbyplanet.delete()
 
 # 백그라운드 스케쥴 
 def start():
