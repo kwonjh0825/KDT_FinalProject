@@ -4,6 +4,7 @@ from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm, PasswordChangeForm
 from .models import Accountbyplanet
 from django.contrib.auth.forms import SetPasswordForm
+from app_planets.forms import validate_inappropriate_words
 
 # 새 비밀번호 변경 form
 class CustomSetPasswordForm(SetPasswordForm):
@@ -70,8 +71,14 @@ class AccountbyplanetForm(forms.ModelForm):
     class Meta:
         model = Accountbyplanet
         fields = ('nickname', 'profile_image', 'background_image')
+    
+    def clean_nickname(self):
+        nickname = self.cleaned_data['nickname']
+        validate_inappropriate_words(nickname)
+        return nickname
 
-class CustomAutentication(AuthenticationForm):
+
+class CustomAuthentication(AuthenticationForm):
     username = forms.CharField(
         label = False,
         widget= forms.TextInput(attrs = {
@@ -94,6 +101,7 @@ class CustomAutentication(AuthenticationForm):
     class Meta:
         model = get_user_model
         fields = ('username', 'password')
+
 
 class CustomUserCreationForm(UserCreationForm):
     # username = forms.CharField(
@@ -159,4 +167,8 @@ class CustomUserCreationForm(UserCreationForm):
         model = get_user_model()
         fields = ('username', 'last_name', 'first_name', 'email', 'password1', 'password2',)
 
+class AdminLevelForm(forms.ModelForm):
+    class Meta:
+        model = Accountbyplanet
+        fields = ('admin_level',)
 

@@ -1,7 +1,13 @@
 from django import forms
-from .models import Planet, Post, Comment, Recomment
+from .models import Planet, Post, Comment, Recomment, InappropriateWord
 from taggit.forms import TagField
 
+
+def validate_inappropriate_words(value):
+    inappropriate_words = InappropriateWord.objects.values_list('word', flat=True)
+    for word in inappropriate_words:
+        if word in value:
+            raise forms.ValidationError(f'부적절한 단어 ({word}) 이/가 포함되어 있습니다. 다시 작성해주세요.')
 
 class PlanetForm(forms.ModelForm):
     class Meta:
@@ -41,6 +47,15 @@ class PlanetForm(forms.ModelForm):
         #     'maximum_capacity': '행성 최대 인원',
         #     'need_confirm': '가입 승인 필요'
         # }
+    def clean_name(self):
+        name = self.cleaned_data['name']
+        validate_inappropriate_words(name)
+        return name
+    
+    def clean_description(self):
+        description = self.cleaned_data['description']
+        validate_inappropriate_words(description)
+        return description
 
 
 class PostForm(forms.ModelForm):
@@ -72,6 +87,16 @@ class PostForm(forms.ModelForm):
         #     'image': '사진',
         #     'tags': '태그',
         # }
+    
+    def clean_content(self):
+        content = self.cleaned_data['content']
+        validate_inappropriate_words(content)
+        return content
+    
+    def clean_tags(self):
+        tags = self.cleaned_data['tags']
+        validate_inappropriate_words(tags)
+        return tags
         
 
 class CommentForm(forms.ModelForm):
@@ -81,6 +106,11 @@ class CommentForm(forms.ModelForm):
         labels = {
             'content': '내용',
         }
+    
+    def clean_content(self):
+        content = self.cleaned_data['content']
+        validate_inappropriate_words(content)
+        return content
 
 
 class RecommentForm(forms.ModelForm):
@@ -90,4 +120,9 @@ class RecommentForm(forms.ModelForm):
         labels = {
             'content': '내용',
         }
+    
+    def clean_content(self):
+        content = self.cleaned_data['content']
+        validate_inappropriate_words(content)
+        return content
 

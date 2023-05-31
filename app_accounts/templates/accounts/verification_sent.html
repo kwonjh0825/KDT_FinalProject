@@ -1,17 +1,21 @@
 {% extends 'base_nav.html' %}
 {% block title %}
-
+활성화 메일 전송
 {% endblock title %}
 
 {% block content %}
-<h2>계정활성화 메일을 전송하였습니다!</h2>
+<div class="max-w-[540px] h-screen mx-auto text-center">
 
-<p>이메일 주소: {{ user_email }}</p>
-<p>계정을 활성화 하지 않으면 로그인을 할 수 없습니다.</p>
+<p class="text-2xl pt-10">계정활성화 메일을 전송하였습니다!</p>
+<div class="flex justify-center">
+  <p class="rounded-md bg-gray-500 py-5 px-3 my-5">이메일 주소: {{ user_email }}</p>
+</div>
+<p class="text-sm my-4 text-gray-400">계정을 활성화 하지 않으면 로그인을 할 수 없습니다.</p>
 
-
-<button id="resend-button">재전송</button>
-
+<div class="py-4">
+  <button class="bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-20 rounded" id="resend-button">재전송</button>
+</div>
+</div>
 {% endblock content %}
 
 
@@ -28,3 +32,5 @@
     });
 </script>
 {% endblock script %}
+
+<!-- 카드형식으로 틀 짜고 초대장 같은 모양으로 만드는 것도 좋을듯 -->

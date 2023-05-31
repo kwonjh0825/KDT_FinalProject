@@ -39,6 +39,10 @@ class Accountbyplanet(models.Model):
     is_confirmed = models.BooleanField(default=False)
     created_at   = models.DateTimeField(auto_now_add=True)
     updated_at   = models.DateTimeField(auto_now=True)
+    # 행성 관리자 권한 설정
+    admin_category = ((1, 'user'), (2, 'staff'), (3, 'admin'))
+    admin_level = models.IntegerField(choices=admin_category, default=1)
+
 
     # accountbyplanet 삭제시 image file 삭제
     def delete(self, *args, **kwargs):
