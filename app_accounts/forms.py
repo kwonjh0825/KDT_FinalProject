@@ -167,3 +167,8 @@ class CustomUserCreationForm(UserCreationForm):
         model = get_user_model()
         fields = ('username', 'last_name', 'first_name', 'email', 'password1', 'password2',)
 
+class AdminLevelForm(forms.ModelForm):
+    class Meta:
+        model = Accountbyplanet
+        fields = ('admin_level',)
+

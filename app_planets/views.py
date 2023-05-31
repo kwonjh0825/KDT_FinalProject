@@ -298,86 +298,120 @@ def recomment_delete(request, planet_name, post_pk, comment_pk, recomment_pk):
 @login_required
 def planet_admin(request, planet_name):
     planet = Planet.objects.get(name=planet_name)
-    confirms = Accountbyplanet.objects.filter(planet=planet, is_confirmed=False)
-    if request.method == 'POST':
-        form_planet = PlanetForm(request.POST, instance=planet)
-        
-        if form_planet.is_valid():
-            form_planet.save()
-            
-            return redirect('planets:main')
-    else:
-        form_planet = PlanetForm(instance=planet)
+    # 관리자인 경우 관리 페이지 접근 가능
+    is_staff = True if Accountbyplanet.objects.get(planet=planet, user=request.user).admin_level == 2 else False
+    is_manager = True if Accountbyplanet.objects.get(planet=planet, user=request.user).admin_level == 3 else False
     
-    context = {
-        'form_planet': form_planet,
-        'planet': planet,
-        'confirms': confirms,
-    }
-    return render(request, 'planets/planet_admin.html', context)
+    if is_staff or is_manager:
+        confirms = Accountbyplanet.objects.filter(planet=planet, is_confirmed=False)
+        if request.method == 'POST':
+            form_planet = PlanetForm(request.POST, instance=planet)
+            
+            if form_planet.is_valid():
+                form_planet.save()
+                
+                return redirect('planets:main')
+        else:
+            form_planet = PlanetForm(instance=planet)
+        
+        context = {
+            'form_planet': form_planet,
+            'planet': planet,
+            'confirms': confirms,
+            'is_manager': is_manager,
+        }
+        return render(request, 'planets/planet_admin.html', context)
+
+    else:
+        messages.warning(request, '관리자만 접근 가능합니다. ')
+        return redirect('planets:main')
 
 
 # 행성 약관 관리 페이지
 @login_required
 def planet_tos_admin(request, planet_name):
     planet = Planet.objects.get(name=planet_name)
-    TOSs = TermsOfService.objects.filter(Planet_id=planet.pk)
-    length = TOSs.count()
-    if request.method == 'POST':
-        termsofservice_count = int(request.POST.get('termsofservice_count', 0))
-        # 기존 약관 DB 삭제
-        old_term = TermsOfService.objects.filter(Planet=planet)
-        old_term.delete()
-        
-        # 이용 약관 저장
-        for i in range(1, termsofservice_count + 1):
-            term_content = request.POST.get(f'term_content_{i}', '')
-            TermsOfService.objects.create(Planet=planet, order=i, content=term_content)
+    # 관리자만 접근 가능
+    is_staff = True if Accountbyplanet.objects.get(planet=planet, user=request.user).admin_level > 1 else False
+    if is_staff:
+        TOSs = TermsOfService.objects.filter(Planet_id=planet.pk)
+        length = TOSs.count()
+        if request.method == 'POST':
+            termsofservice_count = int(request.POST.get('termsofservice_count', 0))
+            # 기존 약관 DB 삭제
+            old_term = TermsOfService.objects.filter(Planet=planet)
+            old_term.delete()
+            
+            # 이용 약관 저장
+            for i in range(1, termsofservice_count + 1):
+                term_content = request.POST.get(f'term_content_{i}', '')
+                TermsOfService.objects.create(Planet=planet, order=i, content=term_content)
 
+            return redirect('planets:main')
+        
+        else:
+            context = {
+                'planet': planet,
+                'TOSs': TOSs,
+                'length': length,
+            }
+            return render(request, 'planets/planet_tos_admin.html', context)
+    else:
+        messages.warning(request, '관리자만 접근 가능합니다. ')
         return redirect('planets:main')
     
-    else:
-        context = {
-            'planet': planet,
-            'TOSs': TOSs,
-            'length': length,
-        }
-        return render(request, 'planets/planet_tos_admin.html', context)
-
 # 행성 가입 관리
 @login_required
 def planet_join_admin(request, planet_name):
     planet = Planet.objects.get(name=planet_name)
-    confirms = Accountbyplanet.objects.filter(planet=planet, is_confirmed=False)
 
-    context = {
-        'planet': planet,
-        'confirms': confirms,
-    }
-    return render(request, 'planets/planet_join_admin.html', context)
+    # 관리자만 접근 가능
+    is_staff = True if Accountbyplanet.objects.get(planet=planet, user=request.user).admin_level > 1 else False
+    if is_staff:
+        confirms = Accountbyplanet.objects.filter(planet=planet, is_confirmed=False)
+
+        context = {
+            'planet': planet,
+            'confirms': confirms,
+        }
+        return render(request, 'planets/planet_joinㅋㅁ_admin.html', context)
+    else:
+        messages.warning(request, '관리자만 접근 가능합니다. ')
+        return redirect('planets:main')
 
 # 행성 가입 승인
 @login_required
 def planet_join_confirm(request, planet_name, user_pk):
     planet = Planet.objects.get(name=planet_name)
-    user = User.objects.get(pk=user_pk)
+    # 관리자만 접근 가능
+    is_staff = True if Accountbyplanet.objects.get(planet=planet, user=request.user).admin_level > 1 else False
+    if is_staff:
+        user = User.objects.get(pk=user_pk)
+        account = Accountbyplanet.objects.get(planet=planet, user=user)
+        account.is_confirmed = True
+        account.save()
 
-    account = Accountbyplanet.objects.get(planet=planet, user=user)
-    account.is_confirmed = True
-    account.save()
-
-    return JsonResponse({'success': True})
+        return JsonResponse({'success': True})
+    else:
+        messages.warning(request, '관리자만 접근 가능합니다.')
+        return redirect('planets:main')
 
 # 행성 가입 거절
 @login_required
 def planet_join_reject(request, planet_name, user_pk):
     planet = Planet.objects.get(name=planet_name)
-    user = User.objects.get(pk=user_pk)
-    
-    account = Accountbyplanet.objects.get(planet=planet, user=user)
-    account.delete()
+    # 관리자만 접근 가능
+    is_staff = True if Accountbyplanet.objects.get(planet=planet, user=request.user).admin_level > 1 else False
+    if is_staff:
+        user = User.objects.get(pk=user_pk)
+        
+        account = Accountbyplanet.objects.get(planet=planet, user=user)
+        account.delete()
 
-    return JsonResponse({'success': True})    
+        return JsonResponse({'success': True})    
+    else:
+        messages.warning(request, '관리자만 접근 가능합니다.')
+        return redirect('planets:main')
 
 # 게시글 신고 기능
 def post_report(request, planet_name, post_pk):
@@ -400,3 +434,32 @@ def admin_report(request, planet_name):
         'reports': reports,
     }
     return render(request, 'planets/admin_report.html', context)
+
+# 행성 회원 관리
+def admin_member(request, planet_name):
+    planet = Planet.objects.get(name=planet_name)
+    is_manager = True if Accountbyplanet.objects.get(planet=planet, user=request.user).admin_level == 3 else False
+    if is_manager:
+        if request.method == 'POST':    
+            accounts = request.POST.getlist('account_pk')
+            admin_levels = request.POST.getlist('admin_level')
+            for pk, level in zip(accounts, admin_levels):
+                temp = Accountbyplanet.objects.get(planet=planet, pk=pk)
+                temp.admin_level = level
+                temp.save()
+            
+            return redirect('planets:admin_member', planet_name)
+
+        else:
+            accounts = Accountbyplanet.objects.filter(planet=planet)
+        
+        accounts = Accountbyplanet.objects.filter(planet=planet)
+        context = {
+            'accounts': accounts,
+            'planet_name': planet_name,
+        }
+        return render(request, 'planets/admin_member.html', context)
+    
+    else:
+        messages.warning(request, '매니저만 접근 가능합니다.')
+        return redirect('planets:main')
