@@ -1,11 +1,11 @@
 {% extends 'base_nav.html' %}
 {% block title %}
-
+유효하지 않은 링크입니다.
 {% endblock title %}
 
 {% block content %}
-<h2>유효하지 않은 링크입니다.</h2>
-
-
-<button><a href="{% url 'accounts:login' %}">로그인</a></button>
+<div class="max-w-[540px] h-screen mx-auto text-center">
+    <p class="text-2xl py-5">유효하지 않은 링크입니다.</p>
+    <button class="bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-20 rounded" ><a href="{% url 'accounts:login' %}">로그인</a></button>
+</div>
 {% endblock content %}
