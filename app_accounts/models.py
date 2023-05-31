@@ -13,8 +13,8 @@ class User(AbstractUser):
     
 
 class Accountbyplanet(models.Model):
-    nickname = models.CharField(max_length=15, blank=False, null=False)
-    profile_image  = ProcessedImageField(
+    nickname      = models.CharField(max_length=15, blank=False, null=False)
+    profile_image = ProcessedImageField(
         upload_to  = 'accounts/',
         processors = [ResizeToFill(128, 128)],
         format     = 'JPEG',
@@ -31,17 +31,18 @@ class Accountbyplanet(models.Model):
         null       = True,
     )
     followings = models.ManyToManyField('self',
-                                        symmetrical=False,
-                                        blank=True,
-                                        related_name='followers')
-    user     = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='accountsbyplanet')
-    planet   = models.ForeignKey('app_planets.Planet', on_delete=models.CASCADE)
-    
+                                        symmetrical  = False,
+                                        blank        = True,
+                                        related_name = 'followers')
+    user         = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='accountsbyplanet')
+    planet       = models.ForeignKey('app_planets.Planet', on_delete=models.CASCADE)
     is_confirmed = models.BooleanField(default=False)
-    
+    created_at   = models.DateTimeField(auto_now_add=True)
+    updated_at   = models.DateTimeField(auto_now=True)
     # 행성 관리자 권한 설정
     admin_category = ((1, 'user'), (2, 'staff'), (3, 'admin'))
     admin_level = models.IntegerField(choices=admin_category, default=1)
+
 
     # accountbyplanet 삭제시 image file 삭제
     def delete(self, *args, **kwargs):
