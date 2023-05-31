@@ -145,3 +145,11 @@ class Emote(models.Model):
 class Report(models.Model):
     post    = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='reported_post')
     user    = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+# 부적절 단어 DB
+class InappropriateWord(models.Model):
+    word = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.word
+    
