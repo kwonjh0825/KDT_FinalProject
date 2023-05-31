@@ -14,7 +14,7 @@
     <!-- 배경사진 -->
     <div class="flex items-center justify-center h-48 mb-4 bg-gray-300 rounded dark:bg-gray-700">
       <div style="position: relative; display: inline-block;">
-        <img class="rounded-md" id="preview2" style="height: 195px; width: 500px;">
+        <img class="rounded-md" id="preview2" style="height: 195px; width: 500px; ">
         <button onclick="document.getElementById('background_image').click();" class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 block text-lg font-medium text-slate-300">
           <span class="material-symbols-outlined text-4xl">
             add_photo_alternate 
@@ -50,28 +50,7 @@
   </div>
 </form>
 
-{% comment %} 
-<div>
-  <form id="profile-form" action="{% url 'planets:planet_join' planet.name %}" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    <img id="preview1">
-    <button onclick="document.getElementById('profile_image').click();" class="ml-1 mt-2 block text-lg font-medium text-slate-300"><span class="material-symbols-outlined">
-      person_add
-      </span></button>
-    <input onchange="readURL1(this);" type="file" id="profile_image" name="profile_image" value="{{ user.profile_image }}" class="form-input mt-1 rounded-md bg-[#101013]" style="display: none;">
-    
-    <img id="preview2">
-    <button onclick="document.getElementById('background_image').click();" class="ml-1 mt-2 block text-lg font-medium text-slate-300"><span class="material-symbols-outlined">
-      add_photo_alternate
-      </span></button>
-    <input onchange="readURL2(this);" type="file" id="background_image" name="background_image" value="{{ user.background_image }}" class="form-input mt-1 rounded-md bg-[#101013]" style="display: none;">
-    
-    <div class="grid my-4">
-      <button id="create-profile-btn" class="btn bg-[#ffd951] text-white font-bold py-2 px-4 rounded" type="submit">행성 프로필 생성</button>
-    </div>
-  </form>
-</div> 
-{% endcomment %}
+
 
 {% endblock content %}
 
@@ -99,5 +78,7 @@
       document.getElementById('preview2').src = "";
     }
   }
+
+  
 </script>
 {% endblock script %}

@@ -24,7 +24,7 @@
   <nav class="sticky top-0 w-full bg-[#191b22] z-[1]">
     <div class="mx-auto flex justify-between font-bold px-2 py-3">
       <a href="{% url 'planets:main' %}" class='text-2xl p-1 text-[#ffd951]'>Catsmos</a> <!-- 로고 위치 -->
-      <div class="border flex text-sm text-white p-3 gap-5">
+      <div class="flex text-sm text-white p-3 gap-5">
         {% if user.is_authenticated %}
         <a href="{% url 'accounts:profile' user %}">{{ user.username }}</a>
         {% if request.user == user %}

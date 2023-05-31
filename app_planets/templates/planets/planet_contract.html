@@ -8,8 +8,42 @@
 {% block content %}
 
 <div>
+  <div class="relative overflow-x-auto rounded-md">
     <p class="mb-7 text-3xl font-bold">Some ground rules.</p>
-  {% for termofservice in termsofservice %}
+    <table class="w-full text-md text-left text-gray-500 dark:text-gray-400 ">
+      <tbody>
+        {% for termofservice in termsofservice %}
+        <tr class="">
+          <th scope="row" class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            <div class="w-10 h-10 rounded-full bg-[#ffd951] flex justify-center items-center">
+              <span class="text-white font-bold">{{ termofservice.order }}</span>
+            </div>
+          </th>
+          <td class="px-6 pt-4 ">
+            <p>{{ termofservice.content|linebreaksbr }}</p>
+            <div class="text-right my-2">
+              <input id="ck1"  type="checkbox" class="mr-2 order2_chks">
+              <label for="ck1">동의합니다</label>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    </div>
+    <div class="my-8">
+      <div class="text-right">
+        <input type="checkbox" id="order2_chk" class="mr-2 ">
+        <label for="order2_chk">모든 이용약관에 동의합니다</label>
+      </div>
+    </div>
+    <div class="btnArea grid">
+      <button onclick="redirectToSignupPage();" disabled="disabled" class="btn bg-gray-500 text-white font-bold py-2 px-4 rounded">Next</button>
+    </div>
+</div>
+
+{% comment %}  
+    {% for termofservice in termsofservice %}
     <div class="my-4">
         <div class="flex gap-8">
             <div class="w-10 h-10 rounded-full bg-[#ffd951] flex justify-center items-center">
@@ -19,18 +53,9 @@
         </div>
       </div>
       <hr class="border-gray-500">
-      {% endfor %}
+      {% endfor %} 
+{% endcomment %}
 
-      <div class="my-8">
-          <div class="text-right">
-              <input type="checkbox" id="order2_chk" class="mr-2 ">
-          <label for="order2_chk">모든 이용약관에 동의합니다</label>
-        </div>
-      </div>
-      <div class="btnArea grid">
-          <button onclick="redirectToSignupPage();" disabled="disabled" class="btn bg-gray-500 text-white font-bold py-2 px-4 rounded">Next</button>
-      </div>
-</div>
 
 {% endblock content %}
 
@@ -76,20 +101,26 @@
 			var tt = $(".order2_chks").length;
 			var ss = $(".order2_chks:checked").length;
 			
-			//선택한 체크박스 값이 true 이거나 체크박스 1개 이상 체크시 버튼 활성화시키기
+			{% comment %} 
+      //선택한 체크박스 값이 true 이거나 체크박스 1개 이상 체크시 버튼 활성화시키기
 			if(tmpp==true || ss>0){
 			$(".btnArea button").css({"backgroundColor":"#ffd951","cursor":"pointer","color":"#fff"}).prop("disabled",false);
 			}
 			else{
 			$(".btnArea button").css({"backgroundColor":"#6b7280","cursor":"auto","color":"#fff"}).prop("disabled",true);
-			}
+			} 
+      {% endcomment %}
 			
 			
 			// 체크박스가 모두 선택되었을 때 상위 체크박스 선택되도록 설정
 			if(tt == ss){
 				$("#order2_chk").prop("checked",true);
+        $(".btnArea button").css({"backgroundColor":"#ffd951","cursor":"pointer","color":"#fff"}).prop("disabled",false);
+
 			}else{
 				$("#order2_chk").prop("checked",false);
+        $(".btnArea button").css({"backgroundColor":"#6b7280","cursor":"auto","color":"#fff"}).prop("disabled",true);
+
 			}
 			
 			});
