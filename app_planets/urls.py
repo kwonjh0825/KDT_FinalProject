@@ -24,6 +24,8 @@ urlpatterns = [
     path('planets/<str:planet_name>/admin/join/<int:user_pk>/reject/', views.planet_join_reject, name='planet_join_reject'),
     # 게시글 신고 관리
     path('planets/<str:planet_name>/admin/report/', views.admin_report, name='admin_report'),
+    # 행성 내 회원 관리
+    path('planets/<str:planet_name>/admin/member/', views.admin_member, name='admin_member'),
     # 행성별 프로필
     path('planets/<str:planet_name>/profile/<str:nickname>/', accounts_views.planet_profile, name='planet_profile'),
     path('planets/<str:planet_name>/profile/<str:nickname>/update/', accounts_views.planet_profile_update, name='planet_profile_update'),

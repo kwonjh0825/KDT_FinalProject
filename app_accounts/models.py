@@ -38,6 +38,10 @@ class Accountbyplanet(models.Model):
     planet   = models.ForeignKey('app_planets.Planet', on_delete=models.CASCADE)
     
     is_confirmed = models.BooleanField(default=False)
+    
+    # 행성 관리자 권한 설정
+    admin_category = ((1, 'user'), (2, 'staff'), (3, 'admin'))
+    admin_level = models.IntegerField(choices=admin_category, default=1)
 
     # accountbyplanet 삭제시 image file 삭제
     def delete(self, *args, **kwargs):

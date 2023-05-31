@@ -1,0 +1,33 @@
+{% extends 'base_nav.html' %}
+
+{% block title %}
+  행성 회원 관리
+{% endblock title %}
+
+{% block content %}
+<form action="{% url 'planets:admin_member' planet_name %}" method="POST">
+  {% csrf_token %}
+  {% for account in accounts %}
+    <div>
+      {{account.nickname}}
+      
+      <input type="text" name="account_pk" value="{{account.pk}}" hidden>
+      <select name="admin_level" {% if account.admin_level == 3 %}disabled {% endif %}>
+        {% if account.admin_level == 1 %}
+          <option value="2">스태프</option>
+          <option value="1" selected>사용자</option>
+        {% elif account.admin_level == 2 %}
+          <option value="2" selected>스태프</option>
+          <option value="1">사용자</option>
+        {% else %}
+          <option value="3" selected>관리자</option>
+          <option value="2">스태프</option>
+          <option value="1">사용자</option>
+        {% endif %}
+      </select>
+    </div>  
+  {% endfor %}
+  <input type="submit" value="설정">
+</form>
+
+{% endblock content %}

@@ -160,3 +160,7 @@ class CustomUserCreationForm(UserCreationForm):
         fields = ('username', 'last_name', 'first_name', 'email', 'password1', 'password2',)
 
 
+class AdminLevelForm(forms.ModelForm):
+    class Meta:
+        model = Accountbyplanet
+        fields = ('admin_level',)
