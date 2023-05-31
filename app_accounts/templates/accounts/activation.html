@@ -4,8 +4,14 @@
 {% endblock title %}
 
 {% block content %}
-<h2>계정 활성화</h2>
-<p>계정 활성화가 완료되었습니다.</p>
+<div class="max-w-[540px] h-screen mx-auto text-center">
 
-<button><a href="{% url 'accounts:login' %}">로그인</a></button>
+<p class="text-2xl py-5">계정 활성화</p>
+<p class="text-sm mb-4 text-gray-400">계정 활성화가 완료되었습니다.</p>
+
+<button class="bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-20 rounded" ><a href="{% url 'accounts:login' %}">로그인</a></button>
+</div>
 {% endblock content %}
+
+
+<!-- 카드 형식으로 왼쪽 이미지 오른쪽 상단 정보 하단 버튼 식으로 만들어도 괜찮을듯 -->

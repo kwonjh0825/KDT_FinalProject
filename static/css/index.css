@@ -1,0 +1,12 @@
+.chatting-create-btn {
+  margin-top: 20px;
+  width: 100%;
+  height: 50px;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+}
+
+.chatting-create-btn:hover {
+  background-color: #ffd951;
+}

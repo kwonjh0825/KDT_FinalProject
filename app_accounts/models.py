@@ -22,7 +22,7 @@ class Accountbyplanet(models.Model):
         blank      = True,
         null       = True,
     )
-    backgounrd_image = ProcessedImageField(
+    background_image = ProcessedImageField(
         upload_to  = 'accounts/',
         processors = [ResizeToFill(500, 100)],
         format     = 'JPEG',
@@ -49,8 +49,8 @@ class Accountbyplanet(models.Model):
             path = self.profile_image.path
             if os.path.isfile(path):
                 os.remove(path)
-        if self.backgounrd_image:
-            path = self.backgounrd_image.path
+        if self.background_image:
+            path = self.background_image.path
             if os.path.isfile(path):
                 os.remove(path)
         super().delete(*args, **kwargs)

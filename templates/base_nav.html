@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}{% endblock title %}</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="./jquery-3.4.1.min.js"></script>
   <link rel="stylesheet" href="{% static 'css/base_nav.css' %}">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
@@ -25,7 +24,7 @@
   <nav class="sticky top-0 w-full bg-[#191b22] z-[1]">
     <div class="mx-auto flex justify-between font-bold px-2 py-3">
       <a href="{% url 'planets:main' %}" class='text-2xl p-1 text-[#ffd951]'>Catsmos</a> <!-- 로고 위치 -->
-      <div class="border flex text-sm text-white p-3 gap-5">
+      <div class="flex text-sm text-white p-3 gap-5">
         {% if user.is_authenticated %}
         <a href="{% url 'accounts:profile' user %}">{{ user.username }}</a>
         {% if request.user == user %}

@@ -26,13 +26,13 @@
           <span class="block text-white text-sm font-medium text-slate-700 py-3">Password</span>
           <input class="placeholder:italic placeholder:text-slate-700 block bg-black border-black w-full rounded-md py-2 pl-4 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="********" type="password" name="password" id="password" />
         </label>
-        <input type="submit" value="LOG IN" class="text-lg my-4 py-1 w-full bg-indigo-500 rounded-md font-bold">
+        <input type="submit" value="LOG IN" class="text-lg my-4 py-1 w-full bg-yellow-400 rounded-md font-bold">
       </form>
     </div>
 
     <!-- 도움 -->
     <div class="me-5 my-3 text-[#889cbb] flex justify-end gap-x-4" style="font-size:12px">
-      <a href="">Sign up</a>
+      <a href="{% url 'accounts:contract' %}">Sign up</a>
       <a href="">Forgot your password?</a>
       <a href="">Didn't receive a confirmation link?</a>
     </div>

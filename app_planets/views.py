@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
@@ -66,12 +67,9 @@ def planet_create(request):
     }
     return render(request, 'planets/planet_create.html', context)
 
-
-# 행성 가입
 @login_required
-def planet_join(request, planet_name):
+def planet_contract(request,planet_name):
     planet = Planet.objects.get(name=planet_name)
-
     # 이미 행성에 계정이 있는 경우
     if Accountbyplanet.objects.filter(planet=planet, user=request.user).exists():
         return redirect('planets:index', planet_name)
@@ -82,6 +80,18 @@ def planet_join(request, planet_name):
     
     termsofservice = TermsOfService.objects.filter(Planet_id=planet.pk)
 
+    context = {
+        'termsofservice': termsofservice,
+        'planet': planet,
+
+    }
+    return render(request, 'planets/planet_contract.html', context )
+
+# 행성 가입
+@login_required
+def planet_join(request, planet_name):
+    planet = Planet.objects.get(name=planet_name)
+    
     if request.method == 'POST':
         form = AccountbyplanetForm(request.POST, request.FILES)
         if form.is_valid():
@@ -100,7 +110,6 @@ def planet_join(request, planet_name):
 
     context = {
         'form': form,
-        'termsofservice': termsofservice,
         'planet': planet,
     }
     return render(request, 'planets/planet_join.html', context)
@@ -117,14 +126,13 @@ def index(request, planet_name):
     postform = PostForm()
     commentform = CommentForm()
     recommentform = RecommentForm()
-    posts = Post.objects.filter(planet=planet).order_by('-pk')
 
     context = {
         'postform': postform,
         'commentform': commentform,
         'recommentform': recommentform,
         'planet': planet,
-        'posts': posts,
+        'first_post': Post.objects.filter(planet=planet).first(),
     }
     return render(request, 'planets/index.html', context)
 
@@ -136,6 +144,40 @@ def planet_delete(request, planet_name):
     if planet.created_by == request.user:
         planet.delete()
     return redirect('planets:main')
+
+
+# posts json
+@login_required
+def planet_posts(request, planet_name):
+    posts = Post.objects.filter(planet=Planet.objects.get(name=planet_name)).order_by('-pk')
+    per_page = 5
+    page_number = request.GET.get('page')
+    paginator = Paginator(posts, per_page)
+
+    try:
+        posts = paginator.page(page_number)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+
+    post_list = []
+    for post in posts:
+        post_list.append({
+            'pk': post.pk,
+            'content': post.content,
+            'created_time': post.created_time,
+            'nickname': post.accountbyplanet.nickname,
+            'image_url': post.image.url if post.image else None,
+            'user': post.accountbyplanet.user.username,
+            'profile_image_url': post.accountbyplanet.profile_image.url if post.accountbyplanet.profile_image else None,
+        })
+
+    if posts.has_next():
+        return JsonResponse(post_list, safe=False)
+    else:
+        post_list.append(None)
+        return JsonResponse(post_list, safe=False)
 
 
 # 게시글 생성
@@ -155,11 +197,13 @@ def post_create(request, planet_name):
             'content': post.content,
             'created_time': post.created_time,
             'nickname': post.accountbyplanet.nickname,
+            'profile_image_url': post.accountbyplanet.profile_image.url,
             'image_url': post.image.url if post.image else None
         }
         return JsonResponse(response_data)
     else:
-        return JsonResponse({'success': False, 'message': 'Form is invalid'})
+        errors = form.errors.as_json()
+        return JsonResponse({'success': False, 'errors': errors})
 
 
 # 게시글 삭제
