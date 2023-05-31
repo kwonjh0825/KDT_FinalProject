@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from .models import Accountbyplanet, User
 from app_planets.models import Planet
-from .forms import AccountbyplanetForm, CustomAutentication, CustomUserCreationForm, CustomSetPasswordForm
+from .forms import AccountbyplanetForm, CustomAuthentication, CustomUserCreationForm, CustomSetPasswordForm
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.views import View
@@ -38,12 +38,12 @@ def login(request):
         return redirect('planets:main')
     
     elif request.method == 'POST':
-        form = CustomAutentication(request, request.POST)
+        form = CustomAuthentication(request, request.POST)
         if form.is_valid():
             auth_login(request, form.get_user())
             return redirect('planets:main')
     else:
-        form = CustomAutentication()
+        form = CustomAuthentication()
 
     context = {
         'form': form,
