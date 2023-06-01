@@ -56,16 +56,17 @@ main
         </div>
       </div>
       <div class="mt-5 mb-2" id="post-content">{{ first_post.content }}</div>
-      <div class= "mb-5" id="post-tags">
+      <div class="mb-5" id="post-tags">
         {% for tag in first_post.tags.all %}
           <span class="text-[#bcbdbf]" id="tag">#{{ tag.name }}</span>
         {% endfor %}
       </div>
-      {% if first_post.image %}
-        <img src="{{ first_post.image.url }}" alt="{{ first_post.image }}" class="rounded-lg">
-      {% endif %}
+      <div id="post-image">
+        {% if first_post.image %}
+          <img src="{{ first_post.image.url }}" alt="{{ first_post.image }}" class="rounded-lg">
+        {% endif %}
+      </div>
     </div>
-
     
     <!-- 감정표현 및 더보기 -->
     <div class="border-b-2 border-[#393f4f]">
@@ -84,38 +85,29 @@ main
             <svg viewBox="0 0 32 32" style="width: 50%; height: 50%;" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"><path fill="none" d="M0 0h32v32H0z"></path><path d="M30 2v22H10.416l-6.002 6H2V2m7.583 20H28V4H4v23.583L9.583 22z" fill="#bcbdbf" class="fill-000000"></path><path d="M8 8h18v2H8zM8 12h18v2H8zM8 16h12v2H8z" fill="#bcbdbf" class="fill-000000"></path></svg>
           </p>
           <p class="w-1/5">
-            <button id="dropdownDividerButton" data-dropdown-toggle="dropdownDivider"type="button"><svg viewBox="0 0 32 32" style="width: 25%; height: 25%;" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" fill="none" r="2" stroke="#bcbdbf" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" class="stroke-000000"></circle><circle cx="16" cy="26" fill="none" r="2" stroke="#bcbdbf" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" class="stroke-000000"></circle><circle cx="16" cy="6" fill="none" r="2" stroke="#bcbdbf" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" class="stroke-000000"></circle></svg>
-            </button>
+            <svg id="more" viewBox="0 0 32 32" style="width: 50%; height: 50%;" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" fill="none" r="2" stroke="#bcbdbf" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" class="stroke-000000"></circle><circle cx="16" cy="26" fill="none" r="2" stroke="#bcbdbf" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" class="stroke-000000"></circle><circle cx="16" cy="6" fill="none" r="2" stroke="#bcbdbf" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" class="stroke-000000"></circle></svg>
           </p>
         </div>
       </div>
     </div>
 
-
-
     <!-- 더보기 버튼 Dropdown menu -->
-    <div id="dropdownDivider" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
-      <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDividerButton">
+    <div id="dropdown-menu" style="display:none;">
+      <ul>
         <li>
           <a href="#" class="block px-4 py-2 hover:bg-gray-100 hover:text-[#d14424]">
-            <!-- 게시글 삭제 -->
-            {% if request.user == post.accountbyplanet.user %}
-              <form id="delete-post-form" data-planet-name="{{ planet.name }}" data-post-pk="{{ post.pk }}">
-                {% csrf_token %}
-                {% comment %} <input type="submit" id="delete-post-button" value="게시글 삭제"> {% endcomment %}
-                <button type="submit" id="delete-post-button">게시글 삭제</button>
-              </form>
-            {% endif %}
+            <form id="delete-post-form" data-planet-name="{{ planet.name }}" data-post-pk="{{ first_post.pk }}">
+              {% csrf_token %}
+              <button type="submit" id="delete-post-button">게시글 삭제</button>
+            </form>
           </a>
         </li>
         <li>
           <a href="#" class="block px-4 py-2 hover:bg-gray-100">
-            {% if request.user.is_authenticated %}
-              <form action="{% url 'planets:post_report' planet.name first_post.pk %}" method="POST">
-                {% csrf_token %}
-                <button type="submit">게시글 신고</button>
-              </form>
-            {% endif %}
+            <form action="{% url 'planets:post_report' planet.name first_post.pk %}" method="POST">
+              {% csrf_token %}
+              <button type="submit">게시글 신고</button>
+            </form>
           </a>
         </li>
         <li>
@@ -126,62 +118,9 @@ main
         <a href="#" class="block px-4 py-2 text-sm text-gray-700">게시글 공유하기</a>
       </div>
     </div>
-    
-    {% comment %} <!-- 댓글 작성 -->
-    <div id="comment-list">
-      {% for comment in post.comments.all reversed %}
-        <div class="comment-container">
-          <div id="comment-content">{{ comment.content }}</div>
-          <div>{{ comment.created_time }}</div>
-          <div>{{ comment.accountbyplanet.nickname }}</div>
-          {% if request.user == comment.accountbyplanet.user %}
-            <form id="delete-comment-form" data-planet-name="{{ planet.name }}" data-post-pk="{{ post.pk }}" data-comment-pk="{{ comment.pk }}">
-              {% csrf_token %}
-              <input type="submit" id="delete-comment-button" value="댓글 삭제">
-            </form>
-          {% endif %}
-          <div id="recomment-list">
-            {% for recomment in comment.recomments.all reversed %}
-              <div class="recomment-container">
-                <div>{{ recomment.content }}</div>
-                <div>{{ recomment.created_time }}</div>
-                <div>{{ recomment.accountbyplanet.nickname }}</div>
-                {% if request.user == recomment.accountbyplanet.user %}
-                  <form id="delete-recomment-form" data-planet-name="{{ planet.name }}" data-post-pk="{{ post.pk }}" data-comment-pk="{{ comment.pk }}" data-recomment-pk="{{ recomment.pk }}">
-                    {% csrf_token %}
-                    <input type="submit" id="delete-recomment-button" value="대댓글 삭제">
-                  </form>
-                {% endif %}
-              </div>
-            {% endfor %}
-            <div id="recomment-create">
-              <button id="show-recomment-form-button">대댓글 작성</button>
-              <form id="recomment-form" data-planet-name="{{ planet.name }}" data-post-pk="{{ post.pk }}" data-comment-pk="{{ comment.pk }}" style="display: none;">
-                {% csrf_token %}
-                {{ recommentform.as_p }}
-                <input type="submit" value="대댓글 작성">
-              </form>
-            </div>
-          </div>
-        </div>
-      {% endfor %}
-
-      <div id="comment-create">
-        <button id="show-comment-form-button">댓글 작성</button>
-        <form id="comment-form" data-planet-name="{{ planet.name }}" data-post-pk="{{ post.pk }}" style="display: none;">
-          {% csrf_token %}
-          {{ commentform.as_p }}
-          <input type="submit" value="댓글 작성">
-        </form>
-      </div>
-    </div> {% endcomment %}
     <hr>
   </div>
 </div>
-{% comment %} <div class="right-side-bar">
-  <h2>right-side-bar</h2>
-  <button id="show-post-form-button">게시하기</button>
-</div> {% endcomment %}
 {% endblock content %}
 
 {% block script %}
