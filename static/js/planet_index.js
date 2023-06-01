@@ -1,6 +1,7 @@
 // csrf
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
 
+var planetName = document.getElementById('post-form').getAttribute('data-planet-name');
 var page = 1;
 
 // 스크롤시 post 비동기
@@ -13,7 +14,6 @@ $(window).scroll(function() {
 
 // posts rendering 비동기 처리
 function loadPosts(page) {
-  var planetName = document.getElementById('post-form').getAttribute('data-planet-name');
 
   $.ajax({
     url: '/planets/' + planetName + '/posts/',
@@ -29,7 +29,7 @@ function loadPosts(page) {
           $(window).off('scroll');
           return;
         }
-        $('#post-list').append(createpostContainer(post.profile_image_url, post.nickname, post.created_time, post.content, post.tags, post.pk, post.image_url));
+        $('#post-list').append(createpostContainer(post.profile_image_url, post.nickname, post.created_time, post.content, post.tags, post.pk, post.image_url, post.user));
       }
     }
   });
@@ -41,7 +41,7 @@ $(document).ready(function() {
 });
 
 // post container 생성
-function createpostContainer(profile_image_url, nickname, created_time, content, tags, post_pk, image_url) {
+function createpostContainer(profile_image_url, nickname, created_time, content, tags, post_pk, image_url, user) {
   var newPostContainer = document.getElementById('post-container').cloneNode(true);
   newPostContainer.style.display = "";
   newPostContainer.querySelector('#post-img img').src = profile_image_url ? profile_image_url : "/static/img/no_profile_img.png";
@@ -49,6 +49,7 @@ function createpostContainer(profile_image_url, nickname, created_time, content,
   newPostContainer.querySelector('#post-createdtime p').textContent = created_time;
   newPostContainer.querySelector('#post-content').textContent = content;
   newPostContainer.querySelector('#delete-post-form').setAttribute("data-post-pk", post_pk);
+  newPostContainer.querySelector('#post-detail').href = "/planets/" + planetName + "/" + post_pk + "/";
   if (tags) {
     tags.forEach(function(tag) {
       var tagContainer = newPostContainer.querySelector('#post-tags');
@@ -67,40 +68,14 @@ function createpostContainer(profile_image_url, nickname, created_time, content,
     newImage.classList.add("rounded-lg");
     imageContainer.append(newImage)
   };
+  if (user == requestuser) {
+    newPostContainer.querySelector('#dropdown-delete').style.display = "block";
+  }
   return newPostContainer;
 }
 
 // eventlistener
 document.addEventListener('DOMContentLoaded', function() {
-  document.querySelector('body').addEventListener('click', function(e) {
-    var target = e.target;
-
-    // 더보기 클릭
-    if (target.tagName == 'circle' || (target.tagName == 'svg' && target.id == 'more')) {
-      var parentDiv = target.closest('#post-container');
-      var dropdownMenu = parentDiv.querySelector('#dropdown-menu');
-      var buttonRect = target.getBoundingClientRect();
-
-      dropdownMenu.style.top = buttonRect.top + window.scrollY + 'px';
-      dropdownMenu.style.left = buttonRect.right + window.scrollX + 'px';
-
-      if (dropdownMenu.style.display == 'none') {
-        dropdownMenu.style.display = 'block';
-      } else {
-        dropdownMenu.style.display = 'none';
-      }
-    } else {
-      var dropdownMenus = document.querySelectorAll('#dropdown-menu');
-
-      dropdownMenus.forEach(function(menu) {
-        if (menu.style.display == 'block') {
-          menu.style.display = 'none';
-        }
-      });
-    }
-  });
-
-
   document.querySelector('body').addEventListener('submit', function(e) {
     var target = e.target;
 
@@ -126,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (response.data.success) {
           var post_pk = response.data.post_pk;
           var postList = document.getElementById('post-list');
-          var newPostContainer = createpostContainer(response.data.profile_image_url, response.data.nickname, response.data.created_time, response.data.content, response.data.tags, post_pk, response.data.image_url);
+          var newPostContainer = createpostContainer(response.data.profile_image_url, response.data.nickname, response.data.created_time, response.data.content, response.data.tags, post_pk, response.data.image_url, response.data.user);
           postList.insertBefore(newPostContainer, postList.children[1]);
           form.reset();
         } else {
@@ -139,36 +114,6 @@ document.addEventListener('DOMContentLoaded', function() {
           strongElement.textContent = JSON.parse(response.data.errors).content[0].message;
           newP.appendChild(strongElement);
           divIdContent.appendChild(newP);
-        }
-      })
-      .catch(function(error) {
-        console.error('AJAX request failed:', error);
-      });
-    }
-
-    // 게시글 삭제
-    else if (target.matches('#delete-post-form')) {
-      e.preventDefault();
-
-      var deleteForm = target;
-      var deleteButton = deleteForm.querySelector('#delete-post-button');
-      var postContainer = deleteButton.closest('#post-container');
-      var planetName = deleteForm.dataset.planetName;
-      var postPk = deleteForm.dataset.postPk;
-      var url = "/planets/" + planetName + "/" + postPk + "/delete/";
-
-      axios({
-        url: url,
-        method: 'POST',
-        headers: {
-          'X-CSRFToken': csrftoken,
-        }
-      })
-      .then(function(response) {
-        if (response.data.success) {
-          postContainer.remove();
-        } else {
-          console.error('Post deletion failed.');
         }
       })
       .catch(function(error) {
