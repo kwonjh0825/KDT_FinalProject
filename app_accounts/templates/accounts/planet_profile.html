@@ -75,8 +75,8 @@
     <div class=" ml-20 pl-12 pt-3 mb-5 flex items-end gap-4">
         <p class="text-slate-200 text-2xl">{{ user_by_planet.nickname }}</p>
         <p class="text-xs text-center">{{ user_by_planet.post_set.all|length }} <br> <span class="text-slate-500">게시물</span> </p>
-        <p class="text-xs text-center">{{ user_by_planet.followings.all|length }} <br> <span class="text-slate-500">팔로잉</span> </p>
-        <p class="text-xs text-center">{{ user_by_planet.followers.all|length }} <br> <span class="text-slate-500">팔로워</span> </p>
+        <p class="text-xs text-center"><span class="following-count">{{ user_by_planet.followings.all|length }}</span> <br> <span class="text-slate-500">팔로잉</span> </p>
+        <p class="text-xs text-center"><span class="follower-count">{{ user_by_planet.followers.all|length }}</span> <br> <span class="text-slate-500">팔로워</span> </p>
 
         {% comment %} <p class="text-slate-500">{{ user.email }}</p> {% endcomment %}
         {% comment %} <!-- 회원가입한 날짜 -->
