@@ -33,4 +33,6 @@ urlpatterns = [
     path('planets/<str:planet_name>/profile/<str:nickname>/update/', accounts_views.planet_profile_update, name='planet_profile_update'),
     # 게시글 신고 기능
     path('planets/<str:planet_name>/report/<int:post_pk>/', views.post_report, name='post_report'),
+    # 팔로잉
+    path('planets/<str:planet_name>/follow/<int:user_pk>/', views.following, name='following'),
 ]

@@ -463,3 +463,25 @@ def admin_member(request, planet_name):
     else:
         messages.warning(request, '매니저만 접근 가능합니다.')
         return redirect('planets:main')
+    
+def following(request, planet_name, user_pk):
+    planet = Planet.objects.get(name=planet_name)
+
+    to_user = Accountbyplanet.objects.get(planet=planet, pk=user_pk)
+    from_user = Accountbyplanet.objects.get(planet=planet, user=request.user)
+    # 자기 자신을 팔로우 할 수 없음
+    if to_user != from_user:
+        if to_user.followers.filter(pk=from_user.pk).exists():
+            # 팔로우 중이면 팔로우 취소
+            to_user.followers.remove(from_user)
+            is_followed = False
+        else:
+            # 팔로우 중이지 않으면 팔로우 
+            to_user.followers.add(from_user)
+            is_followed = True
+        context = {
+            'is_followed': is_followed,
+            
+        }
+        return JsonResponse(context)
+    return redirect('planets:index', planet_name)
