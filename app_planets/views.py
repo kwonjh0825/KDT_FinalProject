@@ -490,7 +490,8 @@ def following(request, planet_name, user_pk):
             is_followed = True
         context = {
             'is_followed': is_followed,
-            
+            'following_count': to_user.followings.count(),
+            'follower_count': to_user.followers.count(),
         }
         return JsonResponse(context)
     return redirect('planets:index', planet_name)

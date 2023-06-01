@@ -16,6 +16,9 @@ followForm.addEventListener('submit', (e) => {
   .then((response) => {
     const isFollowed = response.data.is_followed
     const followBtn = document.querySelector('.follow-btn')
+    
+    const followerCountData = response.data.follower_count
+    const followerCountTag = document.querySelector('.follower-count')
 
     if(isFollowed === true) {
       followBtn.value = 'following'
@@ -23,6 +26,7 @@ followForm.addEventListener('submit', (e) => {
     else {
       followBtn.value = 'follow'
     }
+    followerCountTag.innerHTML = followerCountData
   })
   .catch((error) => {
     console.log(error.response)
