@@ -432,37 +432,3 @@ function createpostContainer(profile_image_url, nickname, created_time, content,
   newPostContainer.querySelector('#post-content').textContent = content;
   return newPostContainer;
 }
-
-// 팔로잉 비동기 처리
-const followForms = document.querySelectorAll('.follow-form')
-followForms.forEach((followForm) => {
-  followForm.addEventListener('submit', (e) => {
-    alert('1')
-    e.preventDefault()
-    const userPk = e.target.dataset.userPk
-    const planetName = e.target.dataset.planetName
-
-    axios({
-      method:'post',
-      url:`/planets/${planetName}/follow/${userPk}`,
-      headers:{'X-CSRFToken': csrftoken,}
-    })
-    .then((response) => {
-      const isFollowed = response.data.is_followed
-      const followBtns = document.querySelectorAll(`.follow-form-${userPk} > input[type=submit]`)
-      if(isFollowed === true) {
-        followBtns.forEach((btn) => {
-          btn.value = "팔로우 취소"
-        })
-      }
-      else {
-        followBtns.forEach((btn) => {
-          btn.value = "팔로우"
-        })
-      }
-    })
-    .catch((error) => {
-      console.log(error.response)
-    })
-  })
-})
