@@ -6,6 +6,8 @@
 {% endblock title %}
 
 {% block content %}
+<p class="text-4xl mb-3 pb-4 font-bold">Terms and Conditions</p>
+<hr class="border-t-2 border-yellow-300">
 <div class="relative overflow-x-auto rounded-md">
 	<table class="w-full text-md text-left text-gray-500 dark:text-gray-400 ">
 		<tbody>
@@ -88,7 +90,7 @@
 		var order2Chk=$("#order2_chk").prop("checked");
 			if(order2Chk){
 				$(".order2_chks").prop("checked",true);
-				$(".btnArea button").css({"backgroundColor":"#ffd951","cursor":"pointer","color":"#fff"}).prop("disabled",false);
+				$(".btnArea button").addClass("hover:bg-yellow-500").css({"backgroundColor":"#facc15","cursor":"pointer","color":"#fff"}).prop("disabled",false);
 			}
 			else{
 				$(".order2_chks").prop("checked",false);
@@ -109,7 +111,7 @@
 			// 체크박스가 모두 선택되었을 때 상위 체크박스 선택되도록 설정
 			if(tt == ss){
 				$("#order2_chk").prop("checked",true);
-				$(".btnArea button").css({"backgroundColor":"#ffd951","cursor":"pointer","color":"#fff"}).prop("disabled",false);
+				$(".btnArea button").addClass("hover:bg-yellow-500").css({"backgroundColor":"#facc15","cursor":"pointer","color":"#fff"}).prop("disabled",false);
 
 			}else{
 				$("#order2_chk").prop("checked",false);

@@ -13,11 +13,6 @@ body {
   max-width: 280px;
 }
 
-.main-bar {
-  max-width: 540px;
-  height: 100%;
-}
-
 .profile-image {
   display: flex;
   justify-content: center;
@@ -33,24 +28,7 @@ body {
   color: aliceblue;
 }
 
-
-/* 임시 */
-.post-container {
-  background-color: green;
-}
-
-/* 임시 */
-.comment-container {
-  background-color: blue;
-}
-
-/* 임시 */
-.recomment-container {
-  background-color: yellow;
-}
-
 .button-chatting {
-  font-size: 1rem;
   border-radius: 0.3rem;
 }
 

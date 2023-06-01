@@ -10,3 +10,11 @@
 .chatting-create-btn:hover {
   background-color: #ffd951;
 }
+
+#dropdown-menu {
+  z-index: 10;
+  position: absolute;
+  background-color: rgb(40, 44, 55);
+  top: 0;
+  left: 100%;
+}

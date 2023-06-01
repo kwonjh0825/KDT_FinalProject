@@ -41,7 +41,6 @@ def planet_create(request):
             planet = form.save(commit=False)
             planet.created_by = request.user
             planet.save()
-
             termsofservice_count = int(request.POST.get('termsofservice_count', 0))
 
             # 이용 약관 저장
@@ -51,14 +50,6 @@ def planet_create(request):
                 # 이용 약관 DB Create
                 TermsOfService.objects.create(Planet=planet, order=i, content=term_content)
 
-            # guide accountbyplanet 생성
-            accountbyplanet = Accountbyplanet.objects.create(nickname='Guide', user=User.objects.get(pk=1), planet=planet)
-
-            # 게시글, 댓글, 대댓글 생성
-            post = Post.objects.create(content='이곳은 게시글입니다. 꿈을 마음 껏 펼치세요!', planet=planet, accountbyplanet=accountbyplanet)
-            comment = Comment.objects.create(content='이곳은 댓글입니다. 게시글에 대한 의견을 작성하세요!', post=post, accountbyplanet=accountbyplanet)
-            Recomment.objects.create(content='이곳은 대댓글입니다. 댓글에 대한 생각을 알려주세요!', comment=comment, accountbyplanet=accountbyplanet)
-
             return redirect('planets:planet_join', planet.name)
     else:
         form = PlanetForm()
@@ -66,6 +57,7 @@ def planet_create(request):
         'form': form,
     }
     return render(request, 'planets/planet_create.html', context)
+
 
 @login_required
 def planet_contract(request,planet_name):
@@ -87,11 +79,11 @@ def planet_contract(request,planet_name):
     }
     return render(request, 'planets/planet_contract.html', context )
 
+
 # 행성 가입
 @login_required
 def planet_join(request, planet_name):
     planet = Planet.objects.get(name=planet_name)
-    
     if request.method == 'POST':
         form = AccountbyplanetForm(request.POST, request.FILES)
         if form.is_valid():
@@ -124,13 +116,9 @@ def index(request, planet_name):
         return redirect('planets:main')
     
     postform = PostForm()
-    commentform = CommentForm()
-    recommentform = RecommentForm()
 
     context = {
         'postform': postform,
-        'commentform': commentform,
-        'recommentform': recommentform,
         'planet': planet,
         'first_post': Post.objects.filter(planet=planet).first(),
     }
@@ -169,8 +157,9 @@ def planet_posts(request, planet_name):
             'created_time': post.created_time,
             'nickname': post.accountbyplanet.nickname,
             'image_url': post.image.url if post.image else None,
-            'user': post.accountbyplanet.user.username,
+            'tags': list(post.tags.names()),
             'profile_image_url': post.accountbyplanet.profile_image.url if post.accountbyplanet.profile_image else None,
+            'user': post.accountbyplanet.user.username,
         })
 
     if posts.has_next():
@@ -197,8 +186,10 @@ def post_create(request, planet_name):
             'content': post.content,
             'created_time': post.created_time,
             'nickname': post.accountbyplanet.nickname,
-            'profile_image_url': post.accountbyplanet.profile_image.url,
-            'image_url': post.image.url if post.image else None
+            'image_url': post.image.url if post.image else None,
+            'tags': list(post.tags.names()),
+            'profile_image_url': post.accountbyplanet.profile_image.url if post.accountbyplanet.profile_image else None,
+            'user': post.accountbyplanet.user.username,
         }
         return JsonResponse(response_data)
     else:
@@ -216,6 +207,24 @@ def post_delete(request, planet_name, post_pk):
         return JsonResponse({'success': True})
     else:
         return JsonResponse({'success': False})
+
+
+# 게시글 상세
+@login_required
+def post_detail(request, planet_name, post_pk):
+    post = Post.objects.get(pk=post_pk)
+    planet = Planet.objects.get(name=planet_name)
+    comments = Comment.objects.filter(post=post)
+    commentform = CommentForm()
+    recommentform = RecommentForm()
+    context = {
+        'post': post,
+        'comments': comments,
+        'planet': planet,
+        'commentform': commentform,
+        'recommentform': recommentform,
+    }
+    return render(request, 'planets/planet_detail.html', context)
 
 
 # 댓글 생성

@@ -6,17 +6,13 @@
 {% endblock title %}
 
 {% block content %}
-<a href="javascript:history.back()" class="block  flex items-center pl-5  text-[#ffd951] " style="height: 50px;">
-    <span class="material-symbols-outlined">
-        chevron_left
-    </span>
-    Back
-</a>
-<div class="mx-auto w-[500px]">
-    <!-- 내용 -->
-    <div class="border container ml-5 pl-8">
+
+<div class="container mx-auto flex justify-center h-screen">
+    <div class="w-full max-w-lg pt-10">
+        <p class="text-4xl mb-3 pb-4 font-bold">My profile</p>
+        <hr class="border-t-2 border-yellow-300 mb-6">
         <!-- 개인정보 -->
-        <table class="my-3">
+        <table class="my-3 ml-5">
             <tr>
                 <td>
                     <div class="border-r-2 pr-4 mr-4">
@@ -34,7 +30,7 @@
             
         
         <!-- 개수 -->
-        <div class="my-4">
+        <div class="my-4 ml-5">
             <p class="text-3xl">Planet Lists</p>
             {% for user_by_planet in user_by_planets %}
             <a type="button" href="{% url 'planets:index' user_by_planet.planet.name %}" class="pl-5 py-2 my-3 rounded-lg bg-[#181A20] hover:bg-[161a24] max-w-[400px] flex gap-4 relative">

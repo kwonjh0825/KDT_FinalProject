@@ -13,6 +13,7 @@ urlpatterns = [
     path('planets/<str:planet_name>/', views.index, name='index'),
     path('planets/<str:planet_name>/posts/', views.planet_posts, name='planet_posts'),
     path('planets/<str:planet_name>/create/', views.post_create, name='post_create'),
+    path('planets/<str:planet_name>/<int:post_pk>/', views.post_detail, name='post_detail'),
     path('planets/<str:planet_name>/<int:post_pk>/delete/', views.post_delete, name='post_delete'),
     path('planets/<str:planet_name>/<int:post_pk>/create/', views.comment_create, name='comment_create'),
     path('planets/<str:planet_name>/<int:post_pk>/<int:comment_pk>/delete/', views.comment_delete, name='comment_delete'),
