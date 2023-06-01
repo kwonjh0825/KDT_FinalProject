@@ -43,28 +43,26 @@ main
     <div id="post-section" class="p-3">
       <div class="flex flex-row justify-between">
         <div class="flex flex-row">
-          <div id="post-img"><img src="{% if first_post.accountbyplanet.profile_image %}{{ first_post.accountbyplanet.profile_image.url }}{% else %}{% static 'img/no_profile_img.png' %}{% endif %}" alt="img" style="width:48px; height:48px;"></div>
+          <div id="post-img"><img src="{% static 'img/no_profile_img.png' %}" alt="img" style="width:48px; height:48px;"></div>
           <div class="ms-2">
-            <a id="post-nickname" ref="{% url 'planets:planet_profile' first_post.accountbyplanet.planet.name first_post.accountbyplanet.nickname %}">{{ first_post.accountbyplanet.nickname }}</a>
-            <p class="text-sm text-[#bcbdbf]">@{{ first_post.accountbyplanet.nickname }}</p>
+            <a id="post-nickname" ref="#">Guide</a>
+            <p class="text-sm text-[#bcbdbf]">@Guide</p>
           </div>
         </div>
         <div class="me-3">
           <div id="post-createdtime">
-            <p class="text-xs text-[#bcbdbf]">{{ first_post.created_time }}</p>
+            <p class="text-xs text-[#bcbdbf]">time</p>
           </div>
         </div>
       </div>
-      <div class="mt-5 mb-2" id="post-content">{{ first_post.content }}</div>
+      <a id="post-detail" href="#">
+        <div class="mt-5 mb-2" id="post-content">
+          이곳은 행성의 첫 페이지입니다!
+        </div>
+      </a>
       <div class="mb-5" id="post-tags">
-        {% for tag in first_post.tags.all %}
-          <span class="text-[#bcbdbf]" id="tag">#{{ tag.name }}</span>
-        {% endfor %}
       </div>
       <div id="post-image">
-        {% if first_post.image %}
-          <img src="{{ first_post.image.url }}" alt="{{ first_post.image }}" class="rounded-lg">
-        {% endif %}
       </div>
     </div>
     
@@ -94,17 +92,15 @@ main
     <!-- 더보기 버튼 Dropdown menu -->
     <div id="dropdown-menu" style="display:none;">
       <ul>
-        <li>
-          <a href="#" class="block px-4 py-2 hover:bg-gray-100 hover:text-[#d14424]">
-            <form id="delete-post-form" data-planet-name="{{ planet.name }}" data-post-pk="{{ first_post.pk }}">
-              {% csrf_token %}
-              <button type="submit" id="delete-post-button">게시글 삭제</button>
-            </form>
-          </a>
+        <li id="dropdown-delete" style="display:none;">
+          <form id="delete-post-form" class="block px-4 py-2 hover:bg-gray-100 hover:text-[#d14424]" data-planet-name="{{ planet.name }}" data-post-pk="0">
+            {% csrf_token %}
+            <button type="submit" id="delete-post-button">게시글 삭제</button>
+          </form>
         </li>
         <li>
           <a href="#" class="block px-4 py-2 hover:bg-gray-100">
-            <form action="{% url 'planets:post_report' planet.name first_post.pk %}" method="POST">
+            <form action="#" method="POST">
               {% csrf_token %}
               <button type="submit">게시글 신고</button>
             </form>
@@ -125,5 +121,9 @@ main
 
 {% block script %}
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  var requestuser = "{{ request.user }}";
+</script>
 <script src="{% static 'js/planet_index.js' %}"></script>
+<script src="{% static 'js/planet_post_more.js' %}"></script>
 {% endblock script %}
