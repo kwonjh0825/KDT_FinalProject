@@ -7,21 +7,22 @@
 
 {% block content %}
 
-<div>
-  <div class="relative overflow-x-auto rounded-md">
+<div class="">
+  <div class="relative rounded-md">
     <p class="mb-7 text-3xl font-bold">Some ground rules.</p>
-    <table class="w-full text-md text-left text-gray-500 dark:text-gray-400 ">
+    <hr class="border-t-2 border-yellow-300">
+     <table class="text-md text-left text-gray-500 dark:text-gray-400 ">
       <tbody>
         {% for termofservice in termsofservice %}
         <tr class="">
-          <th scope="row" class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+          <th scope="row" class="pr-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
             <div class="w-10 h-10 rounded-full bg-[#ffd951] flex justify-center items-center">
               <span class="text-white font-bold">{{ termofservice.order }}</span>
             </div>
           </th>
-          <td class="px-6 pt-4 ">
-            <p>{{ termofservice.content|linebreaksbr }}</p>
-            <div class="text-right my-2">
+          <td class="px-6 pt-8">
+            <p class="text-start">{{ termofservice.content }}</p>
+            <div class="text-right mt-7">
               <input id="ck1"  type="checkbox" class="mr-2 order2_chks">
               <label for="ck1">동의합니다</label>
             </div>
@@ -42,19 +43,7 @@
     </div>
 </div>
 
-{% comment %}  
-    {% for termofservice in termsofservice %}
-    <div class="my-4">
-        <div class="flex gap-8">
-            <div class="w-10 h-10 rounded-full bg-[#ffd951] flex justify-center items-center">
-            <span class="text-white font-bold">{{ termofservice.order }}</span>
-            </div>
-            <p>{{ termofservice.content|linebreaksbr }}</p>
-        </div>
-      </div>
-      <hr class="border-gray-500">
-      {% endfor %} 
-{% endcomment %}
+
 
 
 {% endblock content %}
@@ -132,14 +121,3 @@
 {% endblock script %}
 
 
-{% comment %} 
-<div>
-    <p class="mb-7 text-4xl text-center">몇가지 주의사항이 있습니다</p>
-  {% for termofservice in termsofservice %}
-    <h3>{{ termofservice.order }} {{ termofservice.content|linebreaksbr }}</h3>
-  {% endfor %}
-  
-  <h3>위 이용 약관에 동의하십니까?</h3>
-  <input type="checkbox" id="terms-checkbox"> 이용 약관에 동의합니다.
-</div> 
-{% endcomment %}
