@@ -1,8 +1,106 @@
 // csrf
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
 
+var page = 1;
+
+// 스크롤시 post 비동기
+$(window).scroll(function() {
+  if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+    page++;
+    loadPosts(page);
+  }
+});
+
+// posts rendering 비동기 처리
+function loadPosts(page) {
+  var planetName = document.getElementById('post-form').getAttribute('data-planet-name');
+
+  $.ajax({
+    url: '/planets/' + planetName + '/posts/',
+    type: 'GET',
+    data: {
+        'page': page
+    },
+    dataType: 'json',
+    success: function(data) {
+      for (var i = 0; i < data.length; i++) {
+        var post = data[i];
+        if (post === null) {
+          $(window).off('scroll');
+          return;
+        }
+        $('#post-list').append(createpostContainer(post.profile_image_url, post.nickname, post.created_time, post.content, post.tags, post.pk, post.image_url));
+      }
+    }
+  });
+}
+
+// 스크롤 첫번째 실행
+$(document).ready(function() {
+  loadPosts(page);
+});
+
+// post container 생성
+function createpostContainer(profile_image_url, nickname, created_time, content, tags, post_pk, image_url) {
+  var newPostContainer = document.getElementById('post-container').cloneNode(true);
+  newPostContainer.style.display = "";
+  newPostContainer.querySelector('#post-img img').src = profile_image_url ? profile_image_url : "/static/img/no_profile_img.png";
+  newPostContainer.querySelector('#post-nickname').textContent = nickname;
+  newPostContainer.querySelector('#post-createdtime p').textContent = created_time;
+  newPostContainer.querySelector('#post-content').textContent = content;
+  newPostContainer.querySelector('#delete-post-form').setAttribute("data-post-pk", post_pk);
+  if (tags) {
+    tags.forEach(function(tag) {
+      var tagContainer = newPostContainer.querySelector('#post-tags');
+      var newTag = document.createElement('span');
+      newTag.classList.add("text-[#bcbdbf]");
+      newTag.id = "tag";
+      newTag.textContent = "#" + tag;
+      tagContainer.appendChild(newTag);
+    });
+  };
+  if (image_url) {
+    var imageContainer = newPostContainer.querySelector('#post-image');
+    var newImage = document.createElement('img');
+    newImage.src = image_url;
+    newImage.alt = "image";
+    newImage.classList.add("rounded-lg");
+    imageContainer.append(newImage)
+  };
+  return newPostContainer;
+}
+
 // eventlistener
 document.addEventListener('DOMContentLoaded', function() {
+  document.querySelector('body').addEventListener('click', function(e) {
+    var target = e.target;
+
+    // 더보기 클릭
+    if (target.tagName == 'circle' || (target.tagName == 'svg' && target.id == 'more')) {
+      var parentDiv = target.closest('#post-container');
+      var dropdownMenu = parentDiv.querySelector('#dropdown-menu');
+      var buttonRect = target.getBoundingClientRect();
+
+      dropdownMenu.style.top = buttonRect.top + window.scrollY + 'px';
+      dropdownMenu.style.left = buttonRect.right + window.scrollX + 'px';
+
+      if (dropdownMenu.style.display == 'none') {
+        dropdownMenu.style.display = 'block';
+      } else {
+        dropdownMenu.style.display = 'none';
+      }
+    } else {
+      var dropdownMenus = document.querySelectorAll('#dropdown-menu');
+
+      dropdownMenus.forEach(function(menu) {
+        if (menu.style.display == 'block') {
+          menu.style.display = 'none';
+        }
+      });
+    }
+  });
+
+
   document.querySelector('body').addEventListener('submit', function(e) {
     var target = e.target;
 
@@ -28,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (response.data.success) {
           var post_pk = response.data.post_pk;
           var postList = document.getElementById('post-list');
-          var newPostContainer = createpostContainer(response.data.profile_image_url, response.data.nickname, response.data.created_time, response.data.content, response.data.user, post_pk, planetName);
+          var newPostContainer = createpostContainer(response.data.profile_image_url, response.data.nickname, response.data.created_time, response.data.content, response.data.tags, post_pk, response.data.image_url);
           postList.insertBefore(newPostContainer, postList.children[1]);
           form.reset();
         } else {
@@ -383,52 +481,3 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-// 스크롤 첫번째 실행
-$(document).ready(function() {
-  var initialPage = 1;
-  loadPosts(initialPage);
-});
-
-// 스크롤시 post 비동기
-$(window).scroll(function() {
-  if ($(window).scrollTop() == $(document).height() - $(window).height()) {
-      var nextPage = parseInt($('#post-list').val()) + 1;
-      loadPosts(nextPage);
-  }
-});
-
-// posts rendering 비동기 처리
-function loadPosts(page) {
-  var planetName = document.getElementById('post-form').getAttribute('data-planet-name');
-
-  $.ajax({
-    url: '/planets/' + planetName + '/posts/',
-    type: 'GET',
-    data: {
-        'page': page
-    },
-    dataType: 'json',
-    success: function(data) {
-      for (var i = 0; i < data.length; i++) {
-        var post = data[i];
-        if (post === null) {
-          $(window).off('scroll');
-          return;
-        }
-        $('#post-list').append(createpostContainer(post.profile_image_url, post.nickname, post.created_time, post.content, post.user, post.pk, planetName));
-      }
-      $('#post-list').val(page);
-    }
-  });
-}
-
-// post container 생성
-function createpostContainer(profile_image_url, nickname, created_time, content, user, post_pk, planetName) {
-  var newPostContainer = document.getElementById('post-container').cloneNode(true);
-  newPostContainer.style.display = "";
-  newPostContainer.querySelector('#post-img img').src = profile_image_url ? profile_image_url : "/static/img/no_profile_img.png";
-  newPostContainer.querySelector('#post-nickname').textContent = nickname;
-  newPostContainer.querySelector('#post-createdtime p').textContent = created_time;
-  newPostContainer.querySelector('#post-content').textContent = content;
-  return newPostContainer;
-}

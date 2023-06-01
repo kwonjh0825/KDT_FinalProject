@@ -28,22 +28,6 @@ body {
   color: aliceblue;
 }
 
-
-/* 임시 */
-.post-container {
-  background-color: green;
-}
-
-/* 임시 */
-.comment-container {
-  background-color: blue;
-}
-
-/* 임시 */
-.recomment-container {
-  background-color: yellow;
-}
-
 .button-chatting {
   border-radius: 0.3rem;
 }
