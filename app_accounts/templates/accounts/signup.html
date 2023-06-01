@@ -6,38 +6,55 @@
 {% endblock title %}
 
 {% block content %}
-<div>
-  <form action="{% url 'accounts:signup' %}" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    <div class="grid">
-      <!-- id -->
-      <label for="username" class="ml-1 mt-2 block text-lg font-medium text-slate-300">ID</label>
-      <input type="text" id="username" name="username" value="{{ user.username }}" class="form-input mt-1 rounded-md bg-[#101013] " required>
-      <!-- last_name -->
-      <label for="last_name" class="ml-1 mt-2 block text-lg font-medium text-slate-300">Last_name</label>
-      <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}" class="form-input mt-1 rounded-md bg-[#101013] " required>
-      <!-- first_name -->
-      <label for="first_name" class="ml-1 mt-2 block text-lg font-medium text-slate-300">First_name</label>
-      <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}" class="form-input mt-1 rounded-md bg-[#101013] " required>
-      <!-- email -->
-      <label for="email" class="ml-1 mt-2 block text-lg font-medium text-slate-300">E-mail</label>
-      <input type="text" id="email" name="email" value="{{ user.email }}" class="form-input mt-1 rounded-md bg-[#101013] " required>
-      <!-- password1 -->
-      <label for="password1" class="ml-1 mt-2 block text-lg font-medium text-slate-300">Password</label>
-      <input type="password" id="password1" name="password1" value="{{ user.password1 }}" class="form-input mt-1 rounded-md bg-[#101013] " required>
-      <!-- password2 -->
-      <label for="password2" class="ml-1 mt-2 block text-lg font-medium text-slate-300">Confirm password</label>
-      <input type="password" id="password2" name="password2" value="{{ user.password2 }}" class="form-input mt-1 rounded-md bg-[#101013] " required>
-    
-      <!-- checkbox -->
-      <div class="flex items-center my-4 ml-2">
-        <input id="signup-checkbox" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" required>
-        <label for="signup-checkbox" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">I have read and agree to the privacy policy</label>
+<div class="container mx-auto flex justify-center h-screen">
+  <div class="w-full">
+    <p class="text-4xl mb-3 pb-4 font-bold">Sign up</p>
+    <hr class="border-t-2 border-yellow-300">
+    <form action="{% url 'accounts:signup' %}" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="grid">
+        <!-- id -->
+        <label for="username" class="ml-1 mt-2 block text-lg font-medium text-slate-300">ID</label>
+        <input type="text" id="username" name="username" value="{{ user.username }}" class="form-input mt-1 rounded-md bg-[#101013] " required>
+
+        <!-- email -->
+        <label for="email" class="ml-1 mt-2 block text-lg font-medium text-slate-300">E-mail</label>
+        <input type="text" id="email" name="email" value="{{ user.email }}" class="form-input mt-1 rounded-md bg-[#101013] " required>
+        
+        <div class="flex gap-5">
+          <div class="w-full">
+            <!-- last_name -->
+            <label for="last_name" class="ml-1 mt-2 block text-lg font-medium text-slate-300">Last_name</label>
+            <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}" class="form-input mt-1 w-full rounded-md bg-[#101013] " required>
+          </div>
+          <div class="w-full">
+            <!-- first_name -->
+            <label for="first_name" class="ml-1 mt-2 block text-lg font-medium text-slate-300">First_name</label>
+            <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}" class="form-input mt-1 w-full rounded-md bg-[#101013] " required>
+          </div>
+        </div>
+        <div class="flex gap-5">
+          <div class="w-full">
+            <!-- password1 -->
+            <label for="password1" class="ml-1 mt-2 block text-lg font-medium text-slate-300">Password</label>
+            <input type="password" id="password1" name="password1" value="{{ user.password1 }}" class="form-input mt-1 w-full rounded-md bg-[#101013] " required>
+          </div>
+          <div class="w-full">
+            <!-- password2 -->
+            <label for="password2" class="ml-1 mt-2 block text-lg font-medium text-slate-300">Confirm password</label>
+            <input type="password" id="password2" name="password2" value="{{ user.password2 }}" class="form-input mt-1 w-full rounded-md bg-[#101013] " required>
+          </div>
+        </div>
+        <!-- checkbox -->
+        <div class="flex items-center my-4 ml-2">
+          <input id="signup-checkbox" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" required>
+          <label for="signup-checkbox" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">I have read and agree to the privacy policy</label>
+        </div>
+        <!-- 버튼 -->
+        <input type="submit" value="Sign Up" class="bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded" />
       </div>
-      <!-- 버튼 -->
-      <input type="submit" value="Sign-Up" class="bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded" />
-    </div>
-  </form>
+    </form>
+  </div>
 </div>
 {% endblock content %}
 {% block script %}

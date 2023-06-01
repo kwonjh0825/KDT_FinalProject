@@ -10,31 +10,47 @@
   <div class="m-4">
     <!-- 설명 -->
     <div>
-      <p class="my-3 text-3xl font-bold">Login to Catsmos.social</p>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos ea excepturi vel et temporibus labore consequuntur dicta non possimus porro?</p>
+      <p class="my-3 text-3xl font-bold">Welcome to Catsmos - Your Gateway to Feline Wonder!</p>
+      <p class="text-gray-400">Dive into the enchanting world of cats with Catsmos, where we celebrate everything feline. Discover captivating stories, adorable pictures, expert advice, and a community of passionate cat lovers. </p><br>
+      <p class="text-gray-400">Feel free to use any of these introductions or modify them according to your needs. Enjoy exploring the wonderful world of Catsmos!</p>
     </div>
 
     <!-- 로그인 폼 -->
     <div class="form-login">
       <form action="{% url 'accounts:login' %}" method="POST">
         {% csrf_token %}
-        <label for="username" class="block">
-          <span class="block text-white text-sm font-medium text-slate-700 py-3">ID</span>
-          <input class="placeholder:italic placeholder:text-slate-700 block bg-black border-black w-full rounded-md py-2 pl-4 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="id" type="text" name="username" id="username" />
-        </label>
-        <label for="password">
-          <span class="block text-white text-sm font-medium text-slate-700 py-3">Password</span>
-          <input class="placeholder:italic placeholder:text-slate-700 block bg-black border-black w-full rounded-md py-2 pl-4 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="********" type="password" name="password" id="password" />
-        </label>
-        <input type="submit" value="LOG IN" class="text-lg my-4 py-1 w-full bg-yellow-400 rounded-md font-bold">
+        <div class="my-6">
+
+          {% comment %} <label for="username" class="block">
+            <span class="block text-white text-sm font-medium text-slate-700 py-3">ID</span>
+            <input class="placeholder:italic placeholder:text-slate-700 block bg-black border-black w-full rounded-md py-2 pl-4 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="id" type="text" name="username" id="username" />
+          </label> {% endcomment %}
+          <label for="username" class="block text-sm font-medium text-slate-300">ID</label>
+          <input type="text" id="username" name="username" placeholder="id" class="form-input mt-1 block w-full rounded-md bg-[#101013] " placeholder="" >
+          
+          {% comment %} <label for="password">
+            <span class="block text-white text-sm font-medium text-slate-700 py-3">Password</span>
+            <input class="placeholder:italic placeholder:text-slate-700 block bg-black border-black w-full rounded-md py-2 pl-4 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="********" type="password" name="password" id="password" />
+          </label> {% endcomment %}
+          <label for="password" class="mt-6 block text-sm font-medium text-slate-300">Password</label>
+          <input type="password" id="password" name="password" placeholder="********" class="form-input mt-1 block w-full rounded-md bg-[#101013] ">
+        </div>
+          
+        
+        <div class="grid mt-7">
+          <button type="submit" class="bg-yellow-400 hover:bg-yellow-500 text-xl text-white font-bold py-1 px-4 rounded shadow">Login</button>
+        </div>
+        
+        {% comment %} <input type="submit" value="LOG IN" class="text-lg my-4 py-1 w-full bg-yellow-400 rounded-md font-bold"> {% endcomment %}
       </form>
     </div>
 
     <!-- 도움 -->
     <div class="me-5 my-3 text-[#889cbb] flex justify-end gap-x-4" style="font-size:12px">
       <a href="{% url 'accounts:contract' %}">Sign up</a>
-      <a href="">Forgot your password?</a>
-      <a href="">Didn't receive a confirmation link?</a>
+      <a href="{% url 'accounts:find_id' %}">Forgot your ID?</a>
+      <a href="{% url 'accounts:password_reset' %}">Forgot your password?</a>
+      {% comment %} <a href="">Didn't receive a confirmation link?</a> {% endcomment %}
     </div>
   </div>
 </div>
