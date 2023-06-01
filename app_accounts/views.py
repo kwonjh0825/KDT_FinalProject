@@ -212,9 +212,11 @@ def planet_profile(request, planet_name, nickname):
     user_by_planet = get_object_or_404(Accountbyplanet, planet=planet, nickname=nickname)
     # planet = Planet.objects.get(name=planet_name)
     # user_by_planet = Accountbyplanet.objects.filter(planet=planet, nickname=nickname)
+    request_user = Accountbyplanet.objects.get(planet=planet, user=request.user)
 
     context = {
         'user_by_planet':user_by_planet,
+        'request_user': request_user,
     }
     return render(request, 'accounts/planet_profile.html', context)
 

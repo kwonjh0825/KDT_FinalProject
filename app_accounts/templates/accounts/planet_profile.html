@@ -60,13 +60,15 @@
 
         <!-- 팔로우 버튼 --> 
         {% if request.user.is_authenticated %}
-        {% comment %} {% if user.username != .username %} {% endcomment %}
-            {% if request.user in user_by_planet.followers.all %}
-            <button class="rounded-md bg-[#ab9203] hovor:bg-[#d1cb1d] px-4 py-2">Folloing</button>
-            {% else %}
-            <button class="rounded-md bg-[#d1cb1d] hover:bg-[#ab9203] px-4 py-2">Follow</button>
+            {% if request_user != user_by_planet %}
+                <form class="follow-form" data-user-pk="{{user_by_planet.pk}}" data-planet-name="{{user_by_planet.planet.name}}">
+                    {% if request_user in user_by_planet.followers.all %}
+                    <input type="submit" value="Following" class="rounded-md bg-[#ab9203] hovor:bg-[#d1cb1d] px-4 py-2 follow-btn">
+                    {% else %}
+                    <input type="submit" value="Follow" class="rounded-md bg-[#d1cb1d] hover:bg-[#ab9203] px-4 py-2 follow-btn">
+                    {% endif %}
+                </form>
             {% endif %}
-        {% comment %} {% endif %} {% endcomment %}
         {% endif %}
     </div>
     <!-- 개인정보 -->
@@ -190,5 +192,6 @@
 {% endblock content %}
 
 {% block script %}
-
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="{% static 'js/planet_profile.js' %}"></script>
 {% endblock script %}
