@@ -168,7 +168,7 @@ def planet_posts(request, planet_name):
             'created_time': post.created_time,
             'nickname': post.accountbyplanet.nickname,
             'image_url': post.image.url if post.image else None,
-            'user': post.accountbyplanet.user.username,
+            'tags': list(post.tags.names()),
             'profile_image_url': post.accountbyplanet.profile_image.url if post.accountbyplanet.profile_image else None,
         })
 
@@ -196,8 +196,9 @@ def post_create(request, planet_name):
             'content': post.content,
             'created_time': post.created_time,
             'nickname': post.accountbyplanet.nickname,
+            'image_url': post.image.url if post.image else None,
+            'tags': list(post.tags.names()),
             'profile_image_url': post.accountbyplanet.profile_image.url,
-            'image_url': post.image.url if post.image else None
         }
         return JsonResponse(response_data)
     else:
