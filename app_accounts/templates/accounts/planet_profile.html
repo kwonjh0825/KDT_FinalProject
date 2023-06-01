@@ -35,10 +35,10 @@
 
 {% comment %} 
     <div class=" relative" style="height:180px; background-color: #181A20;"> {% endcomment %}
-        {% if user_by_planet.profile_image %}
-        <img class=" relative" style="height:200px;" src="{{ user_by_planet.background_image.url }}" alt="#">
+        {% if user_by_planet.background_image %}
+        <img class=" relative w-full" style="height:200px;" src="{{ user_by_planet.background_image.url }}" alt="#">
         {% else %}
-        <img class=" relative" style="height:200px;" src="https://www.macmillandictionary.com/external/slideshow/thumb/Grey_thumb.png" alt="no_image">
+        <img class="relative w-full" style="height:200px;" src="https://www.macmillandictionary.com/external/slideshow/thumb/Grey_thumb.png" alt="no_image">
         {% endif %}
     {% comment %} </div> {% endcomment %}
     <!-- 프로필 사진 -->

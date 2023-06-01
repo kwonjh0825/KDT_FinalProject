@@ -91,7 +91,6 @@ def planet_contract(request,planet_name):
 @login_required
 def planet_join(request, planet_name):
     planet = Planet.objects.get(name=planet_name)
-    
     if request.method == 'POST':
         form = AccountbyplanetForm(request.POST, request.FILES)
         if form.is_valid():
