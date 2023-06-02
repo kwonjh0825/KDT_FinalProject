@@ -1,0 +1,15 @@
+{% extends 'base_accounts.html' %}
+{% load static %}
+
+{% block content %}
+<div>
+    {% if planet.image %}
+    <img src="{% static 'planet.image.url' %}" alt="">
+    {% endif %}
+    <h1>카테고리: {{planet.category}}</h1>
+    <h1>행성 이름: {{planet.name}}</h1>
+    
+    <button><a href="{% url 'planets:planet_contract' planet.name %}?invite_code={{invite_code}}">가입하기</a></button>
+</div>
+
+{% endblock content %}

@@ -8,6 +8,9 @@ urlpatterns = [
     path('planets/', views.planet_list, name='planet_list'),
     path('planets/create/', views.planet_create, name='planet_create'),
     path('planets/<str:planet_name>/join/', views.planet_join, name='planet_join'),
+    # private 조인
+    path('planets/invite_create/', views.invite_create, name='invite_create'),
+    path('planets/invite_check/<str:invite_code>/', views.invite_check, name='invite_check'),
     path('planets/<str:planet_name>/contract/', views.planet_contract, name='planet_contract'),
     path('planets/<str:planet_name>/delete/', views.planet_delete, name='planet_delete'),
     path('planets/<str:planet_name>/', views.index, name='index'),
