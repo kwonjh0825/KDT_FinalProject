@@ -7,6 +7,9 @@
 
 body {
   font-family: 'LINESeedKR-Bd', 'serif';
+  background-image: url("/static/img/background.jpg");  
+  background-size: auto;
+  color: aliceblue;
 }
 
 .side-bar {
@@ -24,8 +27,7 @@ body {
 
 
 .bg-color {
-  background-color: #1E2129;
-  color: aliceblue;
+
 }
 
 .button-chatting {

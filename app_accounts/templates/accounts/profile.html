@@ -6,7 +6,14 @@
 {% endblock title %}
 
 {% block content %}
-
+<div class="flex">
+    <a href="javascript:history.back()" class="flex items-center pl-5  text-[#ffd951] " style="height: 50px;">
+        <span class="material-symbols-outlined">
+            chevron_left
+        </span>
+        Back
+    </a>
+</div>
 <div class="container mx-auto flex justify-center h-screen">
     <div class="w-full max-w-lg pt-10">
         <p class="text-4xl mb-3 pb-4 font-bold">My profile</p>
@@ -37,7 +44,7 @@
                 {% if user_by_planet.profile_image %}
                 <img src="{{ user_by_planet.profile_image.url }}" alt="post_image" class="inline-block rounded-md" width="50" height="50">
                 {% else %}
-                <img src="https://i.pinimg.com/originals/fe/c1/6c/fec16c6f886c5d684da5ddcdacd21ffb.gif" alt="no_image" class="inline-block rounded-md" width="50" height="50">
+                <img src="{% static 'img/profile.png' %}" alt="no_image" class="inline-block rounded-md" width="50" height="50">
                 {% endif %}
                 <div>
                     <p class="text-slate-200">{{ user_by_planet.planet.name }}</p>
