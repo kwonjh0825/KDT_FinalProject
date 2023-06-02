@@ -9,6 +9,7 @@ from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 from taggit.managers import TaggableManager
 from app_accounts.models import Accountbyplanet
+import secrets
 
 # 시간 표시
 def get_time_difference(created_at):
@@ -41,18 +42,38 @@ class Planet(models.Model):
         blank      = True,
         null       = True,
     )
-    plan_category    = (('Free', 'Free'), ('Premium', 'Primium'))
-    plan             = models.CharField(max_length=10, choices=plan_category, default='Free')
+    plan_category      = (('Free', 'Free'), ('Premium', 'Primium'))
+    plan               = models.CharField(max_length=10, choices=plan_category, default='Free')
     is_public_category = (('Private', 'Private'), ('Public', 'Public'))
-    is_public        = models.CharField(max_length=10, choices=is_public_category, default='Private')
+    is_public          = models.CharField(max_length=10, choices=is_public_category, default='Private')
     # 가입 요청 확인 필요
     need_confirm_category = ((True, 'Yes'), (False, 'No'))
-    need_confirm     = models.BooleanField(choices=need_confirm_category, default=False)
-    maximum_capacity = models.DecimalField(default=50, max_digits=1000, decimal_places=0)
-    created_by       = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    created_at       = models.DateTimeField(auto_now_add=True)
-    updated_at       = models.DateTimeField(auto_now=True)
+    need_confirm          = models.BooleanField(choices=need_confirm_category, default=False)
+    maximum_capacity      = models.DecimalField(default=50, max_digits=1000, decimal_places=0)
+    created_by            = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_at            = models.DateTimeField(auto_now_add=True)
+    updated_at            = models.DateTimeField(auto_now=True)
+    invite_code           = models.CharField(max_length=20, unique=True, null=True, blank=True)
+    expiration_date       = models.DateTimeField(null=True, blank=True)
 
+    #초대코드 기간 확인
+    def is_invite_code_valid(self):
+        return self.expiration_date >= timezone.now()
+    
+    # 초대코드 생성
+    def generate_invite_code(self):
+        if self.invite_code and self.is_invite_code_valid(): 
+            return self.invite_code
+        
+        # 유효한 초대 코드가 없는 경우 새로 생성
+        invite_code = secrets.token_urlsafe(8)
+        expiration_date = timezone.now() + timezone.timedelta(weeks=1)
+        
+        self.invite_code = invite_code
+        self.expiration_date = expiration_date
+        self.save()
+        
+        return invite_code
     # planets 삭제시 image file 삭제
     def delete(self, *args, **kwargs):
         if self.image:
