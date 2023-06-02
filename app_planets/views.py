@@ -65,14 +65,6 @@ def planet_create(request):
                 # 이용 약관 DB Create
                 TermsOfService.objects.create(Planet=planet, order=i, content=term_content)
 
-            # guide accountbyplanet 생성
-            accountbyplanet = Accountbyplanet.objects.create(nickname='Guide', user=User.objects.get(pk=1), planet=planet)
-
-            # 게시글, 댓글, 대댓글 생성
-            post = Post.objects.create(content='이곳은 게시글입니다. 꿈을 마음 껏 펼치세요!', planet=planet, accountbyplanet=accountbyplanet)
-            comment = Comment.objects.create(content='이곳은 댓글입니다. 게시글에 대한 의견을 작성하세요!', post=post, accountbyplanet=accountbyplanet)
-            Recomment.objects.create(content='이곳은 대댓글입니다. 댓글에 대한 생각을 알려주세요!', comment=comment, accountbyplanet=accountbyplanet)
-
             return redirect('planets:planet_join', planet.name)
     else:
         form = PlanetForm()
@@ -80,6 +72,7 @@ def planet_create(request):
         'form': form,
     }
     return render(request, 'planets/planet_create.html', context)
+
 
 @login_required
 def planet_contract(request,planet_name):
@@ -104,6 +97,7 @@ def planet_contract(request,planet_name):
 
     }
     return render(request, 'planets/planet_contract.html', context )
+
 
 # 행성 가입
 @login_required
@@ -146,13 +140,9 @@ def index(request, planet_name):
         return redirect('planets:main')
     
     postform = PostForm()
-    commentform = CommentForm()
-    recommentform = RecommentForm()
 
     context = {
         'postform': postform,
-        'commentform': commentform,
-        'recommentform': recommentform,
         'planet': planet,
         'first_post': Post.objects.filter(planet=planet).first(),
     }
@@ -193,6 +183,7 @@ def planet_posts(request, planet_name):
             'image_url': post.image.url if post.image else None,
             'tags': list(post.tags.names()),
             'profile_image_url': post.accountbyplanet.profile_image.url if post.accountbyplanet.profile_image else None,
+            'user': post.accountbyplanet.user.username,
         })
 
     if posts.has_next():
@@ -221,7 +212,8 @@ def post_create(request, planet_name):
             'nickname': post.accountbyplanet.nickname,
             'image_url': post.image.url if post.image else None,
             'tags': list(post.tags.names()),
-            'profile_image_url': post.accountbyplanet.profile_image.url,
+            'profile_image_url': post.accountbyplanet.profile_image.url if post.accountbyplanet.profile_image else None,
+            'user': post.accountbyplanet.user.username,
         }
         return JsonResponse(response_data)
     else:
@@ -239,6 +231,24 @@ def post_delete(request, planet_name, post_pk):
         return JsonResponse({'success': True})
     else:
         return JsonResponse({'success': False})
+
+
+# 게시글 상세
+@login_required
+def post_detail(request, planet_name, post_pk):
+    post = Post.objects.get(pk=post_pk)
+    planet = Planet.objects.get(name=planet_name)
+    comments = Comment.objects.filter(post=post)
+    commentform = CommentForm()
+    recommentform = RecommentForm()
+    context = {
+        'post': post,
+        'comments': comments,
+        'planet': planet,
+        'commentform': commentform,
+        'recommentform': recommentform,
+    }
+    return render(request, 'planets/planet_detail.html', context)
 
 
 # 댓글 생성
@@ -489,7 +499,6 @@ def admin_member(request, planet_name):
         messages.warning(request, '매니저만 접근 가능합니다.')
         return redirect('planets:main')
 
-
 @login_required
 def invite_create(request):
     invite_code = request.body.decode('utf-8')
@@ -511,3 +520,29 @@ def invite_create(request):
 def invite_check(request, invite_code):
     planet = Planet.objects.get(invite_code=invite_code, is_public='Private')
     return render(request, 'planets/invite_check.html', {'planet': planet, 'invite_code':invite_code})
+
+def following(request, planet_name, user_pk):
+    planet = Planet.objects.get(name=planet_name)
+
+    to_user = Accountbyplanet.objects.get(planet=planet, pk=user_pk)
+    from_user = Accountbyplanet.objects.get(planet=planet, user=request.user)
+    # 자기 자신을 팔로우 할 수 없음
+    if to_user != from_user:
+        if to_user.followers.filter(pk=from_user.pk).exists():
+            # 팔로우 중이면 팔로우 취소
+            to_user.followers.remove(from_user)
+            is_followed = False
+        else:
+            # 팔로우 중이지 않으면 팔로우 
+            to_user.followers.add(from_user)
+            is_followed = True
+        context = {
+            'is_followed': is_followed,
+            'following_count': to_user.followings.count(),
+            'follower_count': to_user.followers.count(),
+            'from_user_name': from_user.nickname,
+            'from_user_pk': from_user.pk,
+        }
+        return JsonResponse(context)
+    return redirect('planets:index', planet_name)
+
