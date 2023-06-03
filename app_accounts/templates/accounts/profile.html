@@ -40,7 +40,7 @@
         <div class="my-4 ml-5">
             <p class="text-3xl">Planet Lists</p>
             {% for user_by_planet in user_by_planets %}
-            <a type="button" href="{% url 'planets:index' user_by_planet.planet.name %}" class="pl-5 py-2 my-3 rounded-lg bg-[#181A20] hover:bg-[161a24] max-w-[400px] flex gap-4 relative">
+            <a type="button" href="{% url 'planets:planet_profile' planet_name=user_by_planet.planet.name nickname=user_by_planet.nickname %}" class="pl-5 py-2 my-3 rounded-lg bg-[#181A20] hover:bg-[161a24] max-w-[400px] flex gap-4 relative">
                 {% if user_by_planet.profile_image %}
                 <img src="{{ user_by_planet.profile_image.url }}" alt="post_image" class="inline-block rounded-md" width="50" height="50">
                 {% else %}

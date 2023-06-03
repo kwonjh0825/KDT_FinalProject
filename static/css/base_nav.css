@@ -7,9 +7,6 @@
 
 body {
   font-family: 'LINESeedKR-Bd', 'serif';
-  /* background-color: #1E2129; */
-  background-image: url("/static/img/background.jpg");  
-  background-size: auto;
   color: aliceblue;
 
 }

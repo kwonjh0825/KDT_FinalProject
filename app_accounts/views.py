@@ -7,10 +7,13 @@ from app_planets.models import Planet
 from .forms import AccountbyplanetForm, CustomAuthentication, CustomUserCreationForm, CustomSetPasswordForm
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
+from django.contrib.auth import update_session_auth_hash
 from django.views import View
 from django.contrib import messages
 from django.conf import settings
 from django.urls import reverse_lazy
+from django.contrib.auth.forms import PasswordChangeForm
+
 
 from django.core import signing #암호화
 from django.utils.crypto import get_random_string # 토큰
@@ -33,22 +36,62 @@ from django.contrib.auth.views import PasswordResetConfirmView
 def contract(request):
     return render(request, 'accounts/contract.html')
 
+# def login(request):
+#     if request.user.is_authenticated:
+#         return redirect('planets:main')
+    
+#     elif request.method == 'POST':
+#         form = CustomAuthentication(request, request.POST)
+#         if form.is_valid():
+#             auth_login(request, form.get_user())
+#             return redirect('planets:main')
+#         else:
+#     else:
+#         form = CustomAuthentication()
+
+
+#     context = {
+#         'form': form,
+#     }
+#     return render(request, 'accounts/login.html', context)
+
 def login(request):
     if request.user.is_authenticated:
         return redirect('planets:main')
-    
-    elif request.method == 'POST':
+
+    login_failed = False  # 초기에는 로그인 실패를 False로 설정
+
+    if request.method == 'POST':
         form = CustomAuthentication(request, request.POST)
         if form.is_valid():
             auth_login(request, form.get_user())
             return redirect('planets:main')
+        else:
+            login_failed = True  # 로그인 실패 시 login_failed 변수를 True로 설정
     else:
         form = CustomAuthentication()
 
     context = {
         'form': form,
+        'login_failed': login_failed  # login_failed 변수를 context에 추가
     }
     return render(request, 'accounts/login.html', context)
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            return redirect('posts:index')
+    else:
+        form = PasswordChangeForm(request.user)
+    context = {
+        'form':form,
+    }
+    return render(request, 'accounts/change_password.html', context)
+
 
 # 메일 주소 인증(회원가입 중)
 def send_verification_email(request, user):

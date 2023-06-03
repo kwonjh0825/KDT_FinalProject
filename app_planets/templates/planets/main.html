@@ -15,11 +15,12 @@ main
     <script>alert('{{message}}')</script>
   {% endfor %}
 {% endif %}
-<div class="flex flex-col justify-center max-w-768 items-center pt-40 p-20 bg-cover bg-center" style="background-image: url('static/img/catsmos.png'); z-index: 10;"> 
+{% comment %} <div class="flex flex-col justify-center max-w-768 items-center pt-40 p-20 bg-cover bg-center" style="background-image: url('static/img/catsmos.png'); z-index: 10;">  {% endcomment %}
+<div class="flex flex-col justify-center max-w-768 items-center pt-40 p-20 bg-cover bg-center" style=" z-index: 10;"> 
   <p class="text-4xl text-[#ffffff]">"Create your own world"</p>
   <p class="text-4xl text-[#ffffff]">"within the confines of Space."</p>
   <p class="text-2xl text-[#ffffff] mt-20">Our service is built with a focus on selective sharing,</p>
-  <p class="text-2xl text-[#ffffff]">privacy protection, aligned interests, a closed network, and enhanced security.</p>
+  <p class="text-2xl text-[#ffffff]">privacy protection, aligned interests, a closed network,<br> and enhanced security.</p>
 </div>
 <div class="flex justify-center items-center">
   {% if request.user.is_authenticated %}
