@@ -57,3 +57,7 @@ Comment html들
   </form>
 </div> 
 {% endcomment %}
+
+clamp-5-lines
+
+색 , 폰트 , 한/영 , 뒷배경 , 글자크기 , 글자색 , 

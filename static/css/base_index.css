@@ -7,8 +7,6 @@
 
 body {
   font-family: 'LINESeedKR-Bd', 'serif';
-  background-image: url("/static/img/background.jpg");  
-  background-size: auto;
   color: aliceblue;
 }
 
@@ -25,10 +23,6 @@ body {
   overflow: hidden;
 }
 
-
-.bg-color {
-
-}
 
 .button-chatting {
   border-radius: 0.3rem;
