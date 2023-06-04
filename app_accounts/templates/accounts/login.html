@@ -5,6 +5,25 @@
 로그인
 {% endblock title %}
 
+{% block style %}
+.password-container{
+  position: relative;
+}
+.password-container input[type="password"],
+.password-container input[type="text"]{
+  width: 100%;
+  
+  box-sizing: border-box;
+}
+.fa-eye{
+  position: absolute;
+  top: 35%;
+  right: 4%;
+  cursor: pointer;
+  color: lightgray;
+}
+{% endblock style %}
+
 {% block content %}
 <div class="">
   <div class="m-4">
@@ -39,14 +58,18 @@
             <input class="placeholder:italic placeholder:text-slate-700 block bg-black border-black w-full rounded-md py-2 pl-4 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="id" type="text" name="username" id="username" />
           </label> {% endcomment %}
           <label for="username" class="block text-sm font-medium text-slate-300">ID</label>
-          <input type="text" id="username" name="username" placeholder="id" class="form-input mt-1 block w-full rounded-md bg-[#101013] " placeholder="" >
+          <input type="text" id="username" name="username" placeholder="" class="form-input mt-1 block w-full rounded-md bg-[#101013] " placeholder="" >
 
           {% comment %} <label for="password">
             <span class="block text-white text-sm font-medium text-slate-700 py-3">Password</span>
             <input class="placeholder:italic placeholder:text-slate-700 block bg-black border-black w-full rounded-md py-2 pl-4 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="********" type="password" name="password" id="password" />
           </label> {% endcomment %}
           <label for="password" class="mt-6 block text-sm font-medium text-slate-300">Password</label>
-          <input type="password" id="password" name="password" placeholder="********" class="form-input mt-1 block w-full rounded-md bg-[#101013] ">
+          {% comment %} <input type="password" id="password" name="password" placeholder="********" class="form-input mt-1 block w-full rounded-md bg-[#101013] "> {% endcomment %}
+          <div class="password-container">
+            <input type="password" placeholder="" id="password" name="password" class="mt-1 w-full rounded-md bg-[#101013]">
+            <i class="fa-solid fa-eye" id="eye"></i>
+          </div>
 
         </div>
           
@@ -71,6 +94,15 @@
 
 {% endblock content %}
 {% block script %}
+<script>
 
+  const passwordInput = document.querySelector("#password")
+  const eye = document.querySelector("#eye")
+  eye.addEventListener("click", function(){
+    this.classList.toggle("fa-eye-slash")
+    const type = passwordInput.getAttribute("type") === "password" ? "text" : "password"
+    passwordInput.setAttribute("type", type)
+  })
+</script>
 
 {% endblock script %}
