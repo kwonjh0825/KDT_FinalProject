@@ -472,3 +472,11 @@ def admin_member(request, planet_name):
     else:
         messages.warning(request, '매니저만 접근 가능합니다.')
         return redirect('planets:main')
+
+# 조회 기능
+def filter(request, category):
+    planets = Planet.objects.filter(category=category).order_by('-created_at')
+    context = {
+        'planets': planets,
+    }
+    return render(request, 'planets/planet_list.html', context)
