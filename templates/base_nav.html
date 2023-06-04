@@ -123,6 +123,32 @@
     </div>
   </nav>
 
+  <!-- drawer component -->
+  <div id="drawer-right-example" class="fixed top-24 right-0 z-40 h-screen p-4 overflow-y-auto transition-transform translate-x-full bg-[#191b22] w-60" tabindex="-1" aria-labelledby="drawer-right-label">
+    <div class="bg-[#191b22] max-w-screen-xl flex flex-row items-center justify-between mx-auto">
+      <div class="w-full" id="navbar-hamburger">
+        <div>
+          <a href="#" class="block py-2 pl-3 pr-4 my-2 text-white text-center rounded hover:bg-[#ffd951]">Home</a>
+        </div>
+        <div>
+          <a href="#" class="block py-2 pl-3 pr-4 my-2  text-white text-center rounded hover:bg-[#ffd951]">Services</a>
+        </div>
+
+        {% if user.is_authenticated %}
+        <div>
+          <a href="{% url 'accounts:profile_update' %}" class="block py-2 pl-3 pr-4 my-2  text-white text-center rounded hover:bg-[#ffd951]">프로필 수정</a>
+        </div>
+        <div class="block py-2 pl-3 pr-4 my-2  text-white text-center rounded hover:bg-[#ffd951]">
+          <form action="{% url 'accounts:logout' %}" method="POST">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+          </form>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
 
   <div class="mx-auto" style="background-color: #1E2129; color: aliceblue; height: 100vh;">
     <div class="flex">
