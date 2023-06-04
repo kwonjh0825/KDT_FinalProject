@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 더보기 클릭
     if (target.tagName == 'circle' || (target.tagName == 'svg' && target.id == 'more')) {
-      var parentDiv = target.closest('#post-container');
+      var parentDiv = target.closest('#section');
       var dropdownMenu = parentDiv.querySelector('#dropdown-menu');
       var buttonRect = target.getBoundingClientRect();
 
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       var deleteForm = target;
       var deleteButton = deleteForm.querySelector('#delete-post-button');
-      var postContainer = deleteButton.closest('#post-container');
+      var postContainer = deleteButton.closest('#container');
       var planetName = deleteForm.dataset.planetName;
       var postPk = deleteForm.dataset.postPk;
       var url = "/planets/" + planetName + "/" + postPk + "/delete/";

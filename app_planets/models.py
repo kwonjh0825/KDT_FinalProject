@@ -32,7 +32,7 @@ def get_time_difference(created_at):
 class Planet(models.Model):
     name             = models.CharField(max_length=20, unique=True)
     description      = models.TextField()
-    category_choices = (('Tech','Tech'), ('Game','Game'), ('Music','Music'), ('Sprots','Sports'), ('Food','Food'), ('Hobby','Hobby'))
+    category_choices = (('Tech','Tech'), ('Game','Game'), ('Music','Music'), ('Sports','Sports'), ('Food','Food'), ('Hobby','Hobby'))
     category         = models.CharField(max_length=20, choices=category_choices)
     image            = ProcessedImageField(
         upload_to  = 'planets/',
