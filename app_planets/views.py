@@ -247,8 +247,55 @@ def post_detail(request, planet_name, post_pk):
         'planet': planet,
         'commentform': commentform,
         'recommentform': recommentform,
+        'request_user_nickname': Accountbyplanet.objects.get(user=request.user.pk, planet=planet).nickname,
     }
     return render(request, 'planets/planet_detail.html', context)
+
+
+# comments json
+@login_required
+def detail_comments(request, planet_name, post_pk):
+    comments = Comment.objects.filter(post_id=post_pk)
+    per_page = 5
+    page_number = request.GET.get('page')
+    paginator = Paginator(comments, per_page)
+
+    try:
+        comments = paginator.page(page_number)
+    except PageNotAnInteger:
+        comments = paginator.page(1)
+    except EmptyPage:
+        comments = paginator.page(paginator.num_pages)
+
+    comments_list = []
+    for comment in comments:
+        recomments = Recomment.objects.filter(comment=comment.pk)
+        recomments_data = []
+        for recomment in recomments:
+            recomments_data.append(
+                {
+                    'pk': recomment.pk,
+                    'content': recomment.content,
+                    'created_time': recomment.created_time,
+                    'nickname': recomment.accountbyplanet.nickname,
+                    'profile_image_url': recomment.accountbyplanet.profile_image.url if recomment.accountbyplanet.profile_image else None,
+                }
+            )
+        comments_list.append({
+            'pk': comment.pk,
+            'content': comment.content,
+            'created_time': comment.created_time,
+            'nickname': comment.accountbyplanet.nickname,
+            'profile_image_url': comment.accountbyplanet.profile_image.url if comment.accountbyplanet.profile_image else None,
+            'user': comment.accountbyplanet.user.username,
+            'recomments': recomments_data,
+        })
+    
+    if comments.has_next():
+        return JsonResponse(comments_list, safe=False)
+    else:
+        comments_list.append(None)
+        return JsonResponse(comments_list, safe=False)
 
 
 # 댓글 생성
@@ -268,6 +315,8 @@ def comment_create(request, planet_name, post_pk):
             'content': comment.content,
             'created_time': comment.created_time,
             'nickname': comment.accountbyplanet.nickname,
+            'profile_image_url': comment.accountbyplanet.profile_image.url if comment.accountbyplanet.profile_image else None,
+            'user': comment.accountbyplanet.user.username,
         }
         return JsonResponse(response_data)
     else:
@@ -309,6 +358,8 @@ def recomment_create(request, planet_name, post_pk, comment_pk):
             'content': recomment.content,
             'created_time': recomment.created_time,
             'nickname': recomment.accountbyplanet.nickname,
+            'profile_image_url': recomment.accountbyplanet.profile_image.url if recomment.accountbyplanet.profile_image else None,
+            'user': recomment.accountbyplanet.user.username,
         }
         return JsonResponse(response_data)
     else:

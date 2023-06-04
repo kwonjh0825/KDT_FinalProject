@@ -42,7 +42,7 @@ $(document).ready(function() {
 
 // post container 생성
 function createpostContainer(profile_image_url, nickname, created_time, content, tags, post_pk, image_url, user) {
-  var newPostContainer = document.getElementById('post-container').cloneNode(true);
+  var newPostContainer = document.getElementById('container').cloneNode(true);
   newPostContainer.style.display = "";
   newPostContainer.querySelector('#post-img img').src = profile_image_url ? profile_image_url : "/static/img/no_profile_img.png";
   newPostContainer.querySelector('#post-nickname').textContent = nickname;
