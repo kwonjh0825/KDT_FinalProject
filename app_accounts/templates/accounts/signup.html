@@ -178,7 +178,13 @@
     } else {
       pw1input.classList.remove('border-green-300');
       pw1input.classList.add('border-red-300');
-      message.textContent = '유효하지 않은 비밀번호입니다.';
+      if (input_pw.trim() === '') {
+        pw1input.classList.remove('border-green-300');
+        pw1input.classList.remove('border-red-300');
+        message.textContent = '8자 이상,16자 이하여야 합니다';
+      } else {
+        message.textContent = '유효하지 않은 비밀번호입니다.';
+      }
       password = '';
     }
   });
@@ -188,7 +194,7 @@
     const r_message = document.querySelector('#password2Message');
     const pw2input = document.querySelector('#password2');
 
-    if (input_rpw === password) {
+    if (input_rpw === password && password.length !== 0) {
       pw2input.classList.remove('border-red-300');
       pw2input.classList.add('border-green-300');
       r_message.textContent = '동일한 비밀번호입니다.';
@@ -196,6 +202,10 @@
     } else {
       pw2input.classList.remove('border-green-300');
       pw2input.classList.add('border-red-300');
+      if (password.length === 0) {
+        pw1input.classList.remove('border-green-300');
+        pw1input.classList.remove('border-red-300');
+      }
       r_message.textContent = '동일하지 않은 비밀번호입니다.';
       repassword = '';
     }
