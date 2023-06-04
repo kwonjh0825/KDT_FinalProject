@@ -10,10 +10,36 @@
 {% endblock head %}
 
 {% block content %}
-  <div class="max-w-[2000px] mx-auto">
-    <div class="bg-cover bg-center" style="background-image: url('static/catsmos.png');">
+  <div class="max-w-[2000px] mx-auto mt-12">
+    <!-- drawer component -->
+    <div id="drawer-right-example" class="fixed top-24 right-0 z-40 h-screen p-4 overflow-y-auto transition-transform translate-x-full bg-[#191b22] w-60" tabindex="-1" aria-labelledby="drawer-right-label">
+      <div class="bg-[#191b22] max-w-screen-xl flex flex-row items-center justify-between mx-auto">
+        <div class="w-full" id="navbar-hamburger">
+          <div>
+            <a href="#" class="block py-2 pl-3 pr-4 my-2 text-white text-center rounded hover:bg-[#ffd951]">Home</a>
+          </div>
+          <div>
+            <a href="#" class="block py-2 pl-3 pr-4 my-2  text-white text-center rounded hover:bg-[#ffd951]">Services</a>
+          </div>
+  
+          {% if user.is_authenticated %}
+          <div>
+            <a href="{% url 'accounts:profile_update' %}" class="block py-2 pl-3 pr-4 my-2  text-white text-center rounded hover:bg-[#ffd951]">프로필 수정</a>
+          </div>
+          <div class="block py-2 pl-3 pr-4 my-2  text-white text-center rounded hover:bg-[#ffd951]">
+            <form action="{% url 'accounts:logout' %}" method="POST">
+              {% csrf_token %}
+              <button type="submit">Logout</button>
+            </form>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-[#ffd951] bg-cover bg-center"> 
       <div class="flex flex-col">
-        <div class="flex flex-col justify-center items-center pt-40 p-20">
+        <div class="flex flex-col justify-center items-center pt-32 p-20">
           <p class="text-4xl text-[#ffffff]">"Create your own world"</p>
           <p class="text-4xl text-[#ffffff]">"within the confines of Space."</p>
           <p class="text-2xl text-[#ffffff] mt-20">Our service is built with a focus on selective sharing,</p>
@@ -22,65 +48,172 @@
       </div>
     </div>
 
-    <div class="flex justify-center flex-row">
-      <div class="hidden md:block md:w-1/4 me-5 p-20">
-        <p class="text-2xl mb-2">행성 종류</p>
-        <p class="mb-10">관심있는 종류의 행성들을 만나보세요.</p>
-        <p class="text-xl mb-5">Tech</p>
-        <p class="text-xl mb-5">Game</p>
-        <p class="text-xl mb-5">Music</p>
-        <p class="text-xl mb-5">Sports</p>
-        <p class="text-xl mb-5">Food</p>
-        <p class="text-xl mb-5">Hobby</p>
+    <!-- 좌측 사이드바 -->
+    <div class="flex justify-center flex-row mt-10 me-10">
+      <div class="hidden md:block md:w-1/4 pe-10 me-10 pt-20 ps-5">
+        <p class="text-2xl border-b-2 border-[#393f4f] pt-3 mb-3">행성 종류</p>
+        <p class="text-sm pb-3 mb-5">관심있는 종류의 행성들을 만나보세요.</p>
+        <div class="p-3 rounded-md hover:bg-[#ffd951]" id="planet-list-button">
+          <a class="text-x" href="{% url 'planets:planet_list' %}">
+            <p class="text-xl">모든 행성</p>
+          </a>
+        </div>
+        <div class="p-3 rounded-md hover:bg-[#ffd951]" id="tech-button">
+          <a class="text-xl" href="{% url 'planets:filter' 'Tech'%}">
+            <p class="text-xl">Tech</p>
+          </a>
+        </div>
+        <div class="p-3 rounded-md hover:bg-[#ffd951]" id="game-button">
+          <a class="text-xl" href="{% url 'planets:filter' 'Game'%}">
+            <p class="text-xl">Game</p>
+          </a>
+        </div>
+        <div class="p-3 rounded-md hover:bg-[#ffd951]" id="music-button">
+          <a class="text-xl" href="{% url 'planets:filter' 'Music'%}">
+            <p class="text-xl">Music</p>
+          </a>
+        </div>
+        <div class="p-3 rounded-md hover:bg-[#ffd951]" id="sports-button">
+          <a class="text-xl" href="{% url 'planets:filter' 'sports'%}">
+            <p class="text-xl">Sports</p>
+          </a>
+        </div>
+        <div class="p-3 rounded-md hover:bg-[#ffd951]" id="food-button">
+          <a class="text-xl" href="{% url 'planets:filter' 'Food'%}">
+            <p class="text-xl">Food</p>
+          </a>
+        </div>
+        <div class="p-3 rounded-md hover:bg-[#ffd951]" id="hobby-button">
+          <a class="text-xl" href="{% url 'planets:filter' 'Hobby'%}">
+            <p class="text-xl">Hobby</p>
+          </a>
+        </div>
+        <p class="text-2xl mt-20 border-b-2 border-[#393f4f] pt-3 mb-3">초대 코드 입력</p>
+        <p class="text-sm mb-5">전송받은 초대코드를 입력하고 행성에 참여하세요.</p>
+        <div class="p-3 rounded-md hover:bg-[#ffd951]">
+          <a class="text-xl" href="#">
+            <p class="text-xl">초대 코드 입력하기</p>
+          </a>
+        </div>
       </div>
-      <div class="w-3/4 mb-20">
-        <div class="border-b-2 border-[#393f4f]">
-          <p class="text-white text-2xl mb-5">
-            행성 둘러보기 
-          </p>
-          <button id="modalButton" class="text-white text-2xl mb-5">Private join</button>
-        </div>
-        
-        <!-- 모달 -->
-        <div id="inviteModal" class="fixed inset-0 flex items-center justify-center hidden">
-          <div class="bg-white rounded-lg p-6">
-              <h1 class="text-2xl font-bold mb-4  text-black">초대코드 등록</h1>
-              <form id="inviteForm" method="POST" action="{% url 'planets:invite_create' %}">
-                  {% csrf_token %}
-                  <div class="flex items-center">
-                      <input type="text" id='user_input' name="user_input" class="text-black border border-gray-300 rounded-md px-3 py-2 mr-2">
-                      <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white rounded-md px-4 py-2">확인</button>
-                  </div>
-              </form>
-              <p id="errorText" class="text-red-500 mt-2 hidden">존재하지 않는 코드입니다.</p>
-          </div>
-        </div>
-          
 
-        <div class="flex flex-wrap text-white">
-          {% for planet in planets %}
-            <div class="planet-list-box md:w-1/3 xl:w-1/4 m-5 p-3">
-              <img class="planet-list-img mb-5" src="{% if planet.image %} {{ planet.image.url}} {% else %} {% static 'img/no_planet_img.png' %} {% endif %}" alt="image">
-              <div class="planet-list-text">
-                <p class="text-[#999999]">{{ planet.is_public }}</p>
-                <p class="mb-5">{{ planet.name }}</p>
-                <p class="text-sm clamp-5-lines">{{ planet.description }}</p>
-              </div>
-              
-              <a href="{% url 'planets:planet_contract' planet.name %}">
-                <button class="button-big button-color-join mt-8">
-                  <p class="text-base">join</p>
-                </button>
+
+      <!-- 메인 내용 -->
+      <div class="w-full mb:w-3/4 ms-10 mb-20">
+        <!-- 메인 제목 부분 md 크기 이하 일 때-->
+        <div class="md:hidden flex flex-col justify-between border-b-2 border-[#393f4f]">
+          
+          <!-- md크기 이하, 좌측 사이드바였던 것 -->   
+          <div class="md:hidden pe-10 me-10 mb-20 pt-20 ps-5">
+            <p class="text-2xl border-b-2 border-[#393f4f] pt-3 mb-3">행성 종류</p>
+            <p class="text-sm pb-3 mb-5">관심있는 종류의 행성들을 만나보세요.</p>
+            <div class="p-3 rounded-md hover:bg-[#ffd951]" id="planet-list-button">
+              <a class="text-x" href="{% url 'planets:planet_list' %}">
+                <p class="text-xl">모든 행성</p>
               </a>
             </div>
-          {% endfor %}
+            <div class="p-3 rounded-md hover:bg-[#ffd951]" id="tech-button">
+              <a class="text-xl" href="{% url 'planets:filter' 'Tech'%}">
+                <p class="text-xl">Tech</p>
+              </a>
+            </div>
+            <div class="p-3 rounded-md hover:bg-[#ffd951]" id="game-button">
+              <a class="text-xl" href="{% url 'planets:filter' 'Game'%}">
+                <p class="text-xl">Game</p>
+              </a>
+            </div>
+            <div class="p-3 rounded-md hover:bg-[#ffd951]" id="music-button">
+              <a class="text-xl" href="{% url 'planets:filter' 'Music'%}">
+                <p class="text-xl">Music</p>
+              </a>
+            </div>
+            <div class="p-3 rounded-md hover:bg-[#ffd951]" id="sports-button">
+              <a class="text-xl" href="{% url 'planets:filter' 'sports'%}">
+                <p class="text-xl">Sports</p>
+              </a>
+            </div>
+            <div class="p-3 rounded-md hover:bg-[#ffd951]" id="food-button">
+              <a class="text-xl" href="{% url 'planets:filter' 'Food'%}">
+                <p class="text-xl">Food</p>
+              </a>
+            </div>
+            <div class="p-3 rounded-md hover:bg-[#ffd951]" id="hobby-button">
+              <a class="text-xl" href="{% url 'planets:filter' 'Hobby'%}">
+                <p class="text-xl">Hobby</p>
+              </a>
+            </div>
+            <p class="text-2xl mt-20 border-b-2 border-[#393f4f] pt-3 mb-3">초대 코드 입력</p>
+            <p class="text-sm mb-5">전송받은 초대코드를 입력하고 행성에 참여하세요.</p>
+            <div class="p-3 rounded-md hover:bg-[#ffd951]">
+              <a class="text-xl" href="#">
+                <p class="text-xl">초대 코드 입력하기</p>
+              </a>
+            </div>
+          </div>
+
+          <p class="text-white text-2xl my-5">행성 둘러보기</p>
+          <!-- 메인 제목 부분 md 크기 이하 일 때-->
+          <form>   
+            <div class="relative">
+              <input type="search" id="default-search" class="block w-full p-4 mb-5 text-base text-white rounded-lg bg-transparent focus:ring-[#ffc800] focus:border-[#ffc800]" placeholder="행성 검색" required>
+              <button type="submit" class="button-search text-white text-sm absolute right-2.5 bottom-2.5 bg-[#ffd951] rounded-lg px-4 py-2">
+                <svg aria-hidden="true" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+              </button>
+            </div>
+          </form>
         </div>
+
+        <!-- 메인 제목 부분 md 크기 이상 일 때-->
+        <div class="hidden md:flex flex-row justify-between border-b-2 border-[#393f4f]">
+          <p class="text-white text-2xl my-5">행성 둘러보기</p>
+          <!-- 행성 검색 -->
+          <form>   
+            <div class="relative">
+              <input type="search" id="default-search" class="block w-full p-4 pl-5 text-xl text-white rounded-lg bg-transparent focus:ring-[#ffc800] focus:border-[#ffc800]" placeholder="행성 검색" required>
+              <button type="submit" class="button-search text-white text-sm absolute right-2.5 bottom-2.5 bg-[#ffd951] rounded-lg px-4 py-2">
+                <svg aria-hidden="true" class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- 행성 리스트 출력 부분 -->
+        {% if planets %}
+          <div class="flex flex-wrap text-white">
+            <p class="w-full mt-3"><span class="text-[#ffd951]">{{ planets|length }}</span>개의 행성이 있습니다.</p>
+            {% for planet in planets %}
+              <div class="planet-list-box w-full md:w-[45%] xl:w-[30%] m-3">
+                <div class="p-3">
+                  <img class="planet-list-img mb-5" src="{% if planet.image %} {{ planet.image.url}} {% else %} {% static 'img/no_planet_img.png' %} {% endif %}" alt="image">
+                  <div class="planet-list-text">
+                    <p class="text-[#999999]">{{ planet.is_public }}</p>
+                    <p class="mb-5">{{ planet.name }}</p>
+                    <p class="text-sm min-h-[60px] clamp-3-lines">{{ planet.description }}</p>
+                  </div>
+                  
+                  <a href="{% url 'planets:planet_contract' planet.name %}">
+                    <button class="button-big button-color-join mt-8 mb-3">
+                      <p class="text-base">join</p>
+                    </button>
+                  </a>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+        <div class="w-full h-full flex items-center justify-center">
+          <p class="text-xl">현재 검색 조건에 맞는 행성이 존재하지 않습니다.</p>
+        </div>
+        {% endif %}
       </div>
     </div>
   </div>
 {% endblock content %}
 
 {% block script %}
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="{% static 'js/planet_list.js' %}"></script>
+
 <script>
   const modalButton = document.getElementById('modalButton');
   const inviteModal = document.getElementById('inviteModal');
