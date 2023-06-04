@@ -9,17 +9,23 @@
   <link rel="stylesheet" href="{% static 'css/base_accounts.css' %}">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
   {% block head %}{% endblock head %}
 
   <style>
     {% block style %}
     {% endblock style %}
+    body {
+      background-image: url(/static/img/background2.jpg);
+      background-position: center;
+      background-size: cover;
+      background-attachment: fixed;
+    }
   </style>
 </head>
 
 <body>
   <!-- content -->
-  
   <div class="max-w-[540px] h-screen mx-auto">
   <!-- 로고 -->
   <div class="py-14 flex justify-center">
@@ -29,7 +35,7 @@
   {% endblock content %}
   </div>
 </body>
-<script type="text/javascript" src="/static/js/base_nav.js"></script>
+<script type="text/javascript" src="/static/js/base_accounts.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 

@@ -8,12 +8,16 @@ urlpatterns = [
     path('planets/', views.planet_list, name='planet_list'),
     path('planets/create/', views.planet_create, name='planet_create'),
     path('planets/<str:planet_name>/join/', views.planet_join, name='planet_join'),
+    # private 조인
+    path('planets/invite_create/', views.invite_create, name='invite_create'),
+    path('planets/invite_check/<str:invite_code>/', views.invite_check, name='invite_check'),
     path('planets/<str:planet_name>/contract/', views.planet_contract, name='planet_contract'),
     path('planets/<str:planet_name>/delete/', views.planet_delete, name='planet_delete'),
     path('planets/<str:planet_name>/', views.index, name='index'),
     path('planets/<str:planet_name>/posts/', views.planet_posts, name='planet_posts'),
     path('planets/<str:planet_name>/create/', views.post_create, name='post_create'),
     path('planets/<str:planet_name>/<int:post_pk>/', views.post_detail, name='post_detail'),
+    path('planets/<str:planet_name>/<int:post_pk>/comments/', views.detail_comments, name='detail_comments'),
     path('planets/<str:planet_name>/<int:post_pk>/delete/', views.post_delete, name='post_delete'),
     path('planets/<str:planet_name>/<int:post_pk>/create/', views.comment_create, name='comment_create'),
     path('planets/<str:planet_name>/<int:post_pk>/<int:comment_pk>/delete/', views.comment_delete, name='comment_delete'),
@@ -36,4 +40,6 @@ urlpatterns = [
     path('planets/<str:planet_name>/report/<int:post_pk>/', views.post_report, name='post_report'),
     # 리스트 필터 기능
     path('planets/<str:category>/filter/', views.filter, name='filter'),
+    # 팔로잉
+    path('planets/<str:planet_name>/follow/<int:user_pk>/', views.following, name='following'),
 ]
