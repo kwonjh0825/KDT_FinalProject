@@ -12,15 +12,15 @@ main
 
 {% block content %}
 
+<!-- 게시글 작성하기 제거 중 -->
 <div id="accordion-collapse-body-6" class="hidden" aria-labelledby="accordion-collapse-heading-6">
-  <p class="border-b-2 border-[#393f4f] text-2xl text-white p-5">게시글 작성하기</p>
-  <div class="p-5 border-b-2 border-[#393f4f]">
+  <div class="p-5">
     <form id="post-form" data-planet-name="{{ planet.name }}">
       {% csrf_token %}
-      {{ postform | crispy }}
+      {% comment %} {{ postform | crispy }}
       <button type="submit" class="chatting-create-btn bg-[#bcbdbf] mx-auto" style="text-align: center;">
         <p>게시글 작성</p>
-      </button>
+      </button> {% endcomment %}
     </form>
   </div>
 </div>
