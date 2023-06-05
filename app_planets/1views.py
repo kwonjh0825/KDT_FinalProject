@@ -16,8 +16,6 @@ from app_accounts.forms import AccountbyplanetForm
 from datetime import timedelta
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist # 예외처리
-from django.db.models import Q
-
 
 EMOTIONS = [
     {'label': '좋아요', 'value': 1},
@@ -75,14 +73,6 @@ def planet_create(request):
     }
     return render(request, 'planets/planet_create.html', context)
 
-# 행성 검색
-def search(request):
-    query = request.GET.get('q')
-    planets = Planet.objects.filter(Q(name__icontains=query) | Q(description__icontains=query), is_public='Public')
-    context = {
-        'planets':planets,
-    }
-    return render(request, 'planets/search_result.html', context)
 
 @login_required
 def planet_contract(request,planet_name):

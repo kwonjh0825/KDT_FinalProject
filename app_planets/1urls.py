@@ -7,7 +7,6 @@ urlpatterns = [
     path('', views.main, name='main'),
     path('planets/', views.planet_list, name='planet_list'),
     path('planets/create/', views.planet_create, name='planet_create'),
-    path('planets/search/', views.search, name='search'),
     path('planets/<str:planet_name>/join/', views.planet_join, name='planet_join'),
     # private 조인
     path('planets/invite_create/', views.invite_create, name='invite_create'),
