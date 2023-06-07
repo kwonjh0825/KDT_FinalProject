@@ -139,8 +139,6 @@ document.addEventListener('DOMContentLoaded', function() {
           formContainer.append(submitButton);
           postContainer.querySelector('#section').style.display = 'none';
           postContainer.append(formElement);
-          postContainer.appendChild(document.createElement('br'));
-          postContainer.appendChild(document.createElement('hr'));
         } else {
           console.error('Post deletion failed.');
         }

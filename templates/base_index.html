@@ -99,10 +99,10 @@
             <p>search</p>
           </div>
           <div class="flex flex-row">
-            <img src="https://i.pinimg.com/564x/d2/98/4e/d2984ec4b65a8568eab3dc2b640fc58e.jpg" alt="no_image" class="w-1/6 h-1/6 m-5">
+            <img src="{% if user.profile_image%}{{ user.profile_image.url }}{% else %}{% static 'img/no_profile_img.png' %}{% endif %}" alt="no_image" class="w-1/6 h-1/6 m-5">
             <div class="flex flex-col">
-              <p class="mt-5 text-sm">@{{ user.nickname }}</p>
-              <p class="mt-1 text-xs text-[#bcbdbf]"><a href="{% url 'accounts:profile_update' %}">Edit profile</a></p>
+              <p class="mt-5 text-sm"><a href="profile/{{ user.nickname }}/">{{ user.nickname }}</a></p>
+              <p class="mt-1 text-xs text-[#bcbdbf]"><a href="{% url 'planets:planet_profile_update' planet.name user.nickname %}">Edit profile</a></p>
             </div>
             <div class="mt-8 ms-auto me-4">
               <svg viewBox="0 0 32 32" width="20" height="20" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" fill="none" r="2" stroke="#bcbdbf" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" class="stroke-000000"></circle><circle cx="16" cy="26" fill="none" r="2" stroke="#bcbdbf" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" class="stroke-000000"></circle><circle cx="16" cy="6" fill="none" r="2" stroke="#bcbdbf" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" class="stroke-000000"></circle></svg>
