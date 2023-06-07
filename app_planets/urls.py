@@ -22,8 +22,10 @@ urlpatterns = [
     path('planets/<str:planet_name>/<int:post_pk>/comments/', views.detail_comments, name='detail_comments'),
     path('planets/<str:planet_name>/<int:post_pk>/delete/', views.post_delete, name='post_delete'),
     path('planets/<str:planet_name>/<int:post_pk>/create/', views.comment_create, name='comment_create'),
+    path('planets/<str:planet_name>/<int:post_pk>/<int:comment_pk>/update/', views.comment_create, name='comment_create'),
     path('planets/<str:planet_name>/<int:post_pk>/<int:comment_pk>/delete/', views.comment_delete, name='comment_delete'),
     path('planets/<str:planet_name>/<int:post_pk>/<int:comment_pk>/create/', views.recomment_create, name='recomment_create'),
+    path('planets/<str:planet_name>/<int:post_pk>/<int:comment_pk>/<int:recomment_pk>/update/', views.recomment_create, name='recomment_create'),
     path('planets/<str:planet_name>/<int:post_pk>/<int:comment_pk>/<int:recomment_pk>/delete/', views.recomment_delete, name='recomment_delete'),
     # 행성 수정 페이지
     path('planets/<str:planet_name>/admin/', views.planet_admin, name='planet_admin'),

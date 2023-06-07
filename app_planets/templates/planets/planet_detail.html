@@ -153,7 +153,6 @@ detail
 
   <!-- 댓글 -->
   <div id="comment-list">
-
   </div>
 </div>
 {% endblock content %}
@@ -162,7 +161,7 @@ detail
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
   var requestuser = "{{ request.user }}";
-  var requestuser_nickname= "{{ request_user_nickname }}";
+  var requestuser_nickname= "{{ user.nickname }}";
 </script>
 <script src="{% static 'js/planet_detail.js' %}"></script>
 <script src="{% static 'js/planet_post_more.js' %}"></script>
