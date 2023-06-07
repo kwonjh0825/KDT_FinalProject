@@ -3,27 +3,16 @@ const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
 
 var planetName = document.getElementById('comment-create-form').getAttribute('data-planet-name');
 var postPk = document.getElementById('comment-create-form').getAttribute('data-post-pk');
-var page = 1;
+
 if (requestuser_nickname != document.getElementById('post-nickname').textContent) {
   document.getElementById('dropdown-menu').querySelector('li#dropdown-delete').style.display = 'none';
 }
-
-// 스크롤시 comment, recomment 비동기
-$(window).scroll(function() {
-  if ($(window).scrollTop() == $(document).height() - $(window).height()) {
-    page++;
-    loadComments(page);
-  }
-});
 
 // comments, recomments rendering 비동기 처리
 function loadComments(page) {
   $.ajax({
     url: '/planets/' + planetName + '/' + postPk + '/comments/',
     type: 'GET',
-    data: {
-        'page': page
-    },
     dataType: 'json',
     success: function(data) {
       for (var i = 0; i < data.length; i++) {
@@ -59,6 +48,7 @@ function createcommentContainer(profile_image_url, nickname, created_time, conte
   textarea.value = '';
   newCommentContainer.querySelector('#post-img img').src = profile_image_url ? profile_image_url : "/static/img/no_profile_img.png";
   newCommentContainer.querySelector('#post-nickname').textContent = nickname;
+  newCommentContainer.querySelector('#post-nickname').href = "/planets/" + planetName + "/profile/" + nickname + "/";
   newCommentContainer.querySelector('#post-createdtime p').textContent = created_time;
   newCommentContainer.querySelector('#post-content').textContent = content;
   newCommentContainer.querySelector('#post-tags').remove();
@@ -98,6 +88,7 @@ function createRecommentContainer(profile_image_url, nickname, created_time, con
   newRecommentContainer.insertBefore(newDiv2, newRecommentContainer.children[0]);
   newRecommentContainer.querySelector('#post-img img').src = profile_image_url ? profile_image_url : "/static/img/no_profile_img.png";
   newRecommentContainer.querySelector('#post-nickname').textContent = nickname;
+  newRecommentContainer.querySelector('#post-nickname').href = "/planets/" + planetName + "/profile/" + nickname + "/";
   newRecommentContainer.querySelector('#post-createdtime p').textContent = created_time;
   newRecommentContainer.querySelector('#post-content').textContent = content;
   newRecommentContainer.querySelector('#delete-post-button').id = "delete-recomment-button";
