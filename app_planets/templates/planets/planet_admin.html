@@ -20,4 +20,6 @@
   {% endif %}
   <a href="{% url 'planets:planet_tos_admin' planet.name %}">약관 수정</a>
   <a href="{% url 'planets:admin_report' planet.name %}">게시글 신고 관리</a>
+  <p>초대코드: {{planet.invite_code}}</p>
+  <p>초대코드 유효기간: {{planet.expiration_date}}</p>
 {% endblock content %}

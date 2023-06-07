@@ -67,17 +67,15 @@ class PostForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
-        self.fields['content'].widget.attrs['class'] = 'text-black'
+        self.fields['content'].widget.attrs['class'] = 'bg-[#101013] text-white mt-1 block w-full rounded-lg'
         self.fields['content'].widget.attrs['placeholder'] = " "
-        self.fields['content'].label = '<span class="text-base text-white">내용</span>'
         self.fields['content'].help_text = ''
         
-        self.fields['image'].label = '<span class="text-base text-white">행성 사진</span>'
+        self.fields['image'].widget.attrs['class'] = 'bg-white text-black mt-1 block w-3/4'
         self.fields['image'].help_text = ''
         
-        self.fields['tags'].widget.attrs['class'] = 'text-black'
+        self.fields['tags'].widget.attrs['class'] = 'bg-[#101013] text-white mt-1 block rounded-md'
         self.fields['tags'].widget.attrs['placeholder'] = " "
-        self.fields['tags'].label = '<span class="text-base text-white">태그</span>'
         self.fields['tags'].help_text = ''
 
 

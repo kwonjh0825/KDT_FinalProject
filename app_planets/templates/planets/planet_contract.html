@@ -6,42 +6,56 @@
 {% endblock title %}
 
 {% block content %}
+<p class="mb-7 text-3xl font-bold">Some ground rules.</p>
+<hr class="border-t-2 border-yellow-300">
+<div class="relative overflow-x-auto rounded-md">
+  <table class="w-full text-md text-left text-gray-500 dark:text-gray-400 ">
+    <tbody>
+      <!-- 기본 양식 -->
+      <tr class="border-b dark:border-gray-700">
+        <th scope="row" class="pl-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+          <div class="w-10 h-10 rounded-full bg-[#ffd951] flex justify-center items-center">
+            <span class="text-white font-bold">0</span>
+          </div>
+        </th>
+        <td class="px-6 pt-4 ">
+          <p>아래의 내용들은 이 행성에 들어오기 위한 조건이며 , 숙지하시고 불이행시 불이익을 받을 수 있습니다.</p>
+          <div class="text-right my-2">
+            <input id="ck1"  type="checkbox" class="mr-2 order2_chks">
+            <label for="ck1">동의합니다</label>
+          </div>
+        </td>
+      </tr>
+    {% for termofservice in termsofservice %}
+    <tr class="border-b dark:border-gray-700">
+      <th scope="row" class="pl-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+        <div class="w-10 h-10 rounded-full bg-[#ffd951] flex justify-center items-center">
+          <span class="text-white font-bold">{{ termofservice.order }}</span>
+        </div>
+      </th>
+      <td class="px-6 pt-4 ">
+        <p>{{ termofservice.content }}</p>
+        <div class="text-right my-2">
+          <input id="ck1"  type="checkbox" class="mr-2 order2_chks">
+          <label for="ck1">동의합니다</label>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
 
-<div class="">
-  <div class="relative rounded-md">
-    <p class="mb-7 text-3xl font-bold">Some ground rules.</p>
-    <hr class="border-t-2 border-yellow-300">
-     <table class="text-md text-left text-gray-500 dark:text-gray-400 ">
-      <tbody>
-        {% for termofservice in termsofservice %}
-        <tr class="">
-          <th scope="row" class="pr-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-            <div class="w-10 h-10 rounded-full bg-[#ffd951] flex justify-center items-center">
-              <span class="text-white font-bold">{{ termofservice.order }}</span>
-            </div>
-          </th>
-          <td class="px-6 pt-8">
-            <p class="text-start">{{ termofservice.content }}</p>
-            <div class="text-right mt-7">
-              <input id="ck1"  type="checkbox" class="mr-2 order2_chks">
-              <label for="ck1">동의합니다</label>
-            </div>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    </div>
-    <div class="my-8">
-      <div class="text-right">
-        <input type="checkbox" id="order2_chk" class="mr-2 ">
-        <label for="order2_chk">모든 이용약관에 동의합니다</label>
-      </div>
-    </div>
-    <div class="btnArea grid">
-      <button onclick="redirectToSignupPage();" disabled="disabled" class="btn bg-gray-500 text-white font-bold py-2 px-4 rounded">Next</button>
-    </div>
+  </tbody>
+</table>
 </div>
+<div class="my-8">
+  <div class="text-right">
+    <input type="checkbox" id="order2_chk" class="mr-2 ">
+    <label for="order2_chk">모든 이용약관에 동의합니다</label>
+  </div>
+</div>
+<div class="btnArea grid">
+  <button onclick="redirectToSignupPage();" disabled="disabled" class="btn bg-gray-500 text-white font-bold py-2 px-4 rounded">Next</button>
+</div>
+
 
 
 
@@ -121,3 +135,6 @@
 {% endblock script %}
 
 
+
+
+<!-- 동의합니다 수정 필요함!-->

@@ -7,7 +7,7 @@
 
 body {
   font-family: 'LINESeedKR-Bd', 'serif';
-  background-color: #1E2129;
+  color: aliceblue;
 
 }
 
@@ -16,7 +16,6 @@ main {
   width: 1280px;
   padding: 0 1rem;
 }
-
 
 #wrapper{
   height: auto;
@@ -30,8 +29,4 @@ footer{
   position : relative;
 }
 
-.bg-color {
-  color: aliceblue;
-
-}
 
