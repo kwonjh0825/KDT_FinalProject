@@ -217,12 +217,23 @@ def post_detail(request, planet_name, post_pk):
     comments = Comment.objects.filter(post=post)
     commentform = CommentForm()
     recommentform = RecommentForm()
+    
+    # emote
+    accountbyplanet = Accountbyplanet.objects.get(planet=planet, user=request.user)
+
+    post_emotion_heart = Emote.objects.filter(post=post, emotion='heart')
+    post_emotion_thumbsup = Emote.objects.filter(post=post, emotion='thumbsup')
+    post_emotion_thumbsdown = Emote.objects.filter(post=post, emotion='thumbsdown')
+    
     context = {
         'post': post,
         'comments': comments,
         'planet': planet,
         'commentform': commentform,
         'recommentform': recommentform,
+        'post_emotion_heart': post_emotion_heart,
+        'post_emotion_thumbsup': post_emotion_thumbsup,
+        'post_emotion_thumbsdown': post_emotion_thumbsdown,
     }
     return render(request, 'planets/planet_detail.html', context)
 
@@ -497,3 +508,41 @@ def following(request, planet_name, user_pk):
         }
         return JsonResponse(context)
     return redirect('planets:index', planet_name)
+
+# 비동기 post emote
+@login_required
+def post_emote(request, planet_name, post_pk, emotion):
+    planet = Planet.objects.get(name=planet_name)
+    post = Post.objects.get(pk=post_pk)
+    user = Accountbyplanet.objects.get(planet=planet, user=request.user)
+
+    emote = Emote.objects.filter(post=post, accountbyplanet=user, emotion=emotion)
+
+    if emote.exists():
+        emote.delete()
+    else:
+        Emote.objects.create(post=post, accountbyplanet=user, emotion=emotion)
+
+    context = {
+        'emotion_count': Emote.objects.filter(post=post, emotion=emotion).count()
+    }
+    return JsonResponse(context)
+
+# 비동기 comment emote 
+@login_required
+def comment_emote(request, planet_name, post_pk, emotion):
+    planet = Planet.objects.get(name=planet_name)
+    comment = Comment.objects.get(pk=post_pk)
+    user = Accountbyplanet.objects.get(planet=planet, user=request.user)
+
+    emote = Emote.objects.filter(comment=comment, accountbyplanet=user, emotion=emotion)
+
+    if emote.exists():
+        emote.delete()
+    else:
+        Emote.objects.create(comment=comment, accountbyplanet=user, emotion=emotion)
+
+    context = {
+        'emotion_count': Emote.objects.filter(comment=comment, emotion=emotion).count()
+    }
+    return JsonResponse(context)
