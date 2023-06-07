@@ -84,7 +84,7 @@ def change_password(request):
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
-            return redirect('posts:index')
+            return redirect('planets:main')
     else:
         form = PasswordChangeForm(request.user)
     context = {
