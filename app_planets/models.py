@@ -173,4 +173,14 @@ class InappropriateWord(models.Model):
 
     def __str__(self):
         return self.word
-    
+
+# 투표 항목
+class VoteItem(models.Model):
+    content = models.CharField(max_length=255)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='vote_items')
+
+# 투표
+class Vote(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    vote_item = models.ForeignKey(VoteItem, on_delete=models.CASCADE)
+    account = models.ForeignKey(Accountbyplanet, on_delete=models.CASCADE)
