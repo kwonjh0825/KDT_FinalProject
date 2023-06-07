@@ -4,10 +4,12 @@ function createpostContainer(profile_image_url, nickname, created_time, content,
   newPostContainer.querySelector('#section').style.display = "flex";
   newPostContainer.querySelector('#post-img img').src = profile_image_url ? profile_image_url : "/static/img/no_profile_img.png";
   newPostContainer.querySelector('#post-nickname').textContent = nickname;
+  newPostContainer.querySelector('#post-nickname').href = "/planets/" + planetName + "/profile/" + nickname + "/";
   newPostContainer.querySelector('#post-createdtime p').textContent = created_time;
   newPostContainer.querySelector('#post-content').textContent = content;
   newPostContainer.querySelector('#delete-post-form').setAttribute("data-post-pk", post_pk);
   newPostContainer.querySelector('#update-post-form').setAttribute("data-post-pk", post_pk);
+  newPostContainer.querySelector('#report-post-form').setAttribute("action", "/planets/" + planetName + "/report/" + post_pk + "/");
   newPostContainer.querySelector('#post-detailpage').href = "/planets/" + planetName + "/" + post_pk + "/";
   if (tags) {
     tags.forEach(function(tag) {
@@ -121,6 +123,9 @@ document.addEventListener('DOMContentLoaded', function() {
           var formHtml = response.data.form_html;
           var formContainer = document.createElement('div');
           formContainer.innerHTML = formHtml;
+          formContainer.querySelector('label[for="id_content"]').innerHTML = '<p class="text-base text-white">내용</p>';
+          formContainer.querySelector('label[for="id_image"]').innerHTML = '<p class="text-base text-white">이미지</p>';
+          formContainer.querySelector('label[for="id_tags"]').innerHTML = '<p class="text-base text-white">태그</p>';
           var formElement = document.createElement('form');
           formElement.id = "edit-post-form";
           formElement.setAttribute("data-planet-name", planetName);
@@ -128,11 +133,14 @@ document.addEventListener('DOMContentLoaded', function() {
           formElement.appendChild(formContainer);
           var submitButton = document.createElement('button');
           submitButton.id = "edit-post-button";
-          submitButton.textContent = 'Update';
+          submitButton.classList.add('chatting-create-btn', 'bg-[#bcbdbf]', 'mx-auto');
+          submitButton.textContent = '게시글 수정';
           submitButton.type = 'submit';
           formContainer.append(submitButton);
           postContainer.querySelector('#section').style.display = 'none';
           postContainer.append(formElement);
+          postContainer.appendChild(document.createElement('br'));
+          postContainer.appendChild(document.createElement('hr'));
         } else {
           console.error('Post deletion failed.');
         }

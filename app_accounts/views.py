@@ -267,7 +267,7 @@ def planet_profile(request, planet_name, nickname):
 @login_required
 def planet_profile_update(request, planet_name, nickname):
     planet = Planet.objects.get(name=planet_name)
-    user_by_planet = Accountbyplanet.objects.filter(planet=planet, nickname=nickname)
+    user_by_planet = Accountbyplanet.objects.get(planet=planet, nickname=nickname)
 
     if user_by_planet.user == request.user:
         if request.method == 'POST':
