@@ -17,7 +17,10 @@ function createpostContainer(profile_image_url, nickname, created_time, content,
       var newTag = document.createElement('span');
       newTag.classList.add("text-[#bcbdbf]");
       newTag.id = "tag";
-      newTag.textContent = "#" + tag;
+      var newA = document.createElement('a');
+      newA.href = "/planets/" + planetName + "/tags/" + tag + "/";
+      newA.textContent = "#" + tag;
+      newTag.appendChild(newA);
       tagContainer.appendChild(newTag);
     });
   };

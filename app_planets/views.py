@@ -1,5 +1,6 @@
 import json
 import secrets
+import datetime
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.template.loader import render_to_string
@@ -17,6 +18,7 @@ from datetime import timedelta
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist # 예외처리
 from django.db.models import Q
+from taggit.models import Tag
 
 
 EMOTIONS = [
@@ -37,7 +39,6 @@ def planet_list(request):
         'planets':planets
     }
     return render(request, 'planets/planet_list.html', context)
-
 
 
 # 행성 생성 페이지
@@ -707,3 +708,37 @@ def comment_emote(request, planet_name, post_pk, emotion):
         'emotion_count': Emote.objects.filter(comment=comment, emotion=emotion).count()
     }
     return JsonResponse(context)
+
+
+# tags 리스트 페이지
+@login_required
+def tags_list(request, planet_name):
+    planet = Planet.objects.get(name=planet_name)
+    posts = Post.objects.filter(planet=planet, created_at__gte=timezone.now() - datetime.timedelta(weeks=2))
+    tags = Tag.objects.filter(post__in=posts).annotate(tag_count=Count('post')).order_by('-tag_count')[:5]
+    total_posts = sum([tag.tag_count for tag in tags])
+    postform = PostForm()
+    context = {
+        'postform': postform,
+        'tags': tags,
+        'total_posts': total_posts,
+        'planet': planet,
+        'user': Accountbyplanet.objects.get(planet=planet, user=request.user),
+    }
+    return render(request, 'planets/planet_tags.html', context)
+
+
+# tag 페이지
+@login_required
+def post_tag(request, planet_name, tag_name):
+    planet = Planet.objects.get(name=planet_name)
+    tag = Tag.objects.get(name=tag_name)
+    posts = Post.objects.filter(planet=planet, tags=tag).order_by('-pk')
+    postform = PostForm()
+    context = {
+        'postform': postform,
+        'posts': posts,
+        'planet': planet,
+        'user': Accountbyplanet.objects.get(planet=planet, user=request.user),
+    }
+    return render(request, 'planets/planet_tag_posts.html', context)
