@@ -27,6 +27,8 @@ urlpatterns = [
     path('planets/<str:planet_name>/<int:post_pk>/<int:comment_pk>/create/', views.recomment_create, name='recomment_create'),
     path('planets/<str:planet_name>/<int:post_pk>/<int:comment_pk>/<int:recomment_pk>/update/', views.recomment_create, name='recomment_create'),
     path('planets/<str:planet_name>/<int:post_pk>/<int:comment_pk>/<int:recomment_pk>/delete/', views.recomment_delete, name='recomment_delete'),
+    path('planets/<str:planet_name>/tags/', views.tags_list, name='tags_list'),
+    path('planets/<str:planet_name>/tags/<str:tag_name>/', views.post_tag, name='post_tag'),
     # 행성 수정 페이지
     path('planets/<str:planet_name>/admin/', views.planet_admin, name='planet_admin'),
     path('planets/<str:planet_name>/admin/tos/', views.planet_tos_admin, name='planet_tos_admin'),
