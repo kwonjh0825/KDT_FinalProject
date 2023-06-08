@@ -27,7 +27,7 @@
         </a>
       </div>
       <div class="progress-bar">
-        <div class="progress" style="width: {{ tag.tag_count|mul:100|div:total_posts }}%;"></div>
+        <div class="progress" style="width: {{ tag.tag_count|mul:100|div:total_posts }}%;">{{ tag.tag_count|mul:100|div:total_posts }}%</div>
       </div>
     </div>
   {% endfor %}
@@ -49,7 +49,7 @@
       if (t > parseFloat(widthValue)) {
           clearInterval(barAnimation);
       }
-    }, 10);
+    }, 30);
   });
 </script>
 

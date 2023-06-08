@@ -12,8 +12,11 @@ if (requestuser_nickname == document.getElementById('post-nickname').textContent
 function loadComments() {
   $.ajax({
     url: '/planets/' + planetName + '/' + postPk + '/comments/',
-    type: 'GET',
+    type: 'POST',
     dataType: 'json',
+    data: {
+      'csrfmiddlewaretoken': csrftoken,
+    },
     success: function(data) {
       for (var i = 0; i < data.length; i++) {
         var comment = data[i];
@@ -55,12 +58,11 @@ function createcommentContainer(profile_image_url, nickname, created_time, conte
   newCommentContainer.querySelector('#post-image').remove();
   newCommentContainer.querySelector('#update-post-form').id = "update-comment-form";
   newCommentContainer.querySelector('#update-comment-form').setAttribute("data-comment-pk", comment_pk);
-  newCommentContainer.querySelector('#report-post-button').id = "report-comment-button";
-  newCommentContainer.querySelector('#report-comment-button').textContent = "댓글 신고";
+  newCommentContainer.querySelector('#report-post-url').id = "report-comment-url";
+  newCommentContainer.querySelector('#report-comment-url').textContent = "댓글 신고";
+  newCommentContainer.querySelector('#report-comment-url').href = `/planets/${planetName}/report/comment/${comment_pk}/`
   newCommentContainer.querySelector('#delete-post-form').id = "delete-comment-form";
   newCommentContainer.querySelector('#delete-comment-form').setAttribute("data-comment-pk", comment_pk);
-  newCommentContainer.querySelector('#report-post-url').href = `/planets/${planetName}/report/comment/${comment_pk}/`
-  newCommentContainer.querySelector('#report-post-url').id = "report-comment-url"
   if (requestuser_nickname == nickname) {
     newCommentContainer.querySelector('#dropdown-delete').style.display = 'block';
     newCommentContainer.querySelector('#delete-post-button').id = "delete-comment-button";
@@ -108,13 +110,12 @@ function createRecommentContainer(profile_image_url, nickname, created_time, con
   newRecommentContainer.querySelector('#update-post-form').id = "update-recomment-form";
   newRecommentContainer.querySelector('#update-recomment-form').setAttribute("data-comment-pk", comment_pk);
   newRecommentContainer.querySelector('#update-recomment-form').setAttribute("data-recomment-pk", recomment_pk);
-  newRecommentContainer.querySelector('#report-post-button').id = "report-comment-button";
-  newRecommentContainer.querySelector('#report-comment-button').textContent = "대댓글 신고";
+  newRecommentContainer.querySelector('#report-post-url').id = "report-recomment-url"
+  newRecommentContainer.querySelector('#report-recomment-url').textContent = "대댓글 신고";
+  newRecommentContainer.querySelector('#report-recomment-url').href = `/planets/${planetName}/report/recomment/${recomment_pk}/`
   newRecommentContainer.querySelector('#delete-post-form').id = "delete-recomment-form";
   newRecommentContainer.querySelector('#delete-recomment-form').setAttribute("data-comment-pk", comment_pk);
   newRecommentContainer.querySelector('#delete-recomment-form').setAttribute("data-recomment-pk", recomment_pk);
-  newRecommentContainer.querySelector('#report-post-url').href = `/planets/${planetName}/report/recomment/${recomment_pk}/`
-  newRecommentContainer.querySelector('#report-post-url').id = "report-recomment-url"
   if (requestuser_nickname == nickname) {
     newRecommentContainer.querySelector('#dropdown-delete').style.display = 'block';
     newRecommentContainer.querySelector('#delete-post-button').id = "delete-recomment-button";
@@ -204,9 +205,8 @@ document.addEventListener('DOMContentLoaded', function() {
       var deleteButton = target.querySelector('#delete-comment-button');
       var commentContainer = deleteButton.closest('#container');
       var planetName = target.dataset.planetName;
-      var postPk = target.dataset.postPk;
       var commentPk = target.dataset.commentPk;
-      var url = "/planets/" + planetName + "/" + postPk + "/" + commentPk +"/delete/";
+      var url = "/planets/" + planetName + "/comment/" + commentPk + "/delete/";
 
       axios({
         url: url,
@@ -275,7 +275,7 @@ document.addEventListener('DOMContentLoaded', function() {
       var postPk = target.dataset.postPk;
       var commentPk = target.dataset.commentPk;
       var recommentPk = target.dataset.recommentPk;
-      var url = "/planets/" + planetName + "/" + postPk + "/" + commentPk + "/" + recommentPk + "/delete/";
+      var url = "/planets/" + planetName + "/recomment/" + recommentPk + "/delete/";
 
       axios({
         url: url,

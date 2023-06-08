@@ -77,7 +77,14 @@
       </div>
       <div class="flex flex-row justify-center items-center">
         <div class="bg-[#282c37] h-36 w-36 justify-center items-center text-center m-5 p-3">
-          <p>widget1</p>
+          <div class="weather_icon"></div>
+          <div class="current_temp"></div>
+          <div class="weather_description"></div>
+          <div class="temp_min"></div>
+          <div class="temp_max"></div>
+          {% comment %} <div class="humidity"></div>
+          <div class="wind"></div>
+          <div class="cloud"></div> {% endcomment %}
         </div>
         <div class="bg-[#282c37] h-36 w-36 justify-center items-center text-center m-5 p-3">
           <p>widget2</p>
@@ -109,8 +116,16 @@
             </div>
           </div>
           <div class="flex flex-col justify-center items-center">
+            {% comment %} 날씨 {% endcomment %}
             <div class="bg-[#282c37] h-36 w-36 justify-center items-center text-center m-5 p-3">
-              <p>widget1</p>
+              <div class="weather_icon"></div>
+              <div class="current_temp"></div>
+              <div class="weather_description"></div>
+              <div class="temp_min"></div>
+              <div class="temp_max"></div>
+              {% comment %} <div class="humidity"></div>
+              <div class="wind"></div>
+              <div class="cloud"></div> {% endcomment %}
             </div>
             <div class="bg-[#282c37] h-36 w-36 justify-center items-center text-center m-5 p-3">
               <p>widget2</p>
@@ -172,17 +187,17 @@
               <div class="p-8 space-y-6">
                 <form id="post-form" data-planet-name="{{ planet.name }}">
                   {% csrf_token %}
-                  <div class='w-full mb-5'>
-                    <label for="last_name" class="block text-base text-slate-300 mb-2">내용</label>
+                  <div class="w-full mb-5">
+                    <label for="id_content" class="block text-base text-slate-300 mb-2">내용</label>
                     {{ postform.content }}
                   </div>
                   <div class="flex flex-row">
                     <div>
-                      <label for="last_name" class="block text-base text-slate-300 mb-2">이미지</label>
+                      <label for="id_image" class="block text-base text-slate-300 mb-2">이미지</label>
                       {{ postform.image }}
                     </div>
                     <div>
-                      <label for="last_name" class="block text-base text-slate-300 mb-2">태그</label>
+                      <label for="id_tags" class="block text-base text-slate-300 mb-2">태그</label>
                       {{ postform.tags }}
                     </div>
                   </div>
@@ -190,7 +205,7 @@
                     <p>게시글 작성</p>
                   </button>
                 </form>
-              </div>
+              </div>              
             </div>
           </div>
         </div>
@@ -320,8 +335,9 @@
 </body>
 {% comment %} <script type="text/javascript" src="/static/js/base_index.js"></script> {% endcomment %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
+<script src="https://kit.fontawesome.com/96b2992191.js" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
-
+<script src="{% static 'js/base_index.js' %}"></script>
 {% block script %}
 {% endblock script %}
 </html>
