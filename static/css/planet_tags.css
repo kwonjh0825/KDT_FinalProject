@@ -1,0 +1,27 @@
+#top5_tag {
+  padding: 10px;
+}
+
+#tag {
+  display: flex;
+  height: 100px;
+  padding: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.progress-bar {
+  width: 50%;
+  height: 20px;
+  background-color: #dedede;
+  font-weight: 600;
+  font-size: .8rem;
+}
+
+.progress-bar .progress {
+  height: 20px;
+  padding: 0;
+  text-align: center;
+  background-color: #ffd951;
+  color: #111;
+}

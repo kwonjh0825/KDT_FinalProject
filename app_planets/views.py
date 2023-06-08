@@ -1,5 +1,6 @@
 import json
 import secrets
+import datetime
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.template.loader import render_to_string
@@ -17,6 +18,7 @@ from datetime import timedelta
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist # 예외처리
 from django.db.models import Q
+from taggit.models import Tag
 
 
 EMOTIONS = [
@@ -37,7 +39,6 @@ def planet_list(request):
         'planets':planets
     }
     return render(request, 'planets/planet_list.html', context)
-
 
 
 # 행성 생성 페이지
@@ -155,6 +156,7 @@ def index(request, planet_name):
         'postform': postform,
         'planet': planet,
         'first_post': Post.objects.filter(planet=planet).first(),
+        'user': Accountbyplanet.objects.get(planet=planet, user=request.user),
     }
     return render(request, 'planets/index.html', context)
 
@@ -289,7 +291,7 @@ def post_detail(request, planet_name, post_pk):
         'post_emotion_heart': post_emotion_heart,
         'post_emotion_thumbsup': post_emotion_thumbsup,
         'post_emotion_thumbsdown': post_emotion_thumbsdown,
-        'request_user_nickname': Accountbyplanet.objects.get(user=request.user.pk, planet=planet).nickname,
+        'user': Accountbyplanet.objects.get(user=request.user.pk, planet=planet),
     }
     return render(request, 'planets/planet_detail.html', context)
 
@@ -298,17 +300,6 @@ def post_detail(request, planet_name, post_pk):
 @login_required
 def detail_comments(request, planet_name, post_pk):
     comments = Comment.objects.filter(post_id=post_pk)
-    per_page = 5
-    page_number = request.GET.get('page')
-    paginator = Paginator(comments, per_page)
-
-    try:
-        comments = paginator.page(page_number)
-    except PageNotAnInteger:
-        comments = paginator.page(1)
-    except EmptyPage:
-        comments = paginator.page(paginator.num_pages)
-
     comments_list = []
     for comment in comments:
         recomments = Recomment.objects.filter(comment=comment.pk)
@@ -332,37 +323,51 @@ def detail_comments(request, planet_name, post_pk):
             'user': comment.accountbyplanet.user.username,
             'recomments': recomments_data,
         })
-    
-    if comments.has_next():
-        return JsonResponse(comments_list, safe=False)
-    else:
-        comments_list.append(None)
-        return JsonResponse(comments_list, safe=False)
+    return JsonResponse(comments_list, safe=False)
 
 
-# 댓글 생성
+# 댓글 생성 및 수정
 @require_POST
-def comment_create(request, planet_name, post_pk):
+def comment_create(request, planet_name, post_pk, comment_pk=None):
     planet = Planet.objects.get(name=planet_name)
     post = Post.objects.get(pk=post_pk, planet=planet)
     form = CommentForm(request.POST)
-    if form.is_valid():
-        comment = form.save(commit=False)
-        comment.post = post
-        comment.accountbyplanet = Accountbyplanet.objects.get(planet=planet, user=request.user)
-        comment.save()
-        response_data = {
-            'success': True,
-            'comment_pk': comment.pk,
-            'content': comment.content,
-            'created_time': comment.created_time,
-            'nickname': comment.accountbyplanet.nickname,
-            'profile_image_url': comment.accountbyplanet.profile_image.url if comment.accountbyplanet.profile_image else None,
-            'user': comment.accountbyplanet.user.username,
-        }
-        return JsonResponse(response_data)
-    else:
-        return JsonResponse({'success': False, 'message': 'Form is invalid'})
+
+    if comment_pk:  # 기존 댓글 수정 처리
+        try:
+            comment = Comment.objects.get(pk=comment_pk)
+            if form.is_valid():
+                form = CommentForm(request.POST, instance=comment)
+                if form.has_changed():  # 폼 데이터가 변경되었는지 확인
+                    comment = form.save(commit=False)
+                    comment.save()
+            else:
+                form = CommentForm(instance=comment)
+        except Comment.DoesNotExist:
+            return JsonResponse({'success': False, 'errors': 'Comment not found'})
+    else:  # 새로운 댓글 생성
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.accountbyplanet = Accountbyplanet.objects.get(planet=planet, user=request.user)
+            comment.planet = planet
+            comment.content = form.cleaned_data['content']
+            comment.post = post
+            comment.save()
+        else:
+            errors = form.errors.as_json()
+            return JsonResponse({'success': False, 'errors': errors})
+        
+    response_data = {
+        'success': True,
+        'comment_pk': comment.pk,
+        'content': comment.content,
+        'created_time': comment.created_time,
+        'nickname': comment.accountbyplanet.nickname,
+        'profile_image_url': comment.accountbyplanet.profile_image.url if comment.accountbyplanet.profile_image else None,
+        'user': comment.accountbyplanet.user.username,
+        'form_html': form.as_p() if form.as_p() else None,
+    }
+    return JsonResponse(response_data)
 
 
 # 댓글 삭제
@@ -388,28 +393,48 @@ def comment_delete(request, planet_name, comment_pk):
 
 # 대댓글 생성
 @require_POST
-def recomment_create(request, planet_name, post_pk, comment_pk):
+def recomment_create(request, planet_name, post_pk, comment_pk, recomment_pk=None):
     planet = Planet.objects.get(name=planet_name)
     post = Post.objects.get(pk=post_pk, planet=planet)
     comment = Comment.objects.get(pk=comment_pk, post=post)
     form = RecommentForm(request.POST)
-    if form.is_valid():
-        recomment = form.save(commit=False)
-        recomment.comment = comment
-        recomment.accountbyplanet = Accountbyplanet.objects.get(planet=planet, user=request.user)
-        recomment.save()
-        response_data = {
-            'success': True,
-            'recomment_pk': recomment.pk,
-            'content': recomment.content,
-            'created_time': recomment.created_time,
-            'nickname': recomment.accountbyplanet.nickname,
-            'profile_image_url': recomment.accountbyplanet.profile_image.url if recomment.accountbyplanet.profile_image else None,
-            'user': recomment.accountbyplanet.user.username,
-        }
-        return JsonResponse(response_data)
-    else:
-        return JsonResponse({'success': False, 'message': 'Form is invalid'})
+
+    if recomment_pk:  # 기존 대댓글 수정 처리
+        try:
+            recomment = Recomment.objects.get(pk=recomment_pk)
+            if form.is_valid():
+                form = RecommentForm(request.POST, instance=recomment)
+                if form.has_changed():  # 폼 데이터가 변경되었는지 확인
+                    recomment = form.save(commit=False)
+                    recomment.save()
+            else:
+                form = RecommentForm(instance=recomment)
+        except Recomment.DoesNotExist:
+            return JsonResponse({'success': False, 'errors': 'Recomment not found'})
+    else:  # 새로운 대댓글 생성
+        if form.is_valid():
+            recomment = form.save(commit=False)
+            recomment.accountbyplanet = Accountbyplanet.objects.get(planet=planet, user=request.user)
+            recomment.planet = planet
+            recomment.content = form.cleaned_data['content']
+            recomment.post = post
+            recomment.comment = comment
+            recomment.save()
+        else:
+            errors = form.errors.as_json()
+            return JsonResponse({'success': False, 'errors': errors})
+        
+    response_data = {
+        'success': True,
+        'recomment_pk': recomment.pk,
+        'content': recomment.content,
+        'created_time': recomment.created_time,
+        'nickname': recomment.accountbyplanet.nickname,
+        'profile_image_url': recomment.accountbyplanet.profile_image.url if recomment.accountbyplanet.profile_image else None,
+        'user': recomment.accountbyplanet.user.username,
+        'form_html': form.as_p() if form.as_p() else None,
+    }
+    return JsonResponse(response_data)
 
 
 # 대댓글 삭제
@@ -768,3 +793,37 @@ def comment_emote(request, planet_name, post_pk, emotion):
         'emotion_count': Emote.objects.filter(comment=comment, emotion=emotion).count()
     }
     return JsonResponse(context)
+
+
+# tags 리스트 페이지
+@login_required
+def tags_list(request, planet_name):
+    planet = Planet.objects.get(name=planet_name)
+    posts = Post.objects.filter(planet=planet, created_at__gte=timezone.now() - datetime.timedelta(weeks=2))
+    tags = Tag.objects.filter(post__in=posts).annotate(tag_count=Count('post')).order_by('-tag_count')[:5]
+    total_posts = sum([tag.tag_count for tag in tags])
+    postform = PostForm()
+    context = {
+        'postform': postform,
+        'tags': tags,
+        'total_posts': total_posts,
+        'planet': planet,
+        'user': Accountbyplanet.objects.get(planet=planet, user=request.user),
+    }
+    return render(request, 'planets/planet_tags.html', context)
+
+
+# tag 페이지
+@login_required
+def post_tag(request, planet_name, tag_name):
+    planet = Planet.objects.get(name=planet_name)
+    tag = Tag.objects.get(name=tag_name)
+    posts = Post.objects.filter(planet=planet, tags=tag).order_by('-pk')
+    postform = PostForm()
+    context = {
+        'postform': postform,
+        'posts': posts,
+        'planet': planet,
+        'user': Accountbyplanet.objects.get(planet=planet, user=request.user),
+    }
+    return render(request, 'planets/planet_tag_posts.html', context)

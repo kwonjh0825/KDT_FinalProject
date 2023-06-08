@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'crispy_tailwind',
     'imagekit',
     'taggit',
+    'mathfilters',
     'django_apscheduler', # 스케쥴러
     'django.contrib.admin',
     'django.contrib.auth',
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"

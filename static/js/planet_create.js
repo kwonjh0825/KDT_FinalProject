@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const termField = document.createElement('div');
     termField.innerHTML = `
       <label for="term_content_${termCount}">Term Content:</label>
-      <input type="text" id="term_content_${termCount}" name="term_content_${termCount}">
+      <input type="text" class="text-black" id="term_content_${termCount}" name="term_content_${termCount}">
       <button type="button" class="delete-term-btn" data-term-count="${termCount}">Delete</button>
       <br>
     `;

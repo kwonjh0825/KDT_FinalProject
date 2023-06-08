@@ -3,27 +3,16 @@ const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
 
 var planetName = document.getElementById('comment-create-form').getAttribute('data-planet-name');
 var postPk = document.getElementById('comment-create-form').getAttribute('data-post-pk');
-var page = 1;
-if (requestuser_nickname != document.getElementById('post-nickname').textContent) {
-  document.getElementById('dropdown-menu').querySelector('li#dropdown-delete').style.display = 'none';
+
+if (requestuser_nickname == document.getElementById('post-nickname').textContent) {
+  document.getElementById('dropdown-menu').querySelector('li#dropdown-delete').style.display = 'block';
 }
 
-// 스크롤시 comment, recomment 비동기
-$(window).scroll(function() {
-  if ($(window).scrollTop() == $(document).height() - $(window).height()) {
-    page++;
-    loadComments(page);
-  }
-});
-
 // comments, recomments rendering 비동기 처리
-function loadComments(page) {
+function loadComments() {
   $.ajax({
     url: '/planets/' + planetName + '/' + postPk + '/comments/',
     type: 'GET',
-    data: {
-        'page': page
-    },
     dataType: 'json',
     success: function(data) {
       for (var i = 0; i < data.length; i++) {
@@ -40,7 +29,7 @@ function loadComments(page) {
 
 // 스크롤 첫번째 실행
 $(document).ready(function() {
-  loadComments(page);
+  loadComments();
 });
 
 // 댓글 생성 container
@@ -59,20 +48,28 @@ function createcommentContainer(profile_image_url, nickname, created_time, conte
   textarea.value = '';
   newCommentContainer.querySelector('#post-img img').src = profile_image_url ? profile_image_url : "/static/img/no_profile_img.png";
   newCommentContainer.querySelector('#post-nickname').textContent = nickname;
+  newCommentContainer.querySelector('#post-nickname').href = "/planets/" + planetName + "/profile/" + nickname + "/";
   newCommentContainer.querySelector('#post-createdtime p').textContent = created_time;
   newCommentContainer.querySelector('#post-content').textContent = content;
   newCommentContainer.querySelector('#post-tags').remove();
   newCommentContainer.querySelector('#post-image').remove();
-  newCommentContainer.querySelector('#delete-post-button').id = "delete-comment-button";
-  newCommentContainer.querySelector('#delete-comment-button').textContent = "댓글 삭제";
+  newCommentContainer.querySelector('#update-post-form').id = "update-comment-form";
+  newCommentContainer.querySelector('#update-comment-form').setAttribute("data-comment-pk", comment_pk);
+  newCommentContainer.querySelector('#report-post-button').id = "report-comment-button";
+  newCommentContainer.querySelector('#report-comment-button').textContent = "댓글 신고";
   newCommentContainer.querySelector('#delete-post-form').id = "delete-comment-form";
   newCommentContainer.querySelector('#delete-comment-form').setAttribute("data-comment-pk", comment_pk);
   newCommentContainer.querySelector('#report-post-url').href = `/planets/${planetName}/report/comment/${comment_pk}/`
   newCommentContainer.querySelector('#report-post-url').id = "report-comment-url"
-  if (requestuser_nickname == user) {
+  if (requestuser_nickname == nickname) {
     newCommentContainer.querySelector('#dropdown-delete').style.display = 'block';
+    newCommentContainer.querySelector('#delete-post-button').id = "delete-comment-button";
+    newCommentContainer.querySelector('#delete-comment-button').textContent = "댓글 삭제";
+    newCommentContainer.querySelector('#update-post-button').id = "update-comment-button";
+    newCommentContainer.querySelector('#update-comment-button').textContent = "댓글 수정";
   } else {
     newCommentContainer.querySelector('#dropdown-delete').remove();
+    newCommentContainer.querySelector('#update-post-button').closest("li").remove();
   }
   newCommentContainer.querySelector('#comment_form').id = "recomment_form";
   document.getElementById('comment-list').append(newCommentContainer);
@@ -80,8 +77,11 @@ function createcommentContainer(profile_image_url, nickname, created_time, conte
   // 대댓글 있을 경우
   if (recomments) {
     for (var recomment of recomments) {
+      var formContainer = document.createElement('div');
+      formContainer.id = "container";
       var newRecommentContainer = createRecommentContainer(recomment.profile_image_url, recomment.nickname, recomment.created_time, recomment.content, recomment.pk, comment_pk);
-      newCommentContainer.append(newRecommentContainer);
+      formContainer.append(newRecommentContainer);
+      newCommentContainer.append(formContainer);
     }
   }
 
@@ -100,10 +100,16 @@ function createRecommentContainer(profile_image_url, nickname, created_time, con
   newRecommentContainer.insertBefore(newDiv2, newRecommentContainer.children[0]);
   newRecommentContainer.querySelector('#post-img img').src = profile_image_url ? profile_image_url : "/static/img/no_profile_img.png";
   newRecommentContainer.querySelector('#post-nickname').textContent = nickname;
+  newRecommentContainer.querySelector('#post-nickname').href = "/planets/" + planetName + "/profile/" + nickname + "/";
   newRecommentContainer.querySelector('#post-createdtime p').textContent = created_time;
   newRecommentContainer.querySelector('#post-content').textContent = content;
-  newRecommentContainer.querySelector('#delete-post-button').id = "delete-recomment-button";
-  newRecommentContainer.querySelector('#delete-recomment-button').textContent = "대댓글 삭제";
+  newRecommentContainer.querySelector('#post-tags').remove();
+  newRecommentContainer.querySelector('#post-image').remove();
+  newRecommentContainer.querySelector('#update-post-form').id = "update-recomment-form";
+  newRecommentContainer.querySelector('#update-recomment-form').setAttribute("data-comment-pk", comment_pk);
+  newRecommentContainer.querySelector('#update-recomment-form').setAttribute("data-recomment-pk", recomment_pk);
+  newRecommentContainer.querySelector('#report-post-button').id = "report-comment-button";
+  newRecommentContainer.querySelector('#report-comment-button').textContent = "대댓글 신고";
   newRecommentContainer.querySelector('#delete-post-form').id = "delete-recomment-form";
   newRecommentContainer.querySelector('#delete-recomment-form').setAttribute("data-comment-pk", comment_pk);
   newRecommentContainer.querySelector('#delete-recomment-form').setAttribute("data-recomment-pk", recomment_pk);
@@ -111,8 +117,13 @@ function createRecommentContainer(profile_image_url, nickname, created_time, con
   newRecommentContainer.querySelector('#report-post-url').id = "report-recomment-url"
   if (requestuser_nickname == nickname) {
     newRecommentContainer.querySelector('#dropdown-delete').style.display = 'block';
+    newRecommentContainer.querySelector('#delete-post-button').id = "delete-recomment-button";
+    newRecommentContainer.querySelector('#delete-recomment-button').textContent = "대댓글 삭제";
+    newRecommentContainer.querySelector('#update-post-button').id = "update-recomment-button";
+    newRecommentContainer.querySelector('#update-recomment-button').textContent = "대댓글 수정";
   } else {
     newRecommentContainer.querySelector('#dropdown-delete').remove();
+    newRecommentContainer.querySelector('#update-post-button').closest("li").remove();
   }
   var svgDiv = newRecommentContainer.querySelector('#comment_form').closest('p').closest('div')
   var newp = document.createElement('p')
@@ -240,7 +251,10 @@ document.addEventListener('DOMContentLoaded', function() {
       })
       .then(function(response) {
         if (response.data.success) {
-          recommentContainer.append(createRecommentContainer(response.data.profile_image_url, response.data.nickname, response.data.created_time, response.data.content, response.data.recomment_pk, commentPk));
+          var formContainer = document.createElement('div');
+          formContainer.id = "container";
+          formContainer.append(createRecommentContainer(response.data.profile_image_url, response.data.nickname, response.data.created_time, response.data.content, response.data.recomment_pk, commentPk));
+          recommentContainer.append(formContainer);
           form.reset();
         } else {
           console.error(response.data.message);
@@ -256,7 +270,7 @@ document.addEventListener('DOMContentLoaded', function() {
       e.preventDefault();
 
       var deleteButton = target.querySelector('#delete-recomment-button');
-      var recommentContainer = deleteButton.closest('#section');
+      var recommentContainer = deleteButton.closest('#container');
       var planetName = target.dataset.planetName;
       var postPk = target.dataset.postPk;
       var commentPk = target.dataset.commentPk;
@@ -281,6 +295,202 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('AJAX request failed:', error);
       });
     }
+
+    // 댓글 수정 form
+    else if (target.matches('#update-comment-form')) {
+      e.preventDefault();
+
+      var updateForm = target;
+      var updateButton = updateForm.querySelector('#update-comment-button');
+      var postContainer = updateButton.closest('#container');
+      var planetName = updateForm.dataset.planetName;
+      var postPk = updateForm.dataset.postPk;
+      var commentPk = updateForm.dataset.commentPk;
+      var formData = new FormData(updateForm);
+
+      axios({
+        url: "/planets/" + planetName + "/" + postPk + "/" + commentPk + "/update/",
+        method: 'POST',
+        data: formData,
+        headers: {
+          'X-CSRFToken': csrftoken,
+        }
+      })
+      .then(function(response) {
+        if (response.data.success) {
+          var formHtml = response.data.form_html;
+          var formContainer = document.createElement('div');
+          formContainer.innerHTML = formHtml;
+          formContainer.querySelector('label[for="id_content"]').innerHTML = '<p class="text-base text-white">내용</p>';
+          var formElement = document.createElement('form');
+          formElement.id = "edit-comment-form";
+          formElement.setAttribute("data-planet-name", planetName);
+          formElement.setAttribute("data-post-pk", postPk);
+          formElement.setAttribute("data-comment-pk", commentPk);
+          formElement.appendChild(formContainer);
+          var submitButton = document.createElement('button');
+          submitButton.id = "edit-comment-button";
+          submitButton.classList.add('chatting-create-btn', 'bg-[#bcbdbf]', 'mx-auto');
+          submitButton.textContent = '댓글 수정';
+          submitButton.type = 'submit';
+          formContainer.append(submitButton);
+          postContainer.querySelector('#section').style.display = 'none';
+          postContainer.insertBefore(formElement, postContainer.children[0]);
+        } else {
+          console.error('Comment deletion failed.');
+        }
+      })
+      .catch(function(error) {
+        console.error('AJAX request failed:', error);
+      });
+    }
+
+    // 댓글 수정 처리
+    else if (target.matches('#edit-comment-form')) {
+      e.preventDefault();
+
+      var editForm = target;
+      var editButton = editForm.querySelector('#edit-comment-button');
+      var postContainer = editButton.closest('#container');
+      var planetName = editForm.dataset.planetName;
+      var postPk = editForm.dataset.postPk;
+      var commentPk = editForm.dataset.commentPk;
+      var formData = new FormData(editForm);
+
+      axios({
+        url: "/planets/" + planetName + "/" + postPk + "/" + commentPk + "/update/",
+        method: 'POST',
+        data: formData,
+        headers: {
+          'X-CSRFToken': csrftoken,
+        }
+      })
+      .then(function(response) {
+        if (response.data.success) {
+          postContainer.querySelector('#section').style.display = 'flex';
+          postContainer.querySelector('#post-content').textContent = response.data.content;
+          if (response.data.user == requestuser) {
+            postContainer.querySelector('#dropdown-delete').style.display = "block";
+          }
+          postContainer.querySelector('#edit-comment-form').remove()
+          editForm.reset();
+        } else {
+          // var divIdContent = editForm.querySelector("#div_id_content");
+          // var newP = document.createElement("p");
+          // newP.id = "error_1_id_content";
+          // newP.className = "text-red-500 text-xs italic";
+
+          // var strongElement = document.createElement("strong");
+          // strongElement.textContent = JSON.parse(response.data.errors).content[0].message;
+          // newP.appendChild(strongElement);
+          // divIdContent.appendChild(newP);
+        }
+      })
+      .catch(function(error) {
+        console.error('AJAX request failed:', error);
+      });
+    }
+
+    // 대댓글 수정 form
+    else if (target.matches('#update-recomment-form')) {
+      e.preventDefault();
+
+      var updateForm = target;
+      var updateButton = updateForm.querySelector('#update-recomment-button');
+      var postContainer = updateButton.closest('#container');
+      var postSection = updateButton.closest('#section');
+      var planetName = updateForm.dataset.planetName;
+      var postPk = updateForm.dataset.postPk;
+      var commentPk = updateForm.dataset.commentPk;
+      var recommentPk = updateForm.dataset.recommentPk;
+      var formData = new FormData(updateForm);
+
+      axios({
+        url: "/planets/" + planetName + "/" + postPk + "/" + commentPk + "/" + recommentPk + "/update/",
+        method: 'POST',
+        data: formData,
+        headers: {
+          'X-CSRFToken': csrftoken,
+        }
+      })
+      .then(function(response) {
+        if (response.data.success) {
+          var formHtml = response.data.form_html;
+          var formContainer = document.createElement('div');
+          formContainer.innerHTML = formHtml;
+          formContainer.querySelector('label[for="id_content"]').innerHTML = '<p class="text-base text-white">내용</p>';
+          var formElement = document.createElement('form');
+          formElement.id = "edit-recomment-form";
+          formElement.setAttribute("data-planet-name", planetName);
+          formElement.setAttribute("data-post-pk", postPk);
+          formElement.setAttribute("data-comment-pk", commentPk);
+          formElement.setAttribute("data-recomment-pk", recommentPk);
+          formElement.appendChild(formContainer);
+          var submitButton = document.createElement('button');
+          submitButton.id = "edit-recomment-button";
+          submitButton.classList.add('chatting-create-btn', 'bg-[#bcbdbf]', 'mx-auto');
+          submitButton.textContent = '대댓글 수정';
+          submitButton.type = 'submit';
+          formContainer.append(submitButton);
+          postSection.style.display = 'none';
+          postContainer.insertBefore(formElement, postContainer.children[1]);
+        } else {
+          console.error('Comment deletion failed.');
+        }
+      })
+      .catch(function(error) {
+        console.error('AJAX request failed:', error);
+      });
+    }
+
+    // 대댓글 수정 처리
+    else if (target.matches('#edit-recomment-form')) {
+      e.preventDefault();
+
+      var editForm = target;
+      var editButton = editForm.querySelector('#edit-recomment-button');
+      var postContainer = editButton.closest('#container');
+      var planetName = editForm.dataset.planetName;
+      var postPk = editForm.dataset.postPk;
+      var commentPk = editForm.dataset.commentPk;
+      var recommentPk = editForm.dataset.recommentPk;
+      var formData = new FormData(editForm);
+
+      axios({
+        url: "/planets/" + planetName + "/" + postPk + "/" + commentPk + "/" + recommentPk + "/update/",
+        method: 'POST',
+        data: formData,
+        headers: {
+          'X-CSRFToken': csrftoken,
+        }
+      })
+      .then(function(response) {
+        if (response.data.success) {
+          postContainer.querySelector('#section').style.display = 'flex';
+          postContainer.querySelector('#post-content').textContent = response.data.content;
+          if (response.data.user == requestuser) {
+            postContainer.querySelector('#dropdown-delete').style.display = "block";
+          }
+          postContainer.querySelector('#edit-recomment-form').remove()
+          editForm.reset();
+        } else {
+          // var divIdContent = editForm.querySelector("#div_id_content");
+          // var newP = document.createElement("p");
+          // newP.id = "error_1_id_content";
+          // newP.className = "text-red-500 text-xs italic";
+
+          // var strongElement = document.createElement("strong");
+          // strongElement.textContent = JSON.parse(response.data.errors).content[0].message;
+          // newP.appendChild(strongElement);
+          // divIdContent.appendChild(newP);
+        }
+      })
+      .catch(function(error) {
+        console.error('AJAX request failed:', error);
+      });
+    }
+
+
   });
 });
 
