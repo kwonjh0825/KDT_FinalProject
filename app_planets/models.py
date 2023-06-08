@@ -164,8 +164,13 @@ class Emote(models.Model):
 
 # 게시글 신고 
 class Report(models.Model):
-    post    = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='reported_post')
+    post    = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, null=True)
+    recomment = models.ForeignKey(Recomment, on_delete=models.CASCADE, null=True)
+    # 신고자
     user    = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    # 신고 내용 추가
+    content = models.TextField()
 
 # 부적절 단어 DB
 class InappropriateWord(models.Model):

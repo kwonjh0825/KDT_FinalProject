@@ -122,11 +122,8 @@ detail
             </form>
           </li>
           <li>
-            <a href="#" class="block px-4 py-2 hover:bg-gray-100">
-              <form action="{% url 'planets:post_report' planet.name post.pk %}" method="POST">
-                {% csrf_token %}
-                <button type="submit" id="report-post-button">게시글 신고</button>
-              </form>
+            <a href="{% url 'planets:report' planet.name 'post' post.pk %}" class="block px-4 py-2 hover:bg-gray-100" id="report-post-url">
+              <button type="button" id="report-post-button">게시글 신고</button>
             </a>
           </li>
           <li>

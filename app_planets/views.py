@@ -255,7 +255,9 @@ def post_create(request, planet_name, post_pk=None):
 def post_delete(request, planet_name, post_pk):
     post = Post.objects.get(pk=post_pk)
     planet = Planet.objects.get(name=planet_name)
-    if Accountbyplanet.objects.get(user=request.user.pk, planet=planet) == post.accountbyplanet:
+    accountbyplanet = Accountbyplanet.objects.get(user=request.user.pk, planet=planet)
+    
+    if accountbyplanet == post.accountbyplanet or accountbyplanet.admin_level > 1:
         post.delete()
         return JsonResponse({'success': True})
     else:
@@ -365,18 +367,22 @@ def comment_create(request, planet_name, post_pk):
 
 # 댓글 삭제
 @require_POST
-def comment_delete(request, planet_name, post_pk, comment_pk):
+def comment_delete(request, planet_name, comment_pk):
     comment = Comment.objects.get(pk=comment_pk)
     planet = Planet.objects.get(name=planet_name)
-    if Accountbyplanet.objects.get(user=request.user.pk, planet=planet) == comment.accountbyplanet:
+    accountbyplanet = Accountbyplanet.objects.get(user=request.user.pk, planet=planet)
+
+    if accountbyplanet == comment.accountbyplanet or accountbyplanet.admin_level > 1:
         if Recomment.objects.filter(comment=comment).exists():
             comment.content = '이미 삭제된 댓글입니다.'
             comment.save()
             return JsonResponse({'success': 'Change', 'comment_content': comment.content})
         else:
+            print(1)
             comment.delete()
             return JsonResponse({'success': True})
     else:
+        print(2)
         return JsonResponse({'success': False})
 
 
@@ -408,13 +414,17 @@ def recomment_create(request, planet_name, post_pk, comment_pk):
 
 # 대댓글 삭제
 @require_POST
-def recomment_delete(request, planet_name, post_pk, comment_pk, recomment_pk):
+def recomment_delete(request, planet_name, recomment_pk):
     recomment = Recomment.objects.get(pk=recomment_pk)
     planet = Planet.objects.get(name=planet_name)
-    if Accountbyplanet.objects.get(user=request.user.pk, planet=planet) == recomment.accountbyplanet:
+    accountbyplanet = Accountbyplanet.objects.get(user=request.user.pk, planet=planet)
+
+    if accountbyplanet == recomment.accountbyplanet or accountbyplanet.admin_level > 1:
+        print(1)
         recomment.delete()
         return JsonResponse({'success': True})
     else:
+        print(2)
         return JsonResponse({'success': False})
 
 
@@ -540,24 +550,99 @@ def planet_join_reject(request, planet_name, user_pk):
         return redirect('planets:main')
 
 # 게시글 신고 기능
-def post_report(request, planet_name, post_pk):
-    post = Post.objects.get(pk=post_pk)
-    if not Report.objects.filter(user=request.user, post=post):
-        Report.objects.create(user=request.user, post=post)
-        messages.info(request, '신고가 완료되었습니다.')
+@login_required
+def report(request, planet_name, report_category, pk):
+    planet = Planet.objects.get(name=planet_name)
+    user = request.user
+    accountbyplanet = Accountbyplanet.objects.get(planet=planet, user=user)
+    # method GET
+    if request.method == 'POST':
+        content = request.POST.get('report_content')
+
+        if report_category == 'post':
+            post = Post.objects.get(pk=pk)
+            if not Report.objects.filter(post=post, user=user):
+                Report.objects.create(post=post, content=content, user=user)
+                messages.info(request, '신고가 완료되었습니다.') 
+            else:
+                messages.warning(request, '이미 신고한 게시글입니다.')
+        
+        elif report_category == 'comment':
+            comment = Comment.objects.get(pk=pk)
+            if not Report.objects.filter(comment=comment, user=user):
+                Report.objects.create(comment=comment, content=content, user=user)
+                messages.info(request, '신고가 완료되었습니다.') 
+            else:
+                messages.warning(request, '이미 신고한 댓글입니다.')
+        
+        else:
+            recomment = Recomment.objects.get(pk=pk)
+            if not Report.objects.filter(recomment=recomment, user=user):
+                Report.objects.create(recomment=recomment, content=content, user=user)
+                messages.info(request, '신고가 완료되었습니다.') 
+            else:
+                messages.warning(request, '이미 신고한 댓글입니다.')
+
+        return redirect('planets:index', planet.name)
     
     else:
-        messages.info(request, '이미 신고한 게시글입니다. ')
+        if report_category == 'post':
+            post = Post.objects.get(pk=pk)
+            print(accountbyplanet, post.accountbyplanet)
+            if accountbyplanet == post.accountbyplanet:
+                messages.warning(request, '본인의 게시물은 신고할 수 없습니다. ')
+                return redirect('planets:index', planet.name)
+            else:
+                context = {
+                    'reported': post,
+                }
 
-    return redirect('planets:index', planet_name)
+        elif report_category == 'comment':
+            comment = Comment.objects.get(pk=pk)
+            if accountbyplanet == comment.accountbyplanet:
+                messages.warning(request, '본인의 댓글은 신고할 수 없습니다. ')
+                return redirect('planets:index', planet.name)
+            else:
+                context = {
+                    'reported': comment,
+                }
+
+        else:
+            recomment = Recomment.objects.get(pk=pk)
+            if accountbyplanet == recomment.accountbyplanet:
+                messages.warning(request, '본인의 대댓글은 신고할 수 없습니다. ')
+                return redirect('planets:index', planet.name)
+            else:
+                context = {
+                    'reported': recomment,
+                }
+
+        context['category'] = report_category
+        context['planet'] = planet
+        context['pk'] = pk
+
+        return render(request, 'planets/report.html', context)
+    
 
 def admin_report(request, planet_name):
     planet = Planet.objects.get(name=planet_name)
 
-    reports = Report.objects.values('post').annotate(Count('pk'))
+    post_reports = Report.objects.exclude(post__isnull=True)
+    comment_reports = Report.objects.exclude(comment__isnull=True)
+    recomment_reports = Report.objects.exclude(recomment__isnull=True)
+    
+    post_reports_count = Report.objects.exclude(post__isnull=True).values('post').annotate(Count('pk'))
+    comment_reports_count = Report.objects.exclude(comment__isnull=True).values('comment').annotate(Count('pk'))
+    recomment_reports_count = Report.objects.exclude(recomment__isnull=True).values('recomment').annotate(Count('pk'))
+    
     context = {
         'planet': planet,
-        'reports': reports,
+        'post_reports': post_reports,
+        'post_reports_count': post_reports_count,
+        'comment_reports': comment_reports,
+        'comment_reports_count': comment_reports_count,
+        'recomment_reports': recomment_reports,
+        'recomment_reports_count': recomment_reports_count,
     }
     return render(request, 'planets/admin_report.html', context)
 
