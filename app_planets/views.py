@@ -175,7 +175,7 @@ def planet_delete(request, planet_name):
 def planet_posts(request, planet_name):
     posts = Post.objects.filter(planet=Planet.objects.get(name=planet_name)).order_by('-pk')
     per_page = 5
-    page_number = request.GET.get('page')
+    page_number = request.POST.get('page')
     paginator = Paginator(posts, per_page)
 
     try:
@@ -645,6 +645,7 @@ def report(request, planet_name, report_category, pk):
         context['category'] = report_category
         context['planet'] = planet
         context['pk'] = pk
+        context['user'] = Accountbyplanet.objects.get(planet=planet, user=request.user)
 
         return render(request, 'planets/report.html', context)
     

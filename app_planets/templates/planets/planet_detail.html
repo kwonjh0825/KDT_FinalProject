@@ -122,9 +122,7 @@
             </form>
           </li>
           <li>
-            <a href="{% url 'planets:report' planet.name 'post' post.pk %}" class="block px-4 py-2 hover:bg-gray-100" id="report-post-url">
-              <button type="button" id="report-post-button">게시글 신고</button>
-            </a>
+            <a href="{% url 'planets:report' planet.name 'post' post.pk %}" class="block px-4 py-2 hover:bg-gray-100" id="report-post-url">게시글 신고</a>
           </li>
           <li>
             <form id="update-post-form" class="block px-4 py-2 hover:bg-gray-100" data-planet-name="{{ planet.name }}" data-post-pk="{{ post.pk }}">

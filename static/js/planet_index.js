@@ -17,9 +17,10 @@ function loadPosts(page) {
 
   $.ajax({
     url: '/planets/' + planetName + '/posts/',
-    type: 'GET',
+    type: 'POST',
     data: {
-        'page': page
+        'page': page,
+        'csrfmiddlewaretoken': csrftoken,
     },
     dataType: 'json',
     success: function(data) {
