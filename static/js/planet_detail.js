@@ -59,6 +59,8 @@ function createcommentContainer(profile_image_url, nickname, created_time, conte
   newCommentContainer.querySelector('#report-comment-button').textContent = "댓글 신고";
   newCommentContainer.querySelector('#delete-post-form').id = "delete-comment-form";
   newCommentContainer.querySelector('#delete-comment-form').setAttribute("data-comment-pk", comment_pk);
+  newCommentContainer.querySelector('#report-post-url').href = `/planets/${planetName}/report/comment/${comment_pk}/`
+  newCommentContainer.querySelector('#report-post-url').id = "report-comment-url"
   if (requestuser_nickname == nickname) {
     newCommentContainer.querySelector('#dropdown-delete').style.display = 'block';
     newCommentContainer.querySelector('#delete-post-button').id = "delete-comment-button";
@@ -111,6 +113,8 @@ function createRecommentContainer(profile_image_url, nickname, created_time, con
   newRecommentContainer.querySelector('#delete-post-form').id = "delete-recomment-form";
   newRecommentContainer.querySelector('#delete-recomment-form').setAttribute("data-comment-pk", comment_pk);
   newRecommentContainer.querySelector('#delete-recomment-form').setAttribute("data-recomment-pk", recomment_pk);
+  newRecommentContainer.querySelector('#report-post-url').href = `/planets/${planetName}/report/recomment/${recomment_pk}/`
+  newRecommentContainer.querySelector('#report-post-url').id = "report-recomment-url"
   if (requestuser_nickname == nickname) {
     newRecommentContainer.querySelector('#dropdown-delete').style.display = 'block';
     newRecommentContainer.querySelector('#delete-post-button').id = "delete-recomment-button";
