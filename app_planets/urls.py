@@ -18,6 +18,7 @@ urlpatterns = [
     path('planets/<str:planet_name>/contract/', views.planet_contract, name='planet_contract'),
     path('planets/<str:planet_name>/delete/', views.planet_delete, name='planet_delete'),
     path('planets/<str:planet_name>/', views.index, name='index'),
+    path('planets/<str:planet_name>/index_list/', views.index_list, name='index_list'),
     path('planets/<str:planet_name>/posts/', views.planet_posts, name='planet_posts'),
     path('planets/<str:planet_name>/create/', views.post_create, name='post_create'),
     path('planets/<str:planet_name>/<int:post_pk>/update/', views.post_create, name='post_create'),
