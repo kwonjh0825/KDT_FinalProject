@@ -20,11 +20,28 @@ urlpatterns = [
     path('planets/<str:planet_name>/<int:post_pk>/update/', views.post_create, name='post_create'),
     path('planets/<str:planet_name>/<int:post_pk>/', views.post_detail, name='post_detail'),
     path('planets/<str:planet_name>/<int:post_pk>/comments/', views.detail_comments, name='detail_comments'),
-    path('planets/<str:planet_name>/<int:post_pk>/delete/', views.post_delete, name='post_delete'),
+    
+    # 원래 작성되어 있던 post delete url
+    # path('planets/<str:planet_name>/<int:post_pk>/delete/', views.post_delete, name='post_delete'),
+    # 새로 작성한 post delete url
+    path('planets/<str:planet_name>/post/<int:post_pk>/delete/', views.post_delete, name='post_delete'),
+
     path('planets/<str:planet_name>/<int:post_pk>/create/', views.comment_create, name='comment_create'),
-    path('planets/<str:planet_name>/<int:post_pk>/<int:comment_pk>/delete/', views.comment_delete, name='comment_delete'),
+
+    path('planets/<str:planet_name>/<int:post_pk>/<int:comment_pk>/update/', views.comment_create, name='comment_create'),
+    # 원래 작성되어 있던 comment delete url
+    # path('planets/<str:planet_name>/<int:post_pk>/<int:comment_pk>/delete/', views.comment_delete, name='comment_delete'),
+    # 새로 작성한 comment delete url
+    path('planets/<str:planet_name>/comment/<int:comment_pk>/delete/', views.comment_delete, name='comment_delete'),
     path('planets/<str:planet_name>/<int:post_pk>/<int:comment_pk>/create/', views.recomment_create, name='recomment_create'),
-    path('planets/<str:planet_name>/<int:post_pk>/<int:comment_pk>/<int:recomment_pk>/delete/', views.recomment_delete, name='recomment_delete'),
+    path('planets/<str:planet_name>/<int:post_pk>/<int:comment_pk>/<int:recomment_pk>/update/', views.recomment_create, name='recomment_create'),
+    # 원래 작성되어 있던 recomment delete url
+    # path('planets/<str:planet_name>/<int:post_pk>/<int:comment_pk>/<int:recomment_pk>/delete/', views.recomment_delete, name='recomment_delete'),
+    # 새로 작성한 recomment delete url
+    path('planets/<str:planet_name>/recomment/<int:recomment_pk>/delete/', views.recomment_delete, name='recomment_delete'),
+    path('planets/<str:planet_name>/tags/', views.tags_list, name='tags_list'),
+    path('planets/<str:planet_name>/tags/<str:tag_name>/', views.post_tag, name='post_tag'),
+
     # 행성 수정 페이지
     path('planets/<str:planet_name>/admin/', views.planet_admin, name='planet_admin'),
     path('planets/<str:planet_name>/admin/tos/', views.planet_tos_admin, name='planet_tos_admin'),
@@ -38,12 +55,17 @@ urlpatterns = [
     # 행성별 프로필
     path('planets/<str:planet_name>/profile/<str:nickname>/', accounts_views.planet_profile, name='planet_profile'),
     path('planets/<str:planet_name>/profile/<str:nickname>/update/', accounts_views.planet_profile_update, name='planet_profile_update'),
-    # 게시글 신고 기능
-    path('planets/<str:planet_name>/report/<int:post_pk>/', views.post_report, name='post_report'),
+    # 게시글, 댓글, 대댓글 신고 기능
+    path('planets/<str:planet_name>/report/<str:report_category>/<int:pk>/', views.report, name='report'),
     # 리스트 필터 기능
     path('planets/<str:category>/filter/', views.filter, name='filter'),
     # 팔로잉
     path('planets/<str:planet_name>/follow/<int:user_pk>/', views.following, name='following'),
     # 투표
     # path('planets/post/<int:post_pk>/<str:vote_title>/', views.vote, name='vote'),
+    # 게시글 감정표현 
+    path('planets/<str:planet_name>/posts/<int:post_pk>/emotes/<str:emotion>', views.post_emote, name='post_emote'),
+    # 댓글 감정 표현
+    path('planets/<str:planet_name>/posts/<int:post_pk>/comments/<int:comment_pk>/emotes/<str:emotion>', views.comment_emote, name='comment_emote'),
+
 ]

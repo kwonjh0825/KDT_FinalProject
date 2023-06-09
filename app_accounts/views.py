@@ -84,7 +84,7 @@ def change_password(request):
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
-            return redirect('posts:index')
+            return redirect('planets:main')
     else:
         form = PasswordChangeForm(request.user)
     context = {
@@ -267,18 +267,21 @@ def planet_profile(request, planet_name, nickname):
 @login_required
 def planet_profile_update(request, planet_name, nickname):
     planet = Planet.objects.get(name=planet_name)
-    user_by_planet = Accountbyplanet.objects.filter(planet=planet, nickname=nickname)
+    user_by_planet = Accountbyplanet.objects.get(planet=planet, nickname=nickname)
 
     if user_by_planet.user == request.user:
         if request.method == 'POST':
-            planet_user_update_form = AccountbyplanetForm(request.POST, instance=user_by_planet)
+            planet_user_update_form = AccountbyplanetForm(request.POST, request.FILES, instance=user_by_planet)
             if planet_user_update_form.is_valid():
                 planet_user_update_form.save()
-                return redirect('accounts:planet_profile', planet_name, nickname)
+                to_be_nickname = Accountbyplanet.objects.get(planet=planet,user=request.user.pk).nickname
+                return redirect('planets:planet_profile', planet_name , to_be_nickname)
         else:
             planet_user_update_form = AccountbyplanetForm(instance=user_by_planet)
 
     context = {
+        'planet':planet,
+        'user_by_planet':user_by_planet,
         'planet_user_update_form': planet_user_update_form,
     }
     return render(request, 'accounts/planet_update.html', context)

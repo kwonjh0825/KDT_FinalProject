@@ -16,17 +16,6 @@ function createpostContainer(
     ? profile_image_url
     : '/static/img/no_profile_img.png';
   newPostContainer.querySelector('#post-nickname').textContent = nickname;
-  newPostContainer.querySelector('#post-createdtime p').textContent =
-    created_time;
-  newPostContainer.querySelector('#post-content').textContent = content;
-  newPostContainer
-    .querySelector('#delete-post-form')
-    .setAttribute('data-post-pk', post_pk);
-  newPostContainer
-    .querySelector('#update-post-form')
-    .setAttribute('data-post-pk', post_pk);
-  newPostContainer.querySelector('#post-detailpage').href =
-    '/planets/' + planetName + '/' + post_pk + '/';
 
   // if (votetopic) {
   //   console.log('--------------------------------------ssssssssssss');
@@ -72,13 +61,25 @@ function createpostContainer(
     });
   }
 
+  newPostContainer.querySelector('#post-nickname').href = "/planets/" + planetName + "/profile/" + nickname + "/";
+  newPostContainer.querySelector('#post-createdtime p').textContent = created_time;
+  newPostContainer.querySelector('#post-content').textContent = content;
+  newPostContainer.querySelector('#delete-post-form').setAttribute("data-post-pk", post_pk);
+  newPostContainer.querySelector('#update-post-form').setAttribute("data-post-pk", post_pk);
+  newPostContainer.querySelector('a[href^="/planets/music/report/post/"]').href = "/planets/" + planetName + "/report/post/" + post_pk + "/";
+  newPostContainer.querySelector('#post-detailpage').href = "/planets/" + planetName + "/" + post_pk + "/";
+
   if (tags) {
     tags.forEach(function (tag) {
       var tagContainer = newPostContainer.querySelector('#post-tags');
       var newTag = document.createElement('span');
-      newTag.classList.add('text-[#bcbdbf]');
-      newTag.id = 'tag';
-      newTag.textContent = '#' + tag;
+
+      newTag.classList.add("text-[#bcbdbf]");
+      newTag.id = "tag";
+      var newA = document.createElement('a');
+      newA.href = "/planets/" + planetName + "/tags/" + tag + "/";
+      newA.textContent = "#" + tag;
+      newTag.appendChild(newA);
       tagContainer.appendChild(newTag);
     });
   }
@@ -141,7 +142,9 @@ document.addEventListener('DOMContentLoaded', function () {
       var postContainer = deleteButton.closest('#container');
       var planetName = deleteForm.dataset.planetName;
       var postPk = deleteForm.dataset.postPk;
-      var url = '/planets/' + planetName + '/' + postPk + '/delete/';
+
+      var url = "/planets/" + planetName + "/post/" + postPk + "/delete/";
+      
 
       axios({
         url: url,
@@ -180,7 +183,33 @@ document.addEventListener('DOMContentLoaded', function () {
         headers: {
           'X-CSRFToken': csrftoken,
           'Content-Type': 'multipart/form-data',
-        },
+        }
+      })
+      .then(function(response) {
+        if (response.data.success) {
+          var formHtml = response.data.form_html;
+          var formContainer = document.createElement('div');
+          formContainer.innerHTML = formHtml;
+          formContainer.querySelector('label[for="id_content"]').innerHTML = '<p class="text-base text-white">내용</p>';
+          formContainer.querySelector('label[for="id_image"]').innerHTML = '<p class="text-base text-white">이미지</p>';
+          formContainer.querySelector('label[for="id_tags"]').innerHTML = '<p class="text-base text-white">태그</p>';
+          var formElement = document.createElement('form');
+          formElement.id = "edit-post-form";
+          formElement.setAttribute("data-planet-name", planetName);
+          formElement.setAttribute("data-post-pk", postPk);
+          formElement.appendChild(formContainer);
+          var submitButton = document.createElement('button');
+          submitButton.id = "edit-post-button";
+          submitButton.classList.add('chatting-create-btn', 'bg-[#bcbdbf]', 'mx-auto');
+          submitButton.textContent = '게시글 수정';
+          submitButton.type = 'submit';
+          formContainer.append(submitButton);
+          postContainer.querySelector('#section').style.display = 'none';
+          postContainer.append(formElement);
+        } else {
+          console.error('Post deletion failed.');
+        }
+
       })
         .then(function (response) {
           if (response.data.success) {

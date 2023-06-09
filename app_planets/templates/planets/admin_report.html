@@ -6,17 +6,76 @@
 {% block content %}
   
   <h1>게시글 신고 관리</h1>
-  <div>
-  {% for report in reports %}
-    <div id="report-form-{{report.post}}">
-      게시글 번호: {{report.post}},
-      신고 수: {{report.pk__count}}
-      <form class="delete-post-form" data-post-pk="{{report.post}}" data-planet-name="{{planet.name}}">
-        {% csrf_token %}
-        <input type="submit" value="게시글 삭제">
-      </form>
-    </div>
-  {% endfor %}
+  <hr>
+  <h2>게시글 신고 현황</h2>
+  <div id="report-post-list">
+    {% for report_count in post_reports_count %}
+      <div id="report-postform-{{report_count.post}}">
+        <p>게시글 번호: {{report_count.post}}, 신고 수: {{report_count.pk__count}}</p>
+        <div>
+          <p>신고 내용</p>
+          {% for report in post_reports %}
+            {% if report.post.pk == report_count.post %}
+              <p>{{report.content}}</p>
+            {% endif %}
+          {% endfor %}
+        </div>
+        <form class="delete-post-form" data-post-pk="{{report_count.post}}" data-planet-name="{{planet.name}}">
+          {% csrf_token %}
+          <input type="submit" value="게시글 삭제">
+        </form>
+      </div>
+    {% empty %}
+      <p>신고된 내역이 없습니다.</p>
+    {% endfor %}
+  </div>
+  <hr>
+  <h2>댓글 신고 현황</h2>
+  <div id="report-comment-list">
+    {% for report_count in comment_reports_count %}
+      <div id="report-commentform-{{report_count.comment}}">
+        <p>댓글 번호: {{report_count.comment}}, 신고 수: {{report_count.pk__count}}</p>
+        <div>
+          <p>신고 내용</p>
+          {% for report in comment_reports %}
+            {% if report.comment.pk == report_count.comment %}
+              <p>{{report.content}}</p>
+            {% endif %}
+          {% endfor %}
+        </div>
+        <form class="delete-comment-form" data-comment-pk="{{report_count.comment}}" data-planet-name="{{planet.name}}">
+          {% csrf_token %}
+          <input type="submit" value="댓글 삭제">
+        </form>
+      </div>
+    {% empty %}
+      <p>신고된 내역이 없습니다.</p>
+    {% endfor %}
+  </div>
+  <hr>
+  <h2>대댓글 신고 현황</h2>
+  <div id="report-recomment-list">
+    {% for report_count in recomment_reports_count %}
+      <div id="report-recommentform-{{report_count.recomment}}">
+        <p>대댓글 번호: {{report_count.recomment}}, 신고 수: {{report_count.pk__count}}</p>
+        <div>
+          <p>신고 내용</p>
+          <ul>
+          {% for report in recomment_reports %}
+            {% if report.recomment.pk == report_count.recomment %}
+              <li>{{report.content}}</li>
+            {% endif %}
+          {% endfor %}
+          </ul>
+        </div>
+        <form class="delete-recomment-form" data-recomment-pk="{{report_count.recomment}}" data-planet-name="{{planet.name}}">
+          {% csrf_token %}
+          <input type="submit" value="대댓글 삭제">
+        </form>
+      </div>
+    {% empty %}
+     <p>신고된 내역이 없습니다. </p>
+    {% endfor %}
   </div>
   <script src="{% static 'js/admin_report.js' %}"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

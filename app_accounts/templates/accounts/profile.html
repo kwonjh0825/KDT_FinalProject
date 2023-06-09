@@ -6,7 +6,7 @@
 {% endblock title %}
 
 {% block content %}
-<div class="flex">
+<div class="flex mt-5">
     <a href="javascript:history.back()" class="flex items-center pl-5  text-[#ffd951] " style="height: 50px;">
         <span class="material-symbols-outlined">
             chevron_left
@@ -14,51 +14,80 @@
         Back
     </a>
 </div>
-<div class="container mx-auto flex justify-center h-screen">
-    <div class="w-full max-w-lg pt-10">
-        <p class="text-4xl mb-3 pb-4 font-bold">My profile</p>
-        <hr class="border-t-2 border-yellow-300 mb-6">
+<div class="container mx-auto flex justify-center">
+    <div class="w-full max-w-xl mt-10 text-center grid gap-y-4">
+        {% comment %} <p class="text-4xl mb-3 pb-4 font-bold">Catsmos profile</p>
+        <hr class="border-t-2 border-yellow-300 mb-6"> {% endcomment %}
         <!-- 개인정보 -->
-        <table class="my-3 ml-5">
-            <tr>
-                <td>
-                    <div class="border-r-2 pr-4 mr-4">
-                        <p>{{ user.username }}</p>
-                        <p class="text-slate-500">{{ user.email }}</p>
-                    </div>
-                </td>
-                <td>
-                    <p class="">Joined</p>
-                    <p class="text-slate-500">{{ user.created_at|date:'m d, Y' }}</p>
-                </td>
-            </tr>
-        </table>
-        
+        <p class="text-4xl">ID : {{ user.username }}</p>
+        <p class="text-4xl">E-mail : {{ user.email }}</p>
+        <p class=""></p>
+        <p class="text-sm text-right  ">Joined : {{ user.created_at|date:'m d, Y' }}</p>
+
+
             
-        
         <!-- 개수 -->
-        <div class="my-4 ml-5">
-            <p class="text-3xl">Planet Lists</p>
+    </div>
+</div>
+
+<hr class="border-t-2 border-yellow-300 my-6 w-[900px] mx-auto">
+
+<div class="container mx-auto max-w-4xl my-8">
+    <div class="my-4 ml-5">
+        <p class="text-3xl">Favorite Lists</p>
+        <div class="grid grid-cols-2 ">
             {% for user_by_planet in user_by_planets %}
-            <a type="button" href="{% url 'planets:planet_profile' planet_name=user_by_planet.planet.name nickname=user_by_planet.nickname %}" class="pl-5 py-2 my-3 rounded-lg bg-[#181A20] hover:bg-[161a24] max-w-[400px] flex gap-4 relative">
-                {% if user_by_planet.profile_image %}
-                <img src="{{ user_by_planet.profile_image.url }}" alt="post_image" class="inline-block rounded-md" width="50" height="50">
-                {% else %}
-                <img src="{% static 'img/profile.png' %}" alt="no_image" class="inline-block rounded-md" width="50" height="50">
-                {% endif %}
-                <div>
-                    <p class="text-slate-200">{{ user_by_planet.planet.name }}</p>
-                    <p class="text-slate-400">{{ user_by_planet.nickname }}</p>
-                </div>
-                <p class="absolute right-2 bottom-2 text-slate-400 text-xs">{{ user_by_planet.planet.created_at|date:'m d, Y' }}</p>
-            </a>
-        
+            {% comment %} <div class="col">
+                <a type="button" href="{% url 'planets:index' planet_name=user_by_planet.planet.name %}" class="pl-5 py-2 my-3 rounded-lg bg-[#181A20] hover:bg-[161a24] w-[400px] flex gap-4 relative">
+                    {% if user_by_planet.profile_image %}
+                    <img src="{{ user_by_planet.profile_image.url }}" alt="post_image" class="inline-block rounded-md" width="50" height="50">
+                    {% else %}
+                    <img src="{% static 'img/profile.png' %}" alt="no_image" class="inline-block rounded-md" width="50" height="50">
+                    {% endif %}
+                    <div>
+                        <p class="text-slate-200">{{ user_by_planet.planet.name }}</p>
+                        <p class="text-slate-400">{{ user_by_planet.nickname }}</p>
+                    </div>
+                    <p class="absolute right-2 bottom-2 text-slate-400 text-xs">{{ user_by_planet.planet.created_at|date:'m d, Y' }}</p>
+                </a>
+            </div> {% endcomment %}
             {% endfor %}
         </div>
-        
     </div>
-    
+</div>
+<hr class="border-t-2 border-yellow-300 my-6 w-[900px] mx-auto">
 
-    
+<div class="container mx-auto max-w-[1400px] my-8">
+    <div class="my-4 ml-5">
+        <p class="text-3xl mb-5">Planet Lists</p>
+        <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-10">
+            {% for user_by_planet in user_by_planets %}
+            <div class="block mx-auto max-w-1/2 min-w-1/4 col bg-white p-5 border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                <div class="text-bold text-2xl"> 🪐  {{ user_by_planet.planet.name }}</div>
+                <hr class="border-t-2 border-yellow-300 my-3 mx-auto">
+                {% if user_by_planet.background_image %}
+                <img class="min-w-[380px]" style="" src="{{ user_by_planet.background_image.url }}" alt="#">
+                {% else %}
+                <img class="" style="" src="https://www.macmillandictionary.com/external/slideshow/thumb/Grey_thumb.png" alt="no_image">
+                {% endif %}
+                <div class="pl-5 py-2 my-3 rounded-lg bg-[#181A20] min-w-[390px] flex gap-4 relative">
+                    {% if user_by_planet.profile_image %}
+                    <img src="{{ user_by_planet.profile_image.url }}" alt="post_image" class="inline-block rounded-md" width="50" height="50">
+                    {% else %}
+                    <img src="{% static 'img/profile.png' %}" alt="no_image" class="inline-block rounded-md" width="50" height="50">
+                    {% endif %}
+                    <div>
+                        <p class="text-slate-400">Nickname : <br> <span class="text-white text-xl"> {{ user_by_planet.nickname }}</span></p>
+                    </div>
+                    <p class="absolute right-2 bottom-2 text-slate-400 text-xs">{{ user_by_planet.planet.created_at|date:'m d, Y' }}</p>
+                </div>
+                <div class="text-xs flex gap-5 justify-end text-gray-400 ">
+                    <a class="hover:text-gray-200" type="button" href="{% url 'planets:index' planet_name=user_by_planet.planet.name %}">행성으로가기</a>
+                    <a class="hover:text-gray-200" type="button" href="{% url 'planets:planet_profile' planet_name=user_by_planet.planet.name nickname=user_by_planet.nickname %}">프로필로가기</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 </div>
     {% endblock content %}
