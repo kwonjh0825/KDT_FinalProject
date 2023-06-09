@@ -213,6 +213,28 @@ def index(request, planet_name):
     return render(request, 'planets/index.html', context)
 
 
+def index_list(request, planet_name):
+    planet = Planet.objects.get(name=planet_name)
+    user = request.user
+    user_by_planets_star = Accountbyplanet.objects.filter(user=user, star=1)
+    user_by_planets_not_star = Accountbyplanet.objects.filter(user=user, star=0)
+    
+    
+    # 행성에 계정이 없는 경우 또는 가입 승인 대기 중인 경우
+    if not request.user.is_authenticated or not Accountbyplanet.objects.filter(planet=planet, user=request.user).exists() or Accountbyplanet.objects.get(planet=planet, user=request.user).is_confirmed == False: 
+        return redirect('planets:main')
+
+    context = {
+        'planet': planet,
+        'user_by_planets_star' : user_by_planets_star,
+        'user_by_planets_not_star':user_by_planets_not_star,
+        'first_post': Post.objects.filter(planet=planet).first(),
+        'user': Accountbyplanet.objects.get(planet=planet, user=request.user),
+    }
+    return render(request, 'planets/index_list.html', context)
+
+
+
 # 행성 삭제
 @login_required
 def planet_delete(request, planet_name):
