@@ -851,6 +851,7 @@ def following(request, planet_name, user_pk):
         return JsonResponse(context)
     return redirect('planets:index', planet_name)
 
+
 # 투표
 @login_required
 def vote(request, post_pk, vote_title):
@@ -867,6 +868,7 @@ def vote(request, post_pk, vote_title):
         vote = Vote(votetopic=vote_topic, voter=user)
         vote.save()
         return redirect('planets:planet_posts', post.planet.name)
+
 
 # 비동기 post emote
 @login_required
