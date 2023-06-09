@@ -42,6 +42,8 @@ class Accountbyplanet(models.Model):
     # 행성 관리자 권한 설정
     admin_category = ((1, 'user'), (2, 'staff'), (3, 'admin'))
     admin_level = models.IntegerField(choices=admin_category, default=1)
+    # 즐겨찾기
+    star = models.BooleanField(default=False)
 
 
     # accountbyplanet 삭제시 image file 삭제
@@ -71,4 +73,9 @@ class Accountbyplanet(models.Model):
             ('PNG', 'PNG'),
             ('GIF', 'GIF'),
         ]
+
+
+class Memobyplanet(models.Model):
+    memo = models.TextField()
+    accountbyplanet = models.ForeignKey(Accountbyplanet, on_delete=models.CASCADE, related_name='accountbyplanet')
 

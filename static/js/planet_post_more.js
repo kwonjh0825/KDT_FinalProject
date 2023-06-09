@@ -21,11 +21,9 @@ function createpostContainer(
 
   // // 투표 주제 렌더링
   if (votetopics && votetopics.length > 0) {
-    console.log('투표');
-    console.log(votetopics);
     votetopics.forEach(function (votetopic, index) {
+
       if (votetopic.title.trim() !== '') {
-        console.log(votetopic.title);
         var voteTopicContainer =
           newPostContainer.querySelector('#post-votetopics');
         var newVotetopic = document.createElement('button'); // 버튼 엘리먼트로 변경
@@ -156,6 +154,7 @@ function createpostContainer(
   newPostContainer.querySelector('#post-createdtime p').textContent =
     created_time;
   newPostContainer.querySelector('#post-content').textContent = content;
+
   newPostContainer
     .querySelector('#delete-post-form')
     .setAttribute('data-post-pk', post_pk);
@@ -167,6 +166,7 @@ function createpostContainer(
   // ).href = '/planets/' + planetName + '/report/post/' + post_pk + '/';
   newPostContainer.querySelector('#post-detailpage').href =
     '/planets/' + planetName + '/' + post_pk + '/';
+
 
   if (tags) {
     tags.forEach(function (tag) {
@@ -190,8 +190,9 @@ function createpostContainer(
     newImage.classList.add('rounded-lg');
     imageContainer.append(newImage);
   }
-  if (user == requestuser) {
+  if (nickname == requestuser) {
     newPostContainer.querySelector('#dropdown-delete').style.display = 'block';
+    newPostContainer.querySelector('#dropdown-update').style.display = 'block';
   }
   return newPostContainer;
 }
@@ -283,6 +284,7 @@ document.addEventListener('DOMContentLoaded', function () {
           'Content-Type': 'multipart/form-data',
         },
       })
+
         .then(function (response) {
           if (response.data.success) {
             var formHtml = response.data.form_html;
@@ -339,6 +341,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .catch(function (error) {
           console.error('AJAX request failed:', error);
         });
+
     }
 
     // 게시글 수정 처리

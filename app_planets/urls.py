@@ -9,6 +9,9 @@ urlpatterns = [
     path('planets/create/', views.planet_create, name='planet_create'),
     path('planets/search/', views.search, name='search'),
     path('planets/<str:planet_name>/join/', views.planet_join, name='planet_join'),
+    # 마이 플래닛 필터 기능
+    path('planets/my_planet_filter/', views.my_planet_filter, name='my_planet_filter'),
+
     # private 조인
     path('planets/invite_create/', views.invite_create, name='invite_create'),
     path('planets/invite_check/<str:invite_code>/', views.invite_check, name='invite_check'),
@@ -67,5 +70,8 @@ urlpatterns = [
     path('planets/<str:planet_name>/posts/<int:post_pk>/emotes/<str:emotion>', views.post_emote, name='post_emote'),
     # 댓글 감정 표현
     path('planets/<str:planet_name>/posts/<int:post_pk>/comments/<int:comment_pk>/emotes/<str:emotion>', views.comment_emote, name='comment_emote'),
-
+    # 행성 별 메모
+    path('planets/<str:planet_name>/memo/', views.planet_memo, name='planet_memo'),
+    # 행성 즐겨찾기
+    path('planets/<str:planet_name>/star/', views.planet_star, name='planet_star'),
 ]

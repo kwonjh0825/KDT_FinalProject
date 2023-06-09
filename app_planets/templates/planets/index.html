@@ -62,6 +62,8 @@
           </a>
           <div class="mb-5" id="post-tags">
           </div>
+          <div class="mb-5" id="post-image">
+          </div>
           
           <div class="mb-5 rounded-md border p-1" id="post-votetopics"></div>
 
@@ -101,9 +103,9 @@
             </form>
           </li>
           <li>
-            <a href="{% url 'planets:report' planet.name 'post' 95 %}" class="block px-4 py-2 hover:bg-gray-100">게시글 신고</a>
+            <a id="post-report" href="{% url 'planets:report' planet.name 'post' 0 %}" class="block px-4 py-2 hover:bg-gray-100">게시글 신고</a>
           </li>
-          <li>
+          <li id="dropdown-update" style="display:none;">
             <form id="update-post-form" class="block px-4 py-2 hover:bg-gray-100" data-planet-name="{{ planet.name }}" data-post-pk="{{ post.pk }}">
               {% csrf_token %}
               <button type="submit" id="update-post-button">게시글 수정</button>
