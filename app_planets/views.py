@@ -7,6 +7,7 @@ from django.template.loader import render_to_string
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
+from django.contrib.auth import get_user_model
 from django.http import JsonResponse
 from django.contrib import messages
 from django.db.models import Count
@@ -33,13 +34,55 @@ def main(request):
 
 
 # 행성 리스트 페이지
+# def planet_list(request):
+#     user = request.user
+#     planets = Planet.objects.filter(is_public='Public')
+#     user_planets = Accountbyplanet.objects.filter(user=user, planet__in=planets)
+#     joined_planets = [user_planet.planet for user_planet in user_planets]
+    
+#     context = {
+#         'planets':planets,
+#         'joined_planets':joined_planets,
+#     }
+#     return render(request, 'planets/planet_list.html', context)
+    
 def planet_list(request):
     planets = Planet.objects.filter(is_public='Public')
+    user = request.user
+    user_planets = Accountbyplanet.objects.filter(user=user, planet__in=planets)
+    joined_planets = [user_planet.planet for user_planet in user_planets]
+    joined_planet_list = [joined_planet.name for joined_planet in joined_planets]
+    
     context = {
-        'planets':planets
+        'planets': planets,
+        'joined_planet_list': joined_planet_list,
     }
     return render(request, 'planets/planet_list.html', context)
 
+# 조회 기능
+def filter(request, category):
+    planets = Planet.objects.filter(category=category).order_by('-created_at')
+    user = request.user
+    user_planets = Accountbyplanet.objects.filter(user=user, planet__in=planets)
+    joined_planets = [user_planet.planet for user_planet in user_planets]
+    joined_planet_list = [joined_planet.name for joined_planet in joined_planets]
+    context = {
+        'planets': planets,
+        'joined_planet_list': joined_planet_list,
+    }
+    return render(request, 'planets/planet_list.html', context)
+
+def my_planet_filter(request):
+    user = request.user
+    user_planets = Accountbyplanet.objects.filter(user=user, planet__is_public='Public')
+    joined_planets = [user_planet.planet for user_planet in user_planets]
+    joined_planet_list = [joined_planet.name for joined_planet in joined_planets]
+
+    context = {
+        'planets': joined_planets,
+        'joined_planet_list': joined_planet_list
+    }
+    return render(request, 'planets/planet_list.html', context)
 
 # 행성 생성 페이지
 @login_required
@@ -733,15 +776,6 @@ def admin_member(request, planet_name):
     else:
         messages.warning(request, '매니저만 접근 가능합니다.')
         return redirect('planets:main')
-
-
-# 조회 기능
-def filter(request, category):
-    planets = Planet.objects.filter(category=category).order_by('-created_at')
-    context = {
-        'planets': planets,
-    }
-    return render(request, 'planets/planet_list.html', context)
 
 @login_required
 def invite_create(request):

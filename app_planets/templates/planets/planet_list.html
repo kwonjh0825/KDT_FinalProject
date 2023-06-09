@@ -11,6 +11,16 @@
 
 {% block content %}
   <div class="max-w-[2000px] mx-auto mt-12">
+    <!-- main content bar -->
+    <div class="md:hidden w-full flex justify-between planet-main_bar bg-[#191b22] border-b-2 border-[#393f4f] py-2 gap-20 z-[10]">
+      <div class="flex w-full">
+        <div class="w-1/4 planet-main_bar-list"><button id="btn1" class="ms-5 text-xs font-semibold">행성 생성하기</button></div>
+        <div class="w-1/4 planet-main_bar-list"><button id="btn2" class="ms-5 text-xs font-semibold">행성 종류</button></div>
+        <div class="w-1/4 planet-main_bar-list"><button id="btn3"  class="ms-5 text-xs font-semibold">초대코드 입력</button></div>
+        <div class="w-1/4 planet-main_bar-list"><button id="btn4"  class="ms-5 text-xs font-semibold">행성 둘러보기</button></div>
+      </div>
+    </div>
+
     <div class="flex flex-col">
       <div class="flex flex-col justify-center items-center pt-32 p-20">
         <p class="text-4xl text-[#ffffff]">"Create your own world"</p>
@@ -20,12 +30,65 @@
       </div>
     </div>
 
+    <div class="mb-auto" style="overflow-y: auto;">
+      <!-- Main modal -->
+      <div id="defaultModal2" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative w-full max-w-2xl max-h-full">
+          <!-- Modal content -->
+          <div class="relative bg-[#282c37] rounded-lg shadow">
+            <!-- Modal header -->
+            <div class="flex items-start justify-between p-4 bg-[#282c37] border-b border-yellow-300 rounded-t">
+              <h3 class="text-lg mt-1 font-semibold text-white">
+                초대 코드 입력
+              </h3>
+              <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-hide="defaultModal2">
+                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                <span class="sr-only">Close modal</span>
+              </button>
+            </div>
+            <!-- Modal body -->
+            <div id="inviteModal">
+              <form id="inviteForm" method="post"> 
+                {% csrf_token %} 
+                <div class="flex flex-col p-10">
+                  <div class="flex flex-col w-full">
+                    <label for="last_name" class="block text-base text-slate-300 mb-2">초대코드</label>
+                    <input type="text" class="border-[#bcbdbf] rounded-md bg-transparent text-white focus:ring-[#ffc800] focus:border-[#ffc800] w-full" name="user_input">
+                  </div>
+                  <p id="errorText" class="hidden">Invitation code is invalid.</p>
+
+                  <button type="submit" class="button-invite bg-[#bcbdbf] mx-auto mt-10" style="text-align: center;">
+                    <p>입력하기</p>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
     <!-- 좌측 사이드바 -->
     <div class="flex justify-center flex-row mt-10 me-10">
       <div class="hidden md:block md:w-1/4 pe-10 me-10 pt-20 ps-5">
-        <p class="text-2xl border-b-2 border-[#393f4f] pt-3 mb-3">행성 종류</p>
-        <p class="text-sm pb-3 mb-5">관심있는 종류의 행성들을 만나보세요.</p>
+
+        <p class="text-2xl border-b-2 border-[#393f4f] pt-3 mb-3">행성 생성하기</p>
+        <p class="text-sm pb-3 mb-5">행성을 직접 만들어보세요.</p>
         <div class="p-3 rounded-md hover:bg-[#ffd951]" id="planet-list-button">
+          <a class="text-x" href="{% url 'planets:planet_create' %}">
+            <p class="text-xl">행성 만들기</p>
+          </a>
+        </div>
+
+        <p class="text-2xl border-b-2 border-[#393f4f] mt-20 pt-3 mb-3">행성 종류</p>
+        <p class="text-sm pb-3 mb-5">관심있는 종류의 행성들을 만나보세요.</p>
+        <div class="p-3 rounded-md hover:bg-[#ffd951]">
+          <a class="text-x" href="{% url 'planets:my_planet_filter'%}">
+            <p class="text-xl">내가 가입한 행성</p>
+          </a>
+        </div>
+        <div class="p-3 rounded-md hover:bg-[#ffd951]">
           <a class="text-x" href="{% url 'planets:planet_list' %}">
             <p class="text-xl">모든 행성</p>
           </a>
@@ -46,7 +109,7 @@
           </a>
         </div>
         <div class="p-3 rounded-md hover:bg-[#ffd951]" id="sports-button">
-          <a class="text-xl" href="{% url 'planets:filter' 'sports'%}">
+          <a class="text-xl" href="{% url 'planets:filter' 'Sports'%}">
             <p class="text-xl">Sports</p>
           </a>
         </div>
@@ -60,12 +123,15 @@
             <p class="text-xl">Hobby</p>
           </a>
         </div>
+
         <p class="text-2xl mt-20 border-b-2 border-[#393f4f] pt-3 mb-3">초대 코드 입력</p>
         <p class="text-sm mb-5">전송받은 초대코드를 입력하고 행성에 참여하세요.</p>
-        <div class="p-3 rounded-md hover:bg-[#ffd951]">
-          <a class="text-xl" href="#">
-            <p class="text-xl">초대 코드 입력하기</p>
-          </a>
+        <div class="p-3 rounded-md">
+          <div class="p-3">
+            <button id="modalButton" data-modal-target="defaultModal2" data-modal-toggle="defaultModal2" class="block text-white bg-[#282c37] hover:bg-[#ffd951] rounded-md text-base w-[92%] py-4 my-5 text-center" type="button">
+              <p class="text-xl">초대 코드 입력하기</p>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -77,63 +143,84 @@
           
           <!-- md크기 이하, 좌측 사이드바였던 것 -->   
           <div class="md:hidden pe-10 me-10 mb-20 pt-20 ps-5">
-            <p class="text-2xl border-b-2 border-[#393f4f] pt-3 mb-3">행성 종류</p>
-            <p class="text-sm pb-3 mb-5">관심있는 종류의 행성들을 만나보세요.</p>
-            <div class="p-3 rounded-md hover:bg-[#ffd951]" id="planet-list-button">
-              <a class="text-x" href="{% url 'planets:planet_list' %}">
-                <p class="text-xl">모든 행성</p>
-              </a>
+            <div id="sec1">
+              <p class="text-2xl border-b-2 border-[#393f4f] pt-3 mb-3">행성 생성하기</p>
+              <p class="text-sm pb-3 mb-5">행성을 직접 만들어보세요.</p>
+              <div class="p-3 rounded-md hover:bg-[#ffd951]" id="planet-list-button">
+                <a class="text-x" href="{% url 'planets:planet_create' %}">
+                  <p class="text-xl">행성 만들기</p>
+                </a>
+              </div>
             </div>
-            <div class="p-3 rounded-md hover:bg-[#ffd951]" id="tech-button">
-              <a class="text-xl" href="{% url 'planets:filter' 'Tech'%}">
-                <p class="text-xl">Tech</p>
-              </a>
+
+            <div id="sec2">
+              <p class="text-2xl border-b-2 border-[#393f4f] pt-3 mt-20 mb-3">행성 종류</p>
+              <p class="text-sm pb-3 mb-5">관심있는 종류의 행성들을 만나보세요.</p>
+              <div class="p-3 rounded-md hover:bg-[#ffd951]">
+                <a class="text-x" href="{% url 'planets:my_planet_filter'%}">
+                  <p class="text-xl">내가 가입한 행성</p>
+                </a>
+              </div>
+              <div class="p-3 rounded-md hover:bg-[#ffd951]" id="planet-list-button">
+                <a class="text-x" href="{% url 'planets:planet_list' %}">
+                  <p class="text-xl">모든 행성</p>
+                </a>
+              </div>
+              <div class="p-3 rounded-md hover:bg-[#ffd951]" id="tech-button">
+                <a class="text-xl" href="{% url 'planets:filter' 'Tech'%}">
+                  <p class="text-xl">Tech</p>
+                </a>
+              </div>
+              <div class="p-3 rounded-md hover:bg-[#ffd951]" id="game-button">
+                <a class="text-xl" href="{% url 'planets:filter' 'Game'%}">
+                  <p class="text-xl">Game</p>
+                </a>
+              </div>
+              <div class="p-3 rounded-md hover:bg-[#ffd951]" id="music-button">
+                <a class="text-xl" href="{% url 'planets:filter' 'Music'%}">
+                  <p class="text-xl">Music</p>
+                </a>
+              </div>
+              <div class="p-3 rounded-md hover:bg-[#ffd951]" id="sports-button">
+                <a class="text-xl" href="{% url 'planets:filter' 'sports'%}">
+                  <p class="text-xl">Sports</p>
+                </a>
+              </div>
+              <div class="p-3 rounded-md hover:bg-[#ffd951]" id="food-button">
+                <a class="text-xl" href="{% url 'planets:filter' 'Food'%}">
+                  <p class="text-xl">Food</p>
+                </a>
+              </div>
+              <div class="p-3 rounded-md hover:bg-[#ffd951]" id="hobby-button">
+                <a class="text-xl" href="{% url 'planets:filter' 'Hobby'%}">
+                  <p class="text-xl">Hobby</p>
+                </a>
+              </div>  
             </div>
-            <div class="p-3 rounded-md hover:bg-[#ffd951]" id="game-button">
-              <a class="text-xl" href="{% url 'planets:filter' 'Game'%}">
-                <p class="text-xl">Game</p>
-              </a>
-            </div>
-            <div class="p-3 rounded-md hover:bg-[#ffd951]" id="music-button">
-              <a class="text-xl" href="{% url 'planets:filter' 'Music'%}">
-                <p class="text-xl">Music</p>
-              </a>
-            </div>
-            <div class="p-3 rounded-md hover:bg-[#ffd951]" id="sports-button">
-              <a class="text-xl" href="{% url 'planets:filter' 'sports'%}">
-                <p class="text-xl">Sports</p>
-              </a>
-            </div>
-            <div class="p-3 rounded-md hover:bg-[#ffd951]" id="food-button">
-              <a class="text-xl" href="{% url 'planets:filter' 'Food'%}">
-                <p class="text-xl">Food</p>
-              </a>
-            </div>
-            <div class="p-3 rounded-md hover:bg-[#ffd951]" id="hobby-button">
-              <a class="text-xl" href="{% url 'planets:filter' 'Hobby'%}">
-                <p class="text-xl">Hobby</p>
-              </a>
-            </div>
-            <p class="text-2xl mt-20 border-b-2 border-[#393f4f] pt-3 mb-3">초대 코드 입력</p>
-            <p class="text-sm mb-5">전송받은 초대코드를 입력하고 행성에 참여하세요.</p>
-            <div class="p-3 rounded-md hover:bg-[#ffd951]">
-              <a class="text-xl" href="#">
-                <p class="text-xl">초대 코드 입력하기</p>
-              </a>
+
+            <div id="sec3">
+              <p class="text-2xl mt-20 border-b-2 border-[#393f4f] pt-3 mb-3">초대 코드 입력</p>
+              <p class="text-sm mb-5">전송받은 초대코드를 입력하고 행성에 참여하세요.</p>
+              <div class="p-3">
+                <button data-modal-target="defaultModal2" data-modal-toggle="defaultModal2" class="block text-white bg-[#282c37] hover:bg-[#ffd951] rounded-md text-base w-[92%] py-4 my-5 text-center" type="button">
+                  <p class="text-xl">초대 코드 입력하기</p>
+                </button>
+              </div>
             </div>
           </div>
 
-          <p class="text-white text-2xl my-5">행성 둘러보기</p>
+
+          <p id='sec4' class="text-white text-2xl my-5">행성 둘러보기</p>
           <!-- 메인 제목 부분 md 크기 이하 일 때-->
           <form method="GET" action="{% url 'planets:search' %}">
             {% csrf_token %}
             <div class="relative">
-                <input type="text" name="q" value="{{ query }}" id="default-search" class="block w-full p-4 mb-5 text-base text-white rounded-lg bg-transparent focus:ring-[#ffc800] focus:border-[#ffc800]" placeholder="행성 검색" required>
-                <button type="submit" class="button-search text-white text-sm absolute right-2.5 bottom-2.5 bg-[#ffd951] rounded-lg px-4 py-2">
-                    <svg aria-hidden="true" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                </button>
+              <input type="text" name="q" value="{{ query }}" id="default-search" class="block w-full p-4 mb-5 text-base text-white rounded-lg bg-transparent focus:ring-[#ffc800] focus:border-[#ffc800]" placeholder="행성 검색" required>
+              <button type="submit" class="button-search text-white text-sm absolute right-2.5 bottom-2.5 bg-[#ffd951] rounded-lg px-4 py-2">
+                <svg aria-hidden="true" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+              </button>
             </div>
-          </form>        
+          </form>
         </div>
 
         <!-- 메인 제목 부분 md 크기 이상 일 때-->
@@ -151,6 +238,7 @@
           </form>
         </div>
 
+
         <!-- 행성 리스트 출력 부분 -->
         {% if planets %}
           <div class="flex flex-wrap text-white">
@@ -158,18 +246,28 @@
             {% for planet in planets %}
               <div class="planet-list-box w-full md:w-[45%] xl:w-[30%] m-3">
                 <div class="p-3">
-                  <img class="planet-list-img mb-5" src="{% if planet.image %} {{ planet.image.url}} {% else %} {% static 'img/no_planet_img.png' %} {% endif %}" alt="image">
+                  <img class="planet-list-img mb-5" src="{% if planet.image %}{{ planet.image.url }}{% else %}{% static 'img/no_planet_img.png' %}{% endif %}" alt="image" style="height: 172px;">
                   <div class="planet-list-text">
                     <p class="text-[#999999]">{{ planet.is_public }}</p>
                     <p class="mb-5">{{ planet.name }}</p>
-                    <p class="text-sm min-h-[60px] clamp-3-lines">{{ planet.description }}</p>
+                    <p id="description-{{ planet.id }}" class="text-sm min-h-[60px] mb-2 clamp-3-lines">{{ planet.description }}</p>
+                    <button id="moreButton-{{ planet.id }}">더보기</button>
                   </div>
-                  
-                  <a href="{% url 'planets:planet_contract' planet.name %}">
-                    <button class="button-big button-color-join mt-8 mb-3">
-                      <p class="text-base">join</p>
-                    </button>
-                  </a>
+                  <div class="mt-auto">
+                    {% if planet.name in joined_planet_list %}
+                    <a href="{% url 'planets:planet_contract' planet.name %}">
+                      <button class="button-big button-color-enter my-3">
+                        <p class="text-base">enter</p>
+                      </button>
+                    </a>
+                    {% else %}
+                      <a href="{% url 'planets:planet_contract' planet.name %}">
+                        <button class="button-big button-color-join my-3">
+                          <p class="text-base">join</p>
+                        </button>
+                      </a>
+                    {% endif %}
+                  </div>
                 </div>
               </div>
             {% endfor %}
@@ -195,11 +293,10 @@
   const errorText = document.getElementById('errorText');
 
   modalButton.addEventListener('click', function() {
-    inviteModal.classList.toggle('hidden');
     errorText.classList.add('hidden');
   });
 
-    // 다른 창 클릭 시 모달 닫기
+  // 다른 창 클릭 시 모달 닫기
   window.addEventListener('click', function(event) {
     if (event.target === inviteModal) {
       inviteModal.classList.add('hidden');
@@ -270,6 +367,133 @@
     // 폼 제출
     inviteForm.submit();
   }); {% endcomment %}
+
+
+
+// 행성 소개글 3줄 넘어갈 때 처리
+document.addEventListener('DOMContentLoaded', function() {
+  const planets = document.querySelectorAll('[id^="description-"]');
+  const moreButtons = document.querySelectorAll('[id^="moreButton-"]');
+  const clickCounts = {}; // 개별 행성의 클릭 횟수를 저장하는 객체
+
+  for (let i = 0; i < planets.length; i++) {
+    const planet = planets[i];
+    const planetId = planet.id;
+    const moreButton = moreButtons[i];
+    clickCounts[planetId] = 0; // 초기 클릭 횟수를 0으로 설정
+
+    moreButton.addEventListener('click', function() {
+      const planetElement = document.getElementById(planetId);
+      planetElement.classList.toggle('clamp-3-lines');
+
+      const hasMoreContent = planetElement.scrollHeight > planetElement.clientHeight;
+
+      clickCounts[planetId]++; // 해당 행성의 클릭 횟수 증가
+
+      if (clickCounts[planetId] % 2 === 0) {
+        moreButton.textContent = '더보기'; // 클릭 횟수가 짝수인 경우 '더보기'로 설정
+      } else {
+        moreButton.textContent = '감추기'; // 클릭 횟수가 홀수인 경우 '감추기'로 설정
+      }
+
+      console.log(clickCounts);
+    });
+
+    const planetElement = document.getElementById(planetId);
+    const hasMoreContentInitially = planetElement.scrollHeight > planetElement.clientHeight;
+
+    if (!hasMoreContentInitially) {
+      moreButton.style.display = 'none';
+    }
+  }
+
+  window.addEventListener('resize', function() {
+    for (let i = 0; i < planets.length; i++) {
+      const planet = planets[i];
+      const planetId = planet.id;
+      const planetElement = document.getElementById(planetId);
+      const moreButton = moreButtons[i];
+
+      const hasMoreContent = planetElement.scrollHeight > planetElement.clientHeight;
+
+      if (hasMoreContent && planetElement.classList.contains('clamp-3-lines')) {
+        moreButton.style.display = 'inline';
+      } else {
+        moreButton.style.display = 'none';
+      }
+    }
+  });
+});
+
+
+
+// main comtent 바 이동
+const btn1 = document.getElementById('btn1');
+const sec1 = document.getElementById('sec1');
+
+btn1.addEventListener('click', () => {
+  window.scrollBy({top: sec1.getBoundingClientRect().top-180, behavior: 'smooth'});
+});
+
+const btn2 = document.getElementById('btn2');
+const sec2 = document.getElementById('sec2');
+
+btn2.addEventListener('click', () => {
+  window.scrollBy({top: sec2.getBoundingClientRect().top-180, behavior: 'smooth'});
+});
+
+const btn3 = document.getElementById('btn3');
+const sec3 = document.getElementById('sec3');
+
+btn3.addEventListener('click', () => {
+  window.scrollBy({top: sec3.getBoundingClientRect().top-180, behavior: 'smooth'});
+});
+
+const btn4 = document.getElementById('btn4');
+const sec4 = document.getElementById('sec4');
+
+btn4.addEventListener('click', () => {
+  window.scrollBy({top: sec4.getBoundingClientRect().top-180, behavior: 'smooth'});
+});
+
+
+// 관찰자 설정
+let observerOptions = {
+  root: null,
+  rootMargin: '0px',
+  threshold: 0.5
+};
+
+{% comment %} // 각 섹션과 관련된 버튼을 맵으로 연결합니다.
+let sectionButtonMap = {
+  'sec1': document.getElementById('btn1'),
+  'sec2': document.getElementById('btn2'),
+  'sec3': document.getElementById('btn3'),
+  'sec4': document.getElementById('btn4'),
+};
+
+// 각 섹션을 관찰하는 Intersection Observer를 생성합니다.
+let sectionObserver = new IntersectionObserver((entries, observer) => {
+  entries.forEach((entry) => {
+    // 섹션이 보이는 경우, 해당하는 버튼에 밑줄을 추가합니다.
+    if (entry.isIntersecting) {
+      let btn = sectionButtonMap[entry.target.id];
+      btn.parentNode.style.borderBottom = "3px solid #ffd951";
+
+      // 다른 버튼들의 밑줄을 제거합니다.
+      Object.values(sectionButtonMap).forEach((otherBtn) => {
+        if (otherBtn !== btn) {
+          otherBtn.parentNode.style.borderBottom = 'none';
+        }
+      });
+    }
+  });
+}, observerOptions);
+
+// 각 섹션에 대해 Intersection Observer를 설정합니다.
+Object.keys(sectionButtonMap).forEach((section) => {
+  sectionObserver.observe(document.getElementById(section));
+}); {% endcomment %}
 
 </script>
 {% endblock script %}
