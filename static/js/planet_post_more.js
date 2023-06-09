@@ -9,7 +9,7 @@ function createpostContainer(profile_image_url, nickname, created_time, content,
   newPostContainer.querySelector('#post-content').textContent = content;
   newPostContainer.querySelector('#delete-post-form').setAttribute("data-post-pk", post_pk);
   newPostContainer.querySelector('#update-post-form').setAttribute("data-post-pk", post_pk);
-  newPostContainer.querySelector('#report-post-form').setAttribute("action", "/planets/" + planetName + "/report/" + post_pk + "/");
+  newPostContainer.querySelector('a[href^="/planets/music/report/post/"]').href = "/planets/" + planetName + "/report/post/" + post_pk + "/";
   newPostContainer.querySelector('#post-detailpage').href = "/planets/" + planetName + "/" + post_pk + "/";
   if (tags) {
     tags.forEach(function(tag) {
@@ -17,7 +17,10 @@ function createpostContainer(profile_image_url, nickname, created_time, content,
       var newTag = document.createElement('span');
       newTag.classList.add("text-[#bcbdbf]");
       newTag.id = "tag";
-      newTag.textContent = "#" + tag;
+      var newA = document.createElement('a');
+      newA.href = "/planets/" + planetName + "/tags/" + tag + "/";
+      newA.textContent = "#" + tag;
+      newTag.appendChild(newA);
       tagContainer.appendChild(newTag);
     });
   };
@@ -77,8 +80,8 @@ document.addEventListener('DOMContentLoaded', function() {
       var postContainer = deleteButton.closest('#container');
       var planetName = deleteForm.dataset.planetName;
       var postPk = deleteForm.dataset.postPk;
-      var url = "/planets/" + planetName + "/" + postPk + "/delete/";
-
+      var url = "/planets/" + planetName + "/post/" + postPk + "/delete/";
+      
       axios({
         url: url,
         method: 'POST',
@@ -139,8 +142,6 @@ document.addEventListener('DOMContentLoaded', function() {
           formContainer.append(submitButton);
           postContainer.querySelector('#section').style.display = 'none';
           postContainer.append(formElement);
-          postContainer.appendChild(document.createElement('br'));
-          postContainer.appendChild(document.createElement('hr'));
         } else {
           console.error('Post deletion failed.');
         }

@@ -3,7 +3,7 @@
 {% load tailwind_filters %}
 
 {% block title %}
-main
+{{ planet.name }}
 {% endblock title %}
 
 {% block head %}
@@ -46,7 +46,7 @@ main
               <div id="post-img"><img src="{% static 'img/no_profile_img.png' %}" alt="img" style="width:48px; height:48px;"></div>
               <div class="ms-2">
                 <a id="post-nickname">Guide</a>
-                <p class="text-sm text-[#bcbdbf]">@Guide</p>
+                <p id="post-level" class="text-sm text-[#bcbdbf]">@{{ planet.name }}</p>
               </div>
             </div>
             <div class="me-3">
@@ -100,12 +100,7 @@ main
             </form>
           </li>
           <li>
-            <a class="block px-4 py-2 hover:bg-gray-100">
-              <form id="report-post-form" action="{% url 'planets:post_report' planet.name 0 %}" method="POST">
-                {% csrf_token %}
-                <button type="submit" id="report-post-button">게시글 신고</button>
-              </form>
-            </a>
+            <a href="{% url 'planets:report' planet.name 'post' 95 %}" class="block px-4 py-2 hover:bg-gray-100">게시글 신고</a>
           </li>
           <li>
             <form id="update-post-form" class="block px-4 py-2 hover:bg-gray-100" data-planet-name="{{ planet.name }}" data-post-pk="{{ post.pk }}">

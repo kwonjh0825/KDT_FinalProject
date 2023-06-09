@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const termField = document.createElement('div');
     termField.innerHTML = `
+
     <div class="my-5 flex gap-1 delete-term-btn">
       <label class="flex items-center"  for="term_content_${termCount}"> <span class="">약관 : </span> </label>
       <input type="text" class="rounded-md text-black w-4/5" id="term_content_${termCount}" name="term_content_${termCount}">
