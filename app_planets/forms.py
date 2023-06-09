@@ -81,7 +81,7 @@ class PostForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         
         self.fields['content'].widget.attrs['class'] = 'bg-[#101013] text-white mt-1 block w-full rounded-lg'
-        self.fields['content'].widget.attrs['placeholder'] = "내용을"
+        self.fields['content'].widget.attrs['placeholder'] = "작성 할 내용을 입력해 주세요."
         self.fields['content'].help_text = ''
         
         self.fields['image'].widget.attrs['class'] = 'bg-white text-black mt-1 block w-3/4'
@@ -117,6 +117,13 @@ class CommentForm(forms.ModelForm):
         labels = {
             'content': '내용',
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        self.fields['content'].widget.attrs['class'] = 'bg-[#101013] text-white mt-1 block w-full rounded-lg'
+        self.fields['content'].widget.attrs['placeholder'] = "작성 할 내용을 입력해 주세요."
+        self.fields['content'].help_text = ''
     
     def clean_content(self):
         content = self.cleaned_data['content']
@@ -131,6 +138,13 @@ class RecommentForm(forms.ModelForm):
         labels = {
             'content': '내용',
         }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        self.fields['content'].widget.attrs['class'] = 'bg-[#101013] text-white mt-1 block w-full rounded-lg'
+        self.fields['content'].widget.attrs['placeholder'] = "작성 할 내용을 입력해 주세요."
+        self.fields['content'].help_text = ''
     
     def clean_content(self):
         content = self.cleaned_data['content']
