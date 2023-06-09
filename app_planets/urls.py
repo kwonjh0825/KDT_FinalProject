@@ -67,5 +67,8 @@ urlpatterns = [
     path('planets/<str:planet_name>/posts/<int:post_pk>/emotes/<str:emotion>', views.post_emote, name='post_emote'),
     # 댓글 감정 표현
     path('planets/<str:planet_name>/posts/<int:post_pk>/comments/<int:comment_pk>/emotes/<str:emotion>', views.comment_emote, name='comment_emote'),
-
+    # 행성 별 메모
+    path('planets/<str:planet_name>/memo/', views.planet_memo, name='planet_memo'),
+    # 행성 즐겨찾기
+    path('planets/<str:planet_name>/star/', views.planet_star, name='planet_star'),
 ]

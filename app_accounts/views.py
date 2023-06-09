@@ -221,12 +221,15 @@ def signup(request):
 def profile(request, username):
     User = get_user_model()
     user = User.objects.get(username=username)
-    user_by_planets = Accountbyplanet.objects.filter(user=user)
+    user_by_planets_star = Accountbyplanet.objects.filter(user=user, star=1)
+    user_by_planets_not_star = Accountbyplanet.objects.filter(user=user, star=0)
 
     context = {
         'user': user,
-        # 유저가 속한 행성
-        'user_by_planets':user_by_planets,
+        # 유저가 속한 행성 중 즐겨찾기 한 행성
+        'user_by_planets_star': user_by_planets_star,
+        # 유저가 속한 행성 중 즐겨찾기 안한 행성
+        'user_by_planets_not_star':user_by_planets_not_star,
     }
     return render(request, 'accounts/profile.html', context)
 

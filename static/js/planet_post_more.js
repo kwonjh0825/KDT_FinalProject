@@ -35,11 +35,8 @@ function createpostContainer(
   //   }
   // }
   if (votetopics && votetopics.length > 0) {
-    console.log('투표');
-    console.log(votetopics);
     votetopics.forEach(function (votetopic) {
       if (votetopic.title.trim() !== '') {
-        console.log(votetopic.title);
         var voteTopicContainer =
           newPostContainer.querySelector('#post-votetopics');
         var newVotetopic = document.createElement('div'); // 변경된 부분: <span> 대신 <div> 사용
@@ -66,7 +63,7 @@ function createpostContainer(
   newPostContainer.querySelector('#post-content').textContent = content;
   newPostContainer.querySelector('#delete-post-form').setAttribute("data-post-pk", post_pk);
   newPostContainer.querySelector('#update-post-form').setAttribute("data-post-pk", post_pk);
-  newPostContainer.querySelector('a[href^="/planets/music/report/post/"]').href = "/planets/" + planetName + "/report/post/" + post_pk + "/";
+  newPostContainer.querySelector('#post-report').href = "/planets/" + planetName + "/report/post/" + post_pk + "/";
   newPostContainer.querySelector('#post-detailpage').href = "/planets/" + planetName + "/" + post_pk + "/";
 
   if (tags) {
@@ -91,8 +88,9 @@ function createpostContainer(
     newImage.classList.add('rounded-lg');
     imageContainer.append(newImage);
   }
-  if (user == requestuser) {
+  if (nickname == requestuser) {
     newPostContainer.querySelector('#dropdown-delete').style.display = 'block';
+    newPostContainer.querySelector('#dropdown-update').style.display = 'block';
   }
   return newPostContainer;
 }
@@ -211,30 +209,30 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
       })
-        .then(function (response) {
-          if (response.data.success) {
-            var formHtml = response.data.form_html;
-            var formContainer = document.createElement('div');
-            formContainer.innerHTML = formHtml;
-            var formElement = document.createElement('form');
-            formElement.id = 'edit-post-form';
-            formElement.setAttribute('data-planet-name', planetName);
-            formElement.setAttribute('data-post-pk', postPk);
-            formElement.appendChild(formContainer);
-            var submitButton = document.createElement('button');
-            submitButton.id = 'edit-post-button';
-            submitButton.textContent = 'Update';
-            submitButton.type = 'submit';
-            formContainer.append(submitButton);
-            postContainer.querySelector('#section').style.display = 'none';
-            postContainer.append(formElement);
-          } else {
-            console.error('Post deletion failed.');
-          }
-        })
-        .catch(function (error) {
-          console.error('AJAX request failed:', error);
-        });
+        // .then(function (response) {
+        //   if (response.data.success) {
+        //     var formHtml = response.data.form_html;
+        //     var formContainer = document.createElement('div');
+        //     formContainer.innerHTML = formHtml;
+        //     var formElement = document.createElement('form');
+        //     formElement.id = 'edit-post-form';
+        //     formElement.setAttribute('data-planet-name', planetName);
+        //     formElement.setAttribute('data-post-pk', postPk);
+        //     formElement.appendChild(formContainer);
+        //     var submitButton = document.createElement('button');
+        //     submitButton.id = 'edit-post-button';
+        //     submitButton.textContent = 'Update';
+        //     submitButton.type = 'submit';
+        //     formContainer.append(submitButton);
+        //     postContainer.querySelector('#section').style.display = 'none';
+        //     postContainer.append(formElement);
+        //   } else {
+        //     console.error('Post deletion failed.');
+        //   }
+        // })
+        // .catch(function (error) {
+        //   console.error('AJAX request failed:', error);
+        // });
     }
 
     // 게시글 수정 처리
