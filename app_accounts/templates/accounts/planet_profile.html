@@ -52,13 +52,11 @@
     </div>
     <!-- 내용 -->
     <div class="my-3 mr-5 flex gap-3" style="float: right;">
-
         {% comment %} <button data-modal-target="defaultModal" data-modal-toggle="defaultModal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700" type="button">
             <span class="material-symbols-outlined">
                 groups
                 </span>
         </button>  {% endcomment %}
-
         <!-- 팔로우 버튼 --> 
         {% if request.user.is_authenticated %}
             {% if request_user != user_by_planet %}
@@ -71,6 +69,7 @@
                 </form>
             {% endif %}
         {% endif %}
+        <a type="button" class="rounded-md bg-blue-500 hover:bg-blue-400 px-4 py-2" href="{% url 'planets:planet_profile_update' user_by_planet.planet.name user_by_planet.nickname %}">프로필 수정</a>
     </div>
     <!-- 개인정보 -->
     <div class=" ml-20 pl-12 pt-3 mb-5 flex items-end gap-4">

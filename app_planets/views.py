@@ -464,7 +464,7 @@ def planet_admin(request, planet_name):
     if is_staff or is_manager:
         confirms = Accountbyplanet.objects.filter(planet=planet, is_confirmed=False)
         if request.method == 'POST':
-            form_planet = PlanetForm(request.POST, instance=planet)
+            form_planet = PlanetForm(request.POST,request.FILES, instance=planet)
             
             if form_planet.is_valid():
                 form_planet.save()

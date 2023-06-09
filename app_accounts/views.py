@@ -271,14 +271,17 @@ def planet_profile_update(request, planet_name, nickname):
 
     if user_by_planet.user == request.user:
         if request.method == 'POST':
-            planet_user_update_form = AccountbyplanetForm(request.POST, instance=user_by_planet)
+            planet_user_update_form = AccountbyplanetForm(request.POST, request.FILES, instance=user_by_planet)
             if planet_user_update_form.is_valid():
                 planet_user_update_form.save()
-                return redirect('accounts:planet_profile', planet_name, nickname)
+                to_be_nickname = Accountbyplanet.objects.get(planet=planet,user=request.user.pk).nickname
+                return redirect('planets:planet_profile', planet_name , to_be_nickname)
         else:
             planet_user_update_form = AccountbyplanetForm(instance=user_by_planet)
 
     context = {
+        'planet':planet,
+        'user_by_planet':user_by_planet,
         'planet_user_update_form': planet_user_update_form,
     }
     return render(request, 'accounts/planet_update.html', context)

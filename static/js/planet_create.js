@@ -8,10 +8,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const termField = document.createElement('div');
     termField.innerHTML = `
-      <label for="term_content_${termCount}">Term Content:</label>
-      <input type="text" class="text-black" id="term_content_${termCount}" name="term_content_${termCount}">
-      <button type="button" class="delete-term-btn" data-term-count="${termCount}">Delete</button>
+
+    <div class="my-5 flex gap-1 delete-term-btn">
+      <label class="flex items-center"  for="term_content_${termCount}"> <span class="">약관 : </span> </label>
+      <input type="text" class="rounded-md text-black w-4/5" id="term_content_${termCount}" name="term_content_${termCount}">
+      <button type="button" class="my-auto justify-center flex items-center bg-red-400 rounded-lg delete-term-btn" style="width:30px; height:30px;" data-term-count="${termCount}">X</button>
       <br>
+    </div>
     `;
 
     termFieldsContainer.appendChild(termField);
