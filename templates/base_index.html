@@ -187,10 +187,28 @@
               <div class="p-8 space-y-6">
                 <form id="post-form" data-planet-name="{{ planet.name }}">
                   {% csrf_token %}
+
                   <div class="w-full mb-5">
                     <label for="id_content" class="block text-base text-slate-300 mb-2">내용</label>
+
                     {{ postform.content }}
                   </div>
+                  <img src="{% static 'img/vote.png' %}" class="h-16 w-16 my-3" alt="투표" id="vote-toggle">
+                  
+                  <div class="w-full mb-5" id="vote-topics-container" style="display: none;">
+                    <label class="block text-base text-slate-300 mb-2">투표 주제</label>
+                    <button id="plus-button">+</button>
+                    <div id="vote-topics">
+                      <!-- 원래 있던 주제 입력란들 -->
+                      {% comment %} {% for form in votetopicform %} {% endcomment %}
+                      <div class="vote-topic-input">
+                        {% comment %} {{ form.title }} {% endcomment %}
+                        {{ votetopicform.title }}
+                      </div>
+                      {% comment %} {% endfor %} {% endcomment %}
+                    </div>
+                  </div>
+
                   <div class="flex flex-row">
                     <div>
                       <label for="id_image" class="block text-base text-slate-300 mb-2">이미지</label>
@@ -200,6 +218,10 @@
                       <label for="id_tags" class="block text-base text-slate-300 mb-2">태그</label>
                       {{ postform.tags }}
                     </div>
+                    {% comment %} <div>
+                      <label for="last_name" class="block text-base text-slate-300 mb-2">주제</label>
+                      {{ voteform.content }}
+                    </div> {% endcomment %}
                   </div>
                   <button type="submit" class="chatting-create-btn bg-[#bcbdbf] mx-auto mt-10" style="text-align: center;">
                     <p>게시글 작성</p>
@@ -334,6 +356,7 @@
   </div>
 </body>
 {% comment %} <script type="text/javascript" src="/static/js/base_index.js"></script> {% endcomment %}
+<script src="{% static 'js/vote.js' %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
 <script src="https://kit.fontawesome.com/96b2992191.js" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>

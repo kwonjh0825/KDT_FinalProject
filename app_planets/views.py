@@ -10,8 +10,8 @@ from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 from django.contrib import messages
 from django.db.models import Count
-from .models import Planet, TermsOfService, Post, Comment, Recomment, Emote, Report
-from .forms import PlanetForm, PostForm, CommentForm, RecommentForm
+from .models import Planet, TermsOfService, Post, Comment, Recomment, Emote, Report, Vote, VoteTopic
+from .forms import PlanetForm, PostForm, CommentForm, RecommentForm, VoteTopicForm
 from app_accounts.models import Accountbyplanet, User
 from app_accounts.forms import AccountbyplanetForm
 from datetime import timedelta
@@ -151,8 +151,10 @@ def index(request, planet_name):
         return redirect('planets:main')
     
     postform = PostForm()
+    votetopicform = VoteTopicForm()
 
     context = {
+        'votetopicform': votetopicform,
         'postform': postform,
         'planet': planet,
         'first_post': Post.objects.filter(planet=planet).first(),
@@ -196,8 +198,9 @@ def planet_posts(request, planet_name):
             'tags': list(post.tags.names()),
             'profile_image_url': post.accountbyplanet.profile_image.url if post.accountbyplanet.profile_image else None,
             'user': post.accountbyplanet.user.username,
+            'votetopics': list(post.votetopic_set.values('title')),
         })
-
+        print(post_list)
     if posts.has_next():
         return JsonResponse(post_list, safe=False)
     else:
@@ -209,8 +212,14 @@ def planet_posts(request, planet_name):
 @require_POST
 def post_create(request, planet_name, post_pk=None):
     planet = Planet.objects.get(name=planet_name)
+    # print(request.POST)
     form = PostForm(request.POST, request.FILES)
-
+    votetopicform = VoteTopicForm(request.POST)
+    # print('-------------')
+    # print(form)
+    # print('-------------')
+    # print(form.cleaned_data['content'])
+    print(votetopicform)
     if post_pk:  # 기존 게시글 수정 처리
         try:
             post = Post.objects.get(pk=post_pk, planet=planet)
@@ -229,10 +238,32 @@ def post_create(request, planet_name, post_pk=None):
             post = form.save(commit=False)
             post.accountbyplanet = Accountbyplanet.objects.get(planet=planet, user=request.user)
             post.planet = planet
-            post.content = form.cleaned_data['content']
+            # print('testest------------------')
+            # print(form.cleaned_data['content'])
+            # print(request.POST.getlist('content')[0])
+            # post.content = request.POST.getlist('content')[0]
             post.image = form.cleaned_data['image']
             post.save()
+            # print('생성이요~~~~~~~')
             form.save_m2m()
+        #투표 주제
+        if votetopicform.is_valid():
+            # print('----------------')
+            # print(request.POST)
+            titles = request.POST.getlist('title')
+            # print(titles)
+            for title in titles:
+                # print(title)
+                votetopic = VoteTopic()
+                votetopic.title = title
+                votetopic.post = post
+                votetopic.save()
+                # votetopic = votetopicform.save(commit=False) 
+                # votetopic.title = title
+                # votetopic.post = post
+                # votetopic.save()
+                # votetopicform.save_m2m()
+
         else:
             errors = form.errors.as_json()
             return JsonResponse({'success': False, 'errors': errors})
@@ -248,7 +279,9 @@ def post_create(request, planet_name, post_pk=None):
         'profile_image_url': post.accountbyplanet.profile_image.url if post.accountbyplanet.profile_image else None,
         'user': post.accountbyplanet.user.username,
         'form_html': form.as_p() if form.as_p() else None,
+        'votetopic': titles,
     }
+    
     return JsonResponse(response_data)
 
 
@@ -757,6 +790,24 @@ def following(request, planet_name, user_pk):
         return JsonResponse(context)
     return redirect('planets:index', planet_name)
 
+
+# @login_required
+# def vote(request, post_pk, vote_title):
+#     post = Post.objects.get(pk=post_pk)
+#     vote_topic = VoteTopic.objects.get(title=vote_title)
+#     if request.method == 'POST':
+
+#         # 이미 투표한 경우에는 중복 투표를 막습니다.
+#         if Vote.objects.filter(votetopic=vote_topic, voter=request.user).exists():
+#             pass
+
+#         # 새로운 투표 생성
+#         vote = Vote(votetopic=vote_topic, voter=request.user)
+#         vote.save()
+#         context = {
+#             ''
+#         }
+
 # 비동기 post emote
 @login_required
 def post_emote(request, planet_name, post_pk, emotion):
@@ -828,3 +879,4 @@ def post_tag(request, planet_name, tag_name):
         'user': Accountbyplanet.objects.get(planet=planet, user=request.user),
     }
     return render(request, 'planets/planet_tag_posts.html', context)
+

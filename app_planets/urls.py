@@ -61,8 +61,11 @@ urlpatterns = [
     path('planets/<str:category>/filter/', views.filter, name='filter'),
     # 팔로잉
     path('planets/<str:planet_name>/follow/<int:user_pk>/', views.following, name='following'),
+    # 투표
+    # path('planets/post/<int:post_pk>/<str:vote_title>/', views.vote, name='vote'),
     # 게시글 감정표현 
     path('planets/<str:planet_name>/posts/<int:post_pk>/emotes/<str:emotion>', views.post_emote, name='post_emote'),
     # 댓글 감정 표현
     path('planets/<str:planet_name>/posts/<int:post_pk>/comments/<int:comment_pk>/emotes/<str:emotion>', views.comment_emote, name='comment_emote'),
+
 ]
