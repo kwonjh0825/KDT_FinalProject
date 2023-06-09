@@ -225,7 +225,8 @@ def planet_delete(request, planet_name):
 # posts json
 @login_required
 def planet_posts(request, planet_name):
-    posts = Post.objects.filter(planet=Planet.objects.get(name=planet_name)).order_by('-pk')
+    planet = Planet.objects.get(name=planet_name)
+    posts = Post.objects.filter(planet=planet).order_by('-pk')
     per_page = 5
     page_number = request.POST.get('page')
     paginator = Paginator(posts, per_page)
@@ -238,7 +239,7 @@ def planet_posts(request, planet_name):
         posts = paginator.page(paginator.num_pages)
 
     post_list = []
-    user = Accountbyplanet.objects.get(user=request.user)
+    user = Accountbyplanet.objects.get(user=request.user, planet=planet)
     for post in posts:
         # 해당 Post의 VoteTopic들을 가져옵니다.
         vote_topics = VoteTopic.objects.filter(post=post)
@@ -853,8 +854,8 @@ def following(request, planet_name, user_pk):
 # 투표
 @login_required
 def vote(request, post_pk, vote_title):
-    user = Accountbyplanet.objects.get(user=request.user)
     post = Post.objects.get(pk=post_pk)
+    user = Accountbyplanet.objects.get(user=request.user, planet=post.planet)
     vote_topic = VoteTopic.objects.get(title=vote_title, post=post)
     if request.method == 'POST':
 

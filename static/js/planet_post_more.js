@@ -190,7 +190,7 @@ function createpostContainer(
     newImage.classList.add('rounded-lg');
     imageContainer.append(newImage);
   }
-  if (nickname == requestuser) {
+  if (nickname == requestuser_nickname) {
     newPostContainer.querySelector('#dropdown-delete').style.display = 'block';
     newPostContainer.querySelector('#dropdown-update').style.display = 'block';
   }
