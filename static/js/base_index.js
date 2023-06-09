@@ -59,11 +59,7 @@ function success(position) {
   getWeatherData(lat, lon);
 }
 
-function error(error) {
-  console.log('weather error')
-}
-
-navigator.geolocation.getCurrentPosition(success, error);
+navigator.geolocation.getCurrentPosition(success);
 
 document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('body').addEventListener('click', function (e) {
