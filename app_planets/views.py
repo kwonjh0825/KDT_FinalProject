@@ -188,7 +188,15 @@ def planet_posts(request, planet_name):
         posts = paginator.page(paginator.num_pages)
 
     post_list = []
+    user = Accountbyplanet.objects.get(user=request.user)
     for post in posts:
+        # 해당 Post의 VoteTopic들을 가져옵니다.
+        vote_topics = VoteTopic.objects.filter(post=post)
+
+        voted_topics = list(
+            Vote.objects.filter(voter=user, votetopic__in=vote_topics).values_list('votetopic_id', flat=True)
+        )
+        
         post_list.append({
             'pk': post.pk,
             'content': post.content,
@@ -199,6 +207,9 @@ def planet_posts(request, planet_name):
             'profile_image_url': post.accountbyplanet.profile_image.url if post.accountbyplanet.profile_image else None,
             'user': post.accountbyplanet.user.username,
             'votetopics': list(post.votetopic_set.values('title')),
+            'vote_count':[Vote.objects.filter(votetopic=vote_topic).count() for vote_topic in vote_topics],
+            # 'voted': post.votetopic_set.vote.filter(voter=user).exists(),
+            'voted': True if voted_topics else False,
         })
         print(post_list)
     if posts.has_next():
@@ -279,7 +290,9 @@ def post_create(request, planet_name, post_pk=None):
         'profile_image_url': post.accountbyplanet.profile_image.url if post.accountbyplanet.profile_image else None,
         'user': post.accountbyplanet.user.username,
         'form_html': form.as_p() if form.as_p() else None,
-        'votetopic': titles,
+        # 'votetopics': list(post.votetopic_set.values('title')),
+        # 'vote_count':[Vote.objects.filter(votetopic=vote_topic).count() for vote_topic in vote_topics],
+        # 'voted': True if voted_topics else False,
     }
     
     return JsonResponse(response_data)
@@ -790,23 +803,22 @@ def following(request, planet_name, user_pk):
         return JsonResponse(context)
     return redirect('planets:index', planet_name)
 
+# 투표
+@login_required
+def vote(request, post_pk, vote_title):
+    user = Accountbyplanet.objects.get(user=request.user)
+    post = Post.objects.get(pk=post_pk)
+    vote_topic = VoteTopic.objects.get(title=vote_title, post=post)
+    if request.method == 'POST':
 
-# @login_required
-# def vote(request, post_pk, vote_title):
-#     post = Post.objects.get(pk=post_pk)
-#     vote_topic = VoteTopic.objects.get(title=vote_title)
-#     if request.method == 'POST':
+        # 중복 투표 x
+        if Vote.objects.filter(voter=user, votetopic__post=post).exists():
+            return redirect('planets:planet_posts', post.planet.name)
 
-#         # 이미 투표한 경우에는 중복 투표를 막습니다.
-#         if Vote.objects.filter(votetopic=vote_topic, voter=request.user).exists():
-#             pass
-
-#         # 새로운 투표 생성
-#         vote = Vote(votetopic=vote_topic, voter=request.user)
-#         vote.save()
-#         context = {
-#             ''
-#         }
+        # 새로운 투표 생성
+        vote = Vote(votetopic=vote_topic, voter=user)
+        vote.save()
+        return redirect('planets:planet_posts', post.planet.name)
 
 # 비동기 post emote
 @login_required
