@@ -44,4 +44,6 @@ urlpatterns = [
     path('planets/<str:category>/filter/', views.filter, name='filter'),
     # 팔로잉
     path('planets/<str:planet_name>/follow/<int:user_pk>/', views.following, name='following'),
+    # 투표
+    # path('planets/post/<int:post_pk>/<str:vote_title>/', views.vote, name='vote'),
 ]

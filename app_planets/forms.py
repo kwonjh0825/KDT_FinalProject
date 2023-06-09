@@ -1,5 +1,5 @@
 from django import forms
-from .models import Planet, Post, Comment, Recomment, InappropriateWord
+from .models import Planet, Post, Comment, Recomment, InappropriateWord, VoteTopic
 from taggit.forms import TagField
 
 
@@ -59,7 +59,8 @@ class PlanetForm(forms.ModelForm):
 
 
 class PostForm(forms.ModelForm):
-    tags = TagField(required=False)
+    tags         = TagField(required=False)
+
     class Meta:
         model = Post
         fields = ('content', 'image', 'tags',)
@@ -68,7 +69,7 @@ class PostForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         
         self.fields['content'].widget.attrs['class'] = 'bg-[#101013] text-white mt-1 block w-full rounded-lg'
-        self.fields['content'].widget.attrs['placeholder'] = " "
+        self.fields['content'].widget.attrs['placeholder'] = "내용을"
         self.fields['content'].help_text = ''
         
         self.fields['image'].widget.attrs['class'] = 'bg-white text-black mt-1 block w-3/4'
@@ -123,4 +124,27 @@ class RecommentForm(forms.ModelForm):
         content = self.cleaned_data['content']
         validate_inappropriate_words(content)
         return content
+
+class VoteTopicForm(forms.ModelForm):
+    class Meta:
+        model = VoteTopic
+        fields = ('title',)
+        labels = {
+            'title': '내용',
+        }
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'bg-[#101013] text-white mt-1 block w-full rounded-lg',
+                'placeholder': 'ㄴㅇ',
+            }),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        self.fields['title'].required = False
+        self.fields['title'].help_text = ''
+
+        
+
 
