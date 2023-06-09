@@ -1,5 +1,5 @@
 from django import forms
-from .models import Planet, Post, Comment, Recomment, InappropriateWord
+from .models import Planet, Post, Comment, Recomment, InappropriateWord , TermsOfService
 from taggit.forms import TagField
 
 
@@ -18,24 +18,24 @@ class PlanetForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         
         self.fields['name'].widget.attrs['placeholder'] = " "
-        self.fields['name'].label = '행성 이름'
+        self.fields['name'].label = '<span class="text-white">행성 이름</span>'
         self.fields['name'].help_text = ''
         
         self.fields['description'].widget.attrs['placeholder'] = " "
-        self.fields['description'].label = '행성 설명'
+        self.fields['description'].label = '<span class="text-white">행성 설명</span>'
         self.fields['description'].help_text = ''
         
         self.fields['category'].widget.attrs['placeholder'] = " "
-        self.fields['category'].label = '카테고리'
+        self.fields['category'].label = '<span class="text-white">카테고리</span>'
         self.fields['category'].help_text = ''
         
-        self.fields['is_public'].label = '공개 여부'
+        self.fields['is_public'].label = '<span class="text-white">공개 여부</span>'
         self.fields['is_public'].help_text = ''
         
-        self.fields['image'].label = "행성 사진"
+        self.fields['image'].label = '<span class="text-white">행성 사진</span>'
         self.fields['image'].help_text = ''
         
-        self.fields['maximum_capacity'].label = "행성 최대 인원"
+        self.fields['maximum_capacity'].label = '<span class="text-white">행성 최대 인원</span>'
         self.fields['maximum_capacity'].help_text = ''
         
         # labels = {
@@ -57,6 +57,17 @@ class PlanetForm(forms.ModelForm):
         validate_inappropriate_words(description)
         return description
 
+class TermsOfServiceForm(forms.ModelForm):
+    class Meta:
+        model = TermsOfService
+        fields = ('content',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        self.fields['content'].widget.attrs['placeholder'] = " "
+        self.fields['content'].label = '<span class="text-white">행성 이름</span>'
+        self.fields['content'].help_text = ''
 
 class PostForm(forms.ModelForm):
     tags = TagField(required=False)
