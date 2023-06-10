@@ -27,7 +27,7 @@
         </a>
       </div>
       <div class="progress-bar">
-        <div class="progress" style="width: {{ tag.tag_count|mul:100|div:total_posts|floatformat:2 }}%;">{{ tag.tag_count|mul:100|div:total_posts|floatformat:2 }}%</div>
+        <div class="progress" style="width: {{ tag.tag_count|mul:100|div:total_posts|floatformat:1 }}%;">{{ tag.tag_count|mul:100|div:total_posts|floatformat:1 }}%</div>
       </div>
     </div>
   {% endfor %}
