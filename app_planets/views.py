@@ -46,18 +46,23 @@ def main(request):
 #     }
 #     return render(request, 'planets/planet_list.html', context)
     
+
 def planet_list(request):
     planets = Planet.objects.filter(is_public='Public')
     user = request.user
-    user_planets = Accountbyplanet.objects.filter(user=user, planet__in=planets)
-    joined_planets = [user_planet.planet for user_planet in user_planets]
-    joined_planet_list = [joined_planet.name for joined_planet in joined_planets]
+    if user.is_authenticated:
+        user_planets = Accountbyplanet.objects.filter(user=user, planet__in=planets)
+        joined_planets = [user_planet.planet for user_planet in user_planets]
+        joined_planet_list = [joined_planet.name for joined_planet in joined_planets]
+    else:
+        joined_planet_list = None
     
     context = {
         'planets': planets,
         'joined_planet_list': joined_planet_list,
     }
     return render(request, 'planets/planet_list.html', context)
+
 
 # 조회 기능
 def filter(request, category):
@@ -72,6 +77,7 @@ def filter(request, category):
     }
     return render(request, 'planets/planet_list.html', context)
 
+
 def my_planet_filter(request):
     user = request.user
     user_planets = Accountbyplanet.objects.filter(user=user, planet__is_public='Public')
@@ -83,6 +89,7 @@ def my_planet_filter(request):
         'joined_planet_list': joined_planet_list
     }
     return render(request, 'planets/planet_list.html', context)
+
 
 # 행성 생성 페이지
 @login_required
@@ -119,6 +126,7 @@ def planet_create(request):
     }
     return render(request, 'planets/planet_create.html', context)
 
+
 # 행성 검색
 def search(request):
     query = request.GET.get('q')
@@ -127,6 +135,7 @@ def search(request):
         'planets':planets,
     }
     return render(request, 'planets/search_result.html', context)
+
 
 @login_required
 def planet_contract(request,planet_name):
@@ -218,7 +227,11 @@ def index_list(request, planet_name):
     user = request.user
     user_by_planets_star = Accountbyplanet.objects.filter(user=user, star=1)
     user_by_planets_not_star = Accountbyplanet.objects.filter(user=user, star=0)
-    
+    try:
+        memo = Memobyplanet.objects.get(accountbyplanet=Accountbyplanet.objects.get(planet=planet, user=request.user))
+    except:
+        memo = None
+    memoform = MemobyplanetForm()
     
     # 행성에 계정이 없는 경우 또는 가입 승인 대기 중인 경우
     if not request.user.is_authenticated or not Accountbyplanet.objects.filter(planet=planet, user=request.user).exists() or Accountbyplanet.objects.get(planet=planet, user=request.user).is_confirmed == False: 
@@ -226,6 +239,8 @@ def index_list(request, planet_name):
 
     context = {
         'planet': planet,
+        'memo': memo,
+        'memoform': memoform,
         'user_by_planets_star' : user_by_planets_star,
         'user_by_planets_not_star':user_by_planets_not_star,
         'first_post': Post.objects.filter(planet=planet).first(),
@@ -666,6 +681,7 @@ def planet_join_admin(request, planet_name):
         messages.warning(request, '관리자만 접근 가능합니다. ')
         return redirect('planets:main')
 
+
 # 행성 가입 승인
 @login_required
 def planet_join_confirm(request, planet_name, user_pk):
@@ -683,6 +699,7 @@ def planet_join_confirm(request, planet_name, user_pk):
         messages.warning(request, '관리자만 접근 가능합니다.')
         return redirect('planets:main')
 
+
 # 행성 가입 거절
 @login_required
 def planet_join_reject(request, planet_name, user_pk):
@@ -699,6 +716,7 @@ def planet_join_reject(request, planet_name, user_pk):
     else:
         messages.warning(request, '관리자만 접근 가능합니다.')
         return redirect('planets:main')
+
 
 # 게시글 신고 기능
 @login_required
@@ -797,6 +815,7 @@ def admin_report(request, planet_name):
     }
     return render(request, 'planets/admin_report.html', context)
 
+
 # 행성 회원 관리
 def admin_member(request, planet_name):
     planet = Planet.objects.get(name=planet_name)
@@ -825,6 +844,7 @@ def admin_member(request, planet_name):
     else:
         messages.warning(request, '매니저만 접근 가능합니다.')
         return redirect('planets:main')
+
 
 @login_required
 def invite_create(request):
@@ -910,6 +930,7 @@ def post_emote(request, planet_name, post_pk, emotion):
         'emotion_count': Emote.objects.filter(post=post, emotion=emotion).count()
     }
     return JsonResponse(context)
+
 
 # 비동기 comment emote 
 @login_required

@@ -177,7 +177,7 @@ function createpostContainer(
       newTag.id = 'tag';
       var newA = document.createElement('a');
       newA.href = '/planets/' + planetName + '/tags/' + tag + '/';
-      newA.textContent = '#' + tag;
+      newA.textContent = '#' + tag + ' ';
       newTag.appendChild(newA);
       tagContainer.appendChild(newTag);
     });
