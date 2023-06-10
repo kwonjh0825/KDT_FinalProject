@@ -4,6 +4,7 @@
 {% block title %}
 행성 프로필 수정
 {% endblock title %}
+
 {% block style %}
 .tag_profile {
   height: 120px;
@@ -30,12 +31,12 @@
 {% block content %}
 <div class=" container mx-auto flex justify-center">
     <div class="w-full max-w-md pt-10">
-      <p class="text-4xl mb-3 pb-4 font-bold">Update</p>
-      <hr class="border-t-2 border-yellow-300">
-      <div class="my-4">
-        <form id="profile-form" action="{% url 'planets:planet_profile_update' planet.name user_by_planet.nickname  %}" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="grid">
+      <p class="text-4xl mb-2 pb-4 font-bold">Update</p>
+      <div class="my-1">
+          <form id="profile-form" action="{% url 'planets:planet_profile_update' planet.name user_by_planet.nickname  %}" method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="grid">
+            <hr class="mb-6 border-t-2 w-full border-yellow-300">
             <table class="">
               <tr class="border-b-2 border-gray-500">
                 <th scope="col" class="px-6 py-3">
@@ -55,7 +56,11 @@
                   <!-- 프로필 사진 -->
                   <div class="bg-gray-700" style="position: relative; display: inline-block ">
                     <div class="tag_profile">
-                      <img src="{{ user_by_planet.profile_image.url }}" class="absolute inset-0 m-auto tag_img" id="preview1" style="width: 100%; height: 100%;">
+                    {% if user_by_planet.profile_image %}
+                      <img src="{{ user_by_planet.profile_image.url }}" class="absolute inset-0 m-auto tag_img" id="profile_id" style="width: 100%; height: 100%;">
+                      {% else %} 
+                      <img src="{% static 'img/profile.png' %}" class="absolute inset-0 m-auto tag_img" id="profile_id" style="width: 100%; height: 100%;">
+                    {% endif %} 
                     </div>
                     <button type="button" onclick="document.getElementById('id_profile_image').click();" class="absolute inset-0 m-auto block text-lg font-medium text-slate-300" style="top: 50%; transform: translateY(-50%);">
                       <span id="symbol1" class="material-symbols-outlined text-4xl" style="display:none;">
@@ -65,11 +70,11 @@
                     <input onchange="readURL1(this);" type="file" id="id_profile_image" name="profile_image" class="form-input" style="display: none;">
                   </div>
                   <br>
-                    <div class="text-right">
+                    {% comment %} <div class="text-right">
                         <button type="button" onclick="resetImages1()" class="text-gray-400 text-sm" >기존 이미지<span class="material-symbols-outlined">
                           reset_image
                         </span></button>
-                    </div>
+                    </div> {% endcomment %}
                 </th>
               </tr>
               <tr>
@@ -80,7 +85,11 @@
                   <!-- 배경사진 -->
                   <div class="bg-gray-700" style="position: relative; display: inline-block;">
                     <div class="tag_crop">
-                      <img src="{{ user_by_planet.background_image.url }}" class="absolute inset-0 m-auto tag_img" id="preview2" style="width: 100%; height: 100%;" >
+                    {% if user_by_planet.background_image %}
+                      <img src="{{ user_by_planet.background_image.url }}" class="absolute inset-0 m-auto tag_img" id="background_id" style="width: 100%; height: 100%;" >
+                      {% else %}
+                      <img src="{% static 'img/no_background_img.jpeg' %}" class="absolute inset-0 m-auto tag_img" id="background_id" style="width: 100%; height: 100%;" >
+                    {% endif %}
                     </div>
                     <button type="button" onclick="document.getElementById('id_background_image').click();" class="absolute inset-0 m-auto block text-lg font-medium text-slate-300" style="top: 50%; transform: translateY(-50%);">
                       <span id="symbol2" class="material-symbols-outlined text-4xl" style="display:none;">
@@ -89,12 +98,11 @@
                     </button>
                     <input onchange="readURL2(this);" type="file" id="id_background_image" name="background_image" class="form-input" style="display: none;">  
                   </div> 
-                  <div class="text-right">
+                  {% comment %} <div class="text-right">
                     <button type="button" onclick="resetImages2()" class="text-gray-400 text-sm" >기존 이미지<span class="material-symbols-outlined">
                       reset_image
                     </span></button>
-
-                </div>
+                  </div> {% endcomment %}
                 </th>
               </tr>
             </table>
@@ -122,50 +130,62 @@ delete
 {% endblock content %}
 
 
-{% block script %}
+{% block script %}  
 <script>
+    var defaultProfileImage = "{% static 'img/profile.png' %}";
+
     function readURL1(input) {
       if (input.files && input.files[0]) {
         var reader = new FileReader();
         reader.onload = function(e) {
-          document.getElementById('preview1').src = e.target.result;
+          document.getElementById('profile_id').src = e.target.result;
         };
         var spanElement = document.getElementById('symbol1');
         spanElement.style.display = 'none';
-  
+    
         reader.readAsDataURL(input.files[0]);
       } else {
-        document.getElementById('preview1').src = "{{ user_by_planet.profile_image.url }}";
+        {% if user_by_planet.profile_image %}
+        document.getElementById('profile_id').src = "{{ user_by_planet.profile_image.url }}";
+        {% else %}
+        document.getElementById('profile_id').src = defaultProfileImage;
+        {% endif %}
       }
     }
-  
+
+    var defaultBackgroundImage = "{% static 'img/no_background_img.jpeg' %}";
     function readURL2(input) {
       if (input.files && input.files[0]) {
         var reader = new FileReader();
         reader.onload = function(e) {
-          document.getElementById('preview2').src = e.target.result;
+          document.getElementById('background_id').src = e.target.result;
         };
         var spanElement = document.getElementById('symbol2');
         spanElement.style.display = 'none';
   
         reader.readAsDataURL(input.files[0]);
       } else {
-        document.getElementById('preview2').src = "{{ user_by_planet.background_image.url }}";
+        {% if user_by_planet.background_image %}
+        document.getElementById('background_id').src = "{{ user_by_planet.background_image.url }}";
+        {% else %}
+        document.getElementById('background_id').src = defaultBackgroundImage;
+        {% endif %}
       }
     }
 
-    function resetImages1() {
-        document.getElementById('preview1').src = "{{ user_by_planet.profile_image.url }}";
+    {% comment %} function resetImages1() {
+        document.getElementById('profile_id').src = "{{ user_by_planet.profile_image.url }}";
     }
     function resetImages2() {
-        document.getElementById('preview2').src = "{{ user_by_planet.background_image.url }}";
-    }
+        document.getElementById('background_id').src = "{{ user_by_planet.background_image.url }}";
+        
+    } {% endcomment %}
 {% comment %} 
     function baseImages1() {
-        document.getElementById('preview1').src = "";
+        document.getElementById('profile_id').src = "";
     }
     function baseImages2() {
-        document.getElementById('preview2').src = "{{ user_by_planet.background_image.url }}";
+        document.getElementById('background_id').src = "{{ user_by_planet.background_image.url }}";
     } {% endcomment %}
   </script>
 
