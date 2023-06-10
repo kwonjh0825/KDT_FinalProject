@@ -12,8 +12,8 @@
 
 {% block content %}
 <div id="post-list">
-  <div id="container">
-    {% for post in posts %}
+  {% for post in posts %}
+    <div id="container">
       <div id="section" style="display: flex;">
         <div id="post-detail">
           <div class="p-3">
@@ -42,6 +42,7 @@
                 <img src="{{ post.image.url }}" alt="{{ post.image }}" class="rounded-lg">
               {% endif %}
             </div>
+            <div class="mb-5 rounded-md border p-1" id="post-votetopics"></div>
           </div>
 
           
@@ -79,7 +80,7 @@
               </form>
             </li>
             <li>
-              <a href="{% url 'planets:report' planet.name 'post' 0 %}" class="block px-4 py-2 hover:bg-gray-100">게시글 신고</a>
+              <a id="post-report" href="{% url 'planets:report' planet.name 'post' post.pk %}" class="block px-4 py-2 hover:bg-gray-100">게시글 신고</a>
             </li>
             <li>
               <form id="update-post-form" class="block px-4 py-2 hover:bg-gray-100" data-planet-name="{{ planet.name }}" data-post-pk="{{ post.pk }}">
@@ -93,13 +94,15 @@
           </div>
         </div>
       </div>
-    {% endfor %}
-  </div>
+    </div>
+  {% endfor %}
 </div>
 {% endblock content %}
 
 {% block script %}
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="{% static 'js/planet_index.js' %}"></script>
+<script src="{% static 'js/planet_post_more.js' %}"></script>
 <script>
   var requestuser = "{{ request.user }}";
 </script>

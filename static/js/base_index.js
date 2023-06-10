@@ -1,3 +1,7 @@
+function scrollTopFixed() {
+  window.scrollTo(0, 0);
+}
+
 var weatherIcon = {
   '01': 'fas fa-sun',
   '02': 'fas fa-cloud-sun',

@@ -52,8 +52,8 @@
                 {% csrf_token %} 
                 <div class="flex flex-col p-10">
                   <div class="flex flex-col w-full">
-                    <label for="last_name" class="block text-base text-slate-300 mb-2">초대코드</label>
-                    <input type="text" class="border-[#bcbdbf] rounded-md bg-transparent text-white focus:ring-[#ffc800] focus:border-[#ffc800] w-full" name="user_input">
+                    <label for="invite_code" class="block text-base text-slate-300 mb-2">초대코드</label>
+                    <input type="text" class="border-[#bcbdbf] rounded-md bg-transparent text-white focus:ring-[#ffc800] focus:border-[#ffc800] w-full" id="invite_code" name="invite_code">
                   </div>
                   <p id="errorText" class="hidden">Invitation code is invalid.</p>
 
@@ -314,7 +314,7 @@
     event.preventDefault();
     
     // 폼 데이터 가져오기
-    const userInput = inviteForm.querySelector('input[name="user_input"]').value;
+    const userInput = inviteForm.querySelector('input[name="invite_code"]').value;
   
     // 폼 데이터 처리
     // 예: 서버로 전송하여 처리하거나, 다른 동작 수행 등
