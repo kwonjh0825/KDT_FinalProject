@@ -248,7 +248,11 @@
                 <div class="p-3">
                   <img class="planet-list-img mb-5" src="{% if planet.image %}{{ planet.image.url }}{% else %}{% static 'img/no_planet_img.png' %}{% endif %}" alt="image" style="height: 172px;">
                   <div class="planet-list-text">
-                    <p class="text-[#999999]">{{ planet.is_public }}</p>
+                    <div class="flex justify-between">
+                      <p class="text-[#999999]">{{ planet.is_public }}</p>
+                      <p class="text-[#999999]">
+                        {{ planet.current_capacity }}/{{ planet.maximum_capacity }}명                      </p>
+                    </div>
                     <p class="mb-5">{{ planet.name }}</p>
                     <p id="description-{{ planet.id }}" class="text-sm min-h-[60px] mb-2 clamp-3-lines">{{ planet.description }}</p>
                     <button id="moreButton-{{ planet.id }}">더보기</button>
