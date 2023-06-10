@@ -12,20 +12,21 @@
 
 {% block content %}
   <div class="container mx-auto max-w-4xl my-8">
-    <div class="my-4 mx-auto w-[480px] border-b-2 border-[#393f4f]">
-      <p class="text-xl pt-5 mb-5 border-t-2 border-[#393f4f]">Favorite⭐</p>
+    <div class="my-4 mx-auto w-[95%] border-b-2 border-[#393f4f]">
+      <p class="text-xl pt-5 mb-5 border-t-2 border-[#393f4f]">Favorite</p>
       {% if user_by_planets_star %}
         {% for user_by_planets_star in user_by_planets_star %}
-          <a type="button" href="{% url 'planets:index' planet_name=user_by_planets_star.planet.name %}" class="pl-5 py-2 my-3 rounded-lg bg-[#282c37] hover:bg-[161a24] w-[480px] flex mb-5 gap-4 relative">
+          <a type="button" href="{% url 'planets:index' planet_name=user_by_planets_star.planet.name %}" class="pl-5 py-2 my-3 rounded-lg bg-[#282c37] hover:bg-[161a24] w-[100%] flex mb-5 gap-4 relative">
             {% if user_by_planets_star.profile_image %}
               <img src="{{ user_by_planets_star.profile_image.url }}" alt="post_image" class="inline-block rounded-md" width="50" height="50">
             {% else %}
               <img src="{% static 'img/profile.png' %}" alt="no_image" class="inline-block rounded-md" width="50" height="50">
             {% endif %}
-            <div>
-              <p class="text-slate-200">{{ user_by_planets_star.planet.name }}</p>
+            <div class="">
+              <p class="text-slate-200">{{ user_by_planets_star.planet.name }}</p> 
               <p class="text-slate-400">{{ user_by_planets_star.nickname }}</p>
             </div>
+            <p class="absolute right-2 bottom-8">⭐</p>
             <p class="absolute right-2 bottom-2 text-slate-400 text-xs">{{ user_by_planets_star.created_at|date:'m d, Y' }}</p>
           </a>
         {% endfor %}
@@ -39,7 +40,7 @@
       <p class="text-xl pt-5 mb-5 border-t-2 border-[#393f4f]">Planet Lists</p>
       {% if user_by_planets_not_star %}
         {% for user_by_planets_not_star in user_by_planets_not_star %}
-          <a type="button" href="{% url 'planets:index' planet_name=user_by_planets_not_star.planet.name %}" class="pl-5 py-2 my-3 rounded-lg bg-[#282c37] hover:bg-[161a24] w-[480px] flex mb-5 gap-4 relative">
+          <a type="button" href="{% url 'planets:index' planet_name=user_by_planets_not_star.planet.name %}" class="pl-5 py-2 my-3 rounded-lg bg-[#282c37] hover:bg-[161a24] w-[100%] flex mb-5 gap-4 relative">
             {% if user_by_planets_not_star.profile_image %}
               <img src="{{ user_by_planets_not_star.profile_image.url }}" alt="post_image" class="inline-block rounded-md" width="50" height="50">
             {% else %}
@@ -66,6 +67,7 @@
 <script>
   var requestuser = "{{ request.user }}";
   var requestuser_nickname= "{{ user.nickname }}";
+  
 </script>
 <script src="{% static 'js/planet_index_list.js' %}"></script>
 {% endblock script %}
