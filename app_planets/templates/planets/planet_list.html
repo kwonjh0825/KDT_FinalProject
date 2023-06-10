@@ -462,11 +462,11 @@ btn4.addEventListener('click', () => {
 
 
 // 관찰자 설정
-let observerOptions = {
+{% comment %} let observerOptions = {
   root: null,
   rootMargin: '0px',
   threshold: 0.5
-};
+}; {% endcomment %}
 
 {% comment %} // 각 섹션과 관련된 버튼을 맵으로 연결합니다.
 let sectionButtonMap = {
@@ -498,6 +498,7 @@ let sectionObserver = new IntersectionObserver((entries, observer) => {
 Object.keys(sectionButtonMap).forEach((section) => {
   sectionObserver.observe(document.getElementById(section));
 }); {% endcomment %}
+
 
 </script>
 {% endblock script %}
