@@ -51,13 +51,13 @@
 }
 
 .button-color-enter {
-  background-color: #00c542;
+  background-color: #515d5a;
   color: white;
 }
 
 .button-color-enter:hover {
   transform: scale(1.05);
-  background-color: #009030;
+  background-color: #a0a0a0;
 }
 
 .button-invite {
