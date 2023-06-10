@@ -97,7 +97,7 @@
     const message = document.querySelector('#usernameMessage');
     const userinput = document.querySelector('#username');
 
-    if (input_id.trim().length >= 8) {
+    if (input_id.trim().length >= 5) {
       userinput.classList.remove('border-red-300');
       userinput.classList.add('border-green-300');
       message.textContent = '유효한 아이디 양식입니다.';
@@ -109,7 +109,7 @@
         userinput.classList.remove('border-green-300');
         userinput.classList.remove('border-red-300');
       } else {
-        message.textContent = '8자 이상이어야 합니다.';
+        message.textContent = '5자 이상이어야 합니다.';
       }
       username = '';
     }

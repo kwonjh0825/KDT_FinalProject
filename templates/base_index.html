@@ -275,8 +275,10 @@
 
     <!-- 우측 side 바, md:block -->
     <nav class="sticky top-0 mb-auto w-full z-[1] max-w-[280px] hidden lg:block">
-      <div class="border-b-1 border-[#393f4f] text-[#ffd951] font-bold p-5 w-full">
-        <a href="{% url 'planets:main' %}" class='text-2xl p-1 text-[#ffd951]'>Catsmos</a> <!-- 로고 위치 -->
+      <div class="border-b-1 border-[#393f4f] text-[#ffd951] font-bold w-full flex justify-center">
+        <a href="{% url 'planets:main' %}">
+          <img type="button" style="height:50px;" src="{% static 'img/catsmos_logo.png' %}" alt="">
+        </a>
       </div>
       
       <!-- Modal toggle -->
