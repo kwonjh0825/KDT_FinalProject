@@ -1,62 +1,41 @@
 {% extends 'base_nav.html' %}
+{% load static %}
 {% block title %}
   term of services admin
 {% endblock title %}
 
 {% block content %}
-  <h1>term of service admin</h1>
-  <form action="{% url 'planets:planet_tos_admin' planet.name %}" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    <div id="terms-of-service">
-      <h3>Terms of Service</h3>
-      <input type="hidden" id="num-terms" name="termsofservice_count" value="{{length}}">
-      <div id="term-fields-container">
-        {% for TOS in TOSs %}
-          <div>
-            <label for="term_content_{{forloop.counter}}">Term Content:</label>
-            <input type="text" id="term_content_{{forloop.counter}}" name="term_content_{{forloop.counter}}" value="{{TOS.content}}">
-            <button type="button" class="delete-term-btn" data-term-count="{{forloop.counter}}">Delete</button>
-            <br>
+<div class=" container mx-auto flex justify-center">
+  <div class="w-full max-w-md pt-10">
+    <p class="text-4xl mb-3 pb-4 font-bold">Terms of service</p>
+    <hr class="border-t-2 border-yellow-300">
+    <div class="my-4">
+      <form action="{% url 'planets:planet_tos_admin' planet.name %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div id="terms-of-service">
+          <input type="hidden" id="num-terms" name="termsofservice_count" value="{{length}}">
+          <div id="term-fields-container">
+            {% for TOS in TOSs %}
+            <div class="my-5 flex gap-1 delete-term-btn">
+              <label class="flex items-center" for="term_content_{{forloop.counter}}">약관 :</label>
+              <input class="rounded-md text-black w-4/5" type="text" id="term_content_{{forloop.counter}}" name="term_content_{{forloop.counter}}" value="{{TOS.content}}">
+              <button class="my-auto justify-center flex items-center bg-red-400 rounded-lg delete-term-btn" style="width:30px; height:30px;" type="button" data-term-count="{{forloop.counter}}">X</button>
+              <br>
+            </div>
+            {% endfor %}
           </div>
-        {% endfor %}
+          <div class="grid my-2">
+            <button class="text-md bg-gray-500 hover:bg-gray-600 py-1 rounded-md" type="button" id="add-term-btn">약관 추가하기</button>
+          </div>
         </div>
-      <button type="button" id="add-term-btn">Add Term</button>
+        
+        <div class="grid mt-7">
+          <button type="submit" class="py-1 bg-yellow-400 hover:bg-yellow-500 text-xl text-white font-bold py-1 px-4 rounded shadow">Update</button>
+        </div>
+      </form>
     </div>
-    
-    <input type="submit" value="완료">
-  </form>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const addTermBtn = document.getElementById('add-term-btn');
-      const termFieldsContainer = document.getElementById('term-fields-container');
-      let termCount = document.getElementById('num-terms').value;
-    
-      addTermBtn.addEventListener('click', function () {
-        termCount++;
-    
-        const termField = document.createElement('div');
-        termField.innerHTML = `
-          <label for="term_content_${termCount}">Term Content:</label>
-          <input type="text" id="term_content_${termCount}" name="term_content_${termCount}">
-          <button type="button" class="delete-term-btn" data-term-count="${termCount}">Delete</button>
-          <br>
-        `;
-    
-        termFieldsContainer.appendChild(termField);
-        document.getElementById('num-terms').value = termCount;
-      });
-    
-      termFieldsContainer.addEventListener('click', function (event) {
-        if (event.target.classList.contains('delete-term-btn')) {
-          const termCount = event.target.getAttribute('data-term-count');
-          const termField = document.getElementById(`term_content_${termCount}`).parentNode;
-          termField.remove();
-          document.getElementById('num-terms').value = termFieldsContainer.children.length;
-        }
-      });
-    });
-  </script>
-
+  </div>
+</div>
+<script src="{% static 'js/planet_tos_update.js' %}"></script>
 
 {% endblock content %}

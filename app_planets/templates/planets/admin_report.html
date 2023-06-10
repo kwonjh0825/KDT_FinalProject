@@ -4,79 +4,45 @@
   게시글 신고 관리
 {% endblock title %}
 {% block content %}
-  
-  <h1>게시글 신고 관리</h1>
-  <hr>
-  <h2>게시글 신고 현황</h2>
-  <div id="report-post-list">
-    {% for report_count in post_reports_count %}
-      <div id="report-postform-{{report_count.post}}">
-        <p>게시글 번호: {{report_count.post}}, 신고 수: {{report_count.pk__count}}</p>
-        <div>
-          <p>신고 내용</p>
-          {% for report in post_reports %}
-            {% if report.post.pk == report_count.post %}
-              <p>{{report.content}}</p>
-            {% endif %}
-          {% endfor %}
+<div class="container mx-auto flex justify-center h-screen">
+  <div class="w-full max-w-md pt-10">
+    <p class="text-4xl mb-3 pb-4 font-bold">게시글 신고 관리</p>
+    <hr class="border-t-2 border-yellow-300">
+      <div class="mt-5 grid">
+      {% for report in reports %}
+        <div id="report-form-{{report.post}}" class="col pl-5 py-2 my-3 rounded-lg bg-[#181A20] hover:bg-[161a24] flex gap-4 relative">
+          <div>
+            <p class="text-slate-200">게시글 번호: {{report.post}}</p>
+            <p class="text-slate-400">신고 수: {{report.pk__count}}</p>
+          </div>
+          <form class="delete-post-form" data-post-pk="{{report.post}}" data-planet-name="{{planet.name}}">
+            {% csrf_token %}
+            <button class="absolute right-2 top-2 text-slate-400 text-xs" type="submit"><span class="material-symbols-outlined">
+              delete
+              </span></button>
+          </form>
         </div>
-        <form class="delete-post-form" data-post-pk="{{report_count.post}}" data-planet-name="{{planet.name}}">
-          {% csrf_token %}
-          <input type="submit" value="게시글 삭제">
-        </form>
+
+      {% endfor %}
       </div>
-    {% empty %}
-      <p>신고된 내역이 없습니다.</p>
-    {% endfor %}
-  </div>
-  <hr>
-  <h2>댓글 신고 현황</h2>
-  <div id="report-comment-list">
-    {% for report_count in comment_reports_count %}
-      <div id="report-commentform-{{report_count.comment}}">
-        <p>댓글 번호: {{report_count.comment}}, 신고 수: {{report_count.pk__count}}</p>
-        <div>
-          <p>신고 내용</p>
-          {% for report in comment_reports %}
-            {% if report.comment.pk == report_count.comment %}
-              <p>{{report.content}}</p>
-            {% endif %}
-          {% endfor %}
+      {% comment %} <div class="grid grid-cols-2 ">
+        <div class="col">
+          <div class="pl-5 py-2 my-3 rounded-lg bg-[#181A20] hover:bg-[161a24] w-[400px] flex gap-4 relative">
+            <div>
+              <p class="text-slate-200">게시글 번호: {{report.post}}</p>
+              <p class="text-slate-400">신고 수: {{report.pk__count}}</p>
+            </div>
+            <form class="delete-post-form" data-post-pk="{{report.post}}" data-planet-name="{{planet.name}}">
+              {% csrf_token %}
+              <input class="absolute right-2 bottom-2 text-slate-400 text-xs" type="submit" value="게시글 삭제">
+            </form>
+          </div>
         </div>
-        <form class="delete-comment-form" data-comment-pk="{{report_count.comment}}" data-planet-name="{{planet.name}}">
-          {% csrf_token %}
-          <input type="submit" value="댓글 삭제">
-        </form>
-      </div>
-    {% empty %}
-      <p>신고된 내역이 없습니다.</p>
-    {% endfor %}
-  </div>
-  <hr>
-  <h2>대댓글 신고 현황</h2>
-  <div id="report-recomment-list">
-    {% for report_count in recomment_reports_count %}
-      <div id="report-recommentform-{{report_count.recomment}}">
-        <p>대댓글 번호: {{report_count.recomment}}, 신고 수: {{report_count.pk__count}}</p>
-        <div>
-          <p>신고 내용</p>
-          <ul>
-          {% for report in recomment_reports %}
-            {% if report.recomment.pk == report_count.recomment %}
-              <li>{{report.content}}</li>
-            {% endif %}
-          {% endfor %}
-          </ul>
-        </div>
-        <form class="delete-recomment-form" data-recomment-pk="{{report_count.recomment}}" data-planet-name="{{planet.name}}">
-          {% csrf_token %}
-          <input type="submit" value="대댓글 삭제">
-        </form>
-      </div>
-    {% empty %}
-     <p>신고된 내역이 없습니다. </p>
-    {% endfor %}
-  </div>
-  <script src="{% static 'js/admin_report.js' %}"></script>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+      </div> {% endcomment %}
+
+
 {% endblock content %}
+{% block script %}
+<script src="{% static 'js/admin_report.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+{% endblock script %}

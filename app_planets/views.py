@@ -626,12 +626,11 @@ def planet_admin(request, planet_name):
     if is_staff or is_manager:
         confirms = Accountbyplanet.objects.filter(planet=planet, is_confirmed=False)
         if request.method == 'POST':
-            form_planet = PlanetForm(request.POST,request.FILES, instance=planet)
-            
+            form_planet = PlanetForm(request.POST,request.FILES, instance=planet)            
             if form_planet.is_valid():
+
                 form_planet.save()
-                
-                return redirect('planets:main')
+                return redirect('planets:planet_list')
         else:
             form_planet = PlanetForm(instance=planet)
         
@@ -664,13 +663,13 @@ def planet_tos_admin(request, planet_name):
             # 기존 약관 DB 삭제
             old_term = TermsOfService.objects.filter(Planet=planet)
             old_term.delete()
-            
+
             # 이용 약관 저장
             for i in range(1, termsofservice_count + 1):
                 term_content = request.POST.get(f'term_content_{i}', '')
                 TermsOfService.objects.create(Planet=planet, order=i, content=term_content)
 
-            return redirect('planets:main')
+            return redirect('planets:planet_admin',planet_name)
         
         else:
             context = {
@@ -850,7 +849,7 @@ def admin_member(request, planet_name):
                 temp.admin_level = level
                 temp.save()
             
-            return redirect('planets:admin_member', planet_name)
+            return redirect('planets:planet_admin', planet_name)
 
         else:
             accounts = Accountbyplanet.objects.filter(planet=planet)

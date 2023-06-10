@@ -20,7 +20,7 @@
         <!-- id -->
         <label for="username" class="ml-1 mt-2 block text-lg font-medium text-slate-300">ID</label>
         <input type="text" id="username" name="username" value="{{ user.username }}" class="form-input mt-1 rounded-md bg-[#101013] " required>
-        <small id="usernameMessage" class="pt-2 text-xs text-gray-400">6자 이상이어야 합니다</small>
+        <small id="usernameMessage" class="pt-2 text-xs text-gray-400">5자 이상이어야 합니다</small>
 
         <!-- email -->
         <label for="email" class="ml-1 mt-2 block text-lg font-medium text-slate-300">E-mail</label>
@@ -55,7 +55,7 @@
         </div>
         <!-- checkbox -->
         <div class="flex items-center my-4 ml-2">
-          <input id="signup-checkbox" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" required>
+          <input id="signup-checkbox" type="checkbox" class="w-4 h-4 text-yellow-600 bg-gray-100 border-gray-300 rounded focus:ring-yellow-500 dark:focus:ring-yellow-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" required>
           <label for="signup-checkbox" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">I have read and agree to the privacy policy</label>
         </div>
         <!-- 버튼 -->
@@ -97,7 +97,7 @@
     const message = document.querySelector('#usernameMessage');
     const userinput = document.querySelector('#username');
 
-    if (input_id.trim().length >= 6) {
+    if (input_id.trim().length >= 5) {
       userinput.classList.remove('border-red-300');
       userinput.classList.add('border-green-300');
       message.textContent = '유효한 아이디 양식입니다.';
@@ -109,7 +109,7 @@
         userinput.classList.remove('border-green-300');
         userinput.classList.remove('border-red-300');
       } else {
-        message.textContent = '6자 이상이어야 합니다.';
+        message.textContent = '5자 이상이어야 합니다.';
       }
       username = '';
     }
