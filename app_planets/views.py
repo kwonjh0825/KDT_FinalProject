@@ -248,6 +248,19 @@ def index_list(request, planet_name):
     user = request.user
     user_by_planets_star = Accountbyplanet.objects.filter(user=user, star=1)
     user_by_planets_not_star = Accountbyplanet.objects.filter(user=user, star=0)
+    
+    # 1. Get all planets the user has joined
+    user_planets = Accountbyplanet.objects.filter(user=user)
+
+    # 2. Extract unique categories from these planets
+    user_categories = user_planets.values_list('planet__category', flat=True).distinct()
+
+    # 3. Find all the planets that have their category in the list of user's categories but aren't joined by the user
+    planet_recommends = Planet.objects.filter(category__in=user_categories).exclude(accountbyplanet__in=user_planets).order_by('?')[:5]
+    planet_not_recommends = Planet.objects.exclude(category__in=user_categories).exclude(accountbyplanet__in=user_planets).order_by('?')[:5]
+    num_not_recommended = max(0, 5 - len(planet_recommends))
+    planet_not_recommends = planet_not_recommends[:num_not_recommended]
+    
     try:
         memo = Memobyplanet.objects.get(accountbyplanet=Accountbyplanet.objects.get(planet=planet, user=request.user))
     except:
@@ -266,6 +279,9 @@ def index_list(request, planet_name):
         'user_by_planets_not_star':user_by_planets_not_star,
         'first_post': Post.objects.filter(planet=planet).first(),
         'user': Accountbyplanet.objects.get(planet=planet, user=request.user),
+        'planet_recommends': planet_recommends,
+        'planet_not_recommends': planet_not_recommends,
+
     }
     return render(request, 'planets/index_list.html', context)
 
