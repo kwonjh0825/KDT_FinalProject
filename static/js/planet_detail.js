@@ -24,7 +24,7 @@ function loadComments() {
           $(window).off('scroll');
           return;
         }
-        createcommentContainer(comment.profile_image_url, comment.nickname, comment.created_time, comment.content, comment.pk, comment.user, comment.recomments);
+        createcommentContainer(comment.profile_image_url, comment.nickname, comment.created_time, comment.content, comment.pk, comment.user, comment.recomments, comment.comment_emote_heart, comment.comment_emote_thumbsup, comment.comment_emote_thumbsdown);
       }
     }
   });
@@ -36,7 +36,7 @@ $(document).ready(function() {
 });
 
 // 댓글 생성 container
-function createcommentContainer(profile_image_url, nickname, created_time, content, comment_pk, user, recomments) {
+function createcommentContainer(profile_image_url, nickname, created_time, content, comment_pk, user, recomments, comment_emote_heart, comment_emote_thumbsup, comment_emote_thumbsdown) {
   var newCommentContainer = document.getElementById('container').cloneNode(true);
   var commentSection = newCommentContainer.querySelector('#section')
   commentSection.style.display = 'flex';
@@ -63,9 +63,17 @@ function createcommentContainer(profile_image_url, nickname, created_time, conte
   newCommentContainer.querySelector('#report-comment-url').href = `/planets/${planetName}/report/comment/${comment_pk}/`
   newCommentContainer.querySelector('#delete-post-form').id = "delete-comment-form";
   newCommentContainer.querySelector('#delete-comment-form').setAttribute("data-comment-pk", comment_pk);
+
+  newCommentContainer.querySelectorAll('.post-emote-form').forEach((form) => {
+    form.setAttribute('data-comment-pk', comment_pk)
+  })
   newCommentContainer.querySelector('.emotion-heart-count').textContent = 0;
   newCommentContainer.querySelector('.emotion-thumbsup-count').textContent = 0;
   newCommentContainer.querySelector('.emotion-thumbsdown-count').textContent = 0;
+  newCommentContainer.querySelectorAll('.post-emote-form').forEach((form) => {
+    form.classList.replace('post-emote-form', 'comment-emote-form')
+    form.id = `comment-emote-form-${comment_pk}`
+  })
   if (requestuser_nickname == nickname) {
     newCommentContainer.querySelector('#dropdown-delete').style.display = 'block';
     newCommentContainer.querySelector('#delete-post-button').id = "delete-comment-button";
@@ -504,53 +512,27 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-// post 비동기 emote
-const postEmoteForms = document.querySelectorAll('.post-emote-form')
-postEmoteForms.forEach((emoteForm) => {
-  emoteForm.addEventListener('submit', (e) => {
-    e.preventDefault()
-    
-    const emoteClass = e.target.dataset.emoteClass
-    const planetName = e.target.dataset.planetName
-    const postPk = e.target.dataset.postPk
-    const emotionCount = document.querySelector(`.post-emote-form > p > .emotion-${emoteClass}-count`)
-
-    axios({
-      method:'post',
-      url:`/planets/${planetName}/posts/${postPk}/emotes/${emoteClass}`,
-      headers:{'X-CSRFToken': csrftoken,}
-    })
-    .then((response) => {
-      emotionCount.innerHTML = response.data.emotion_count
-    })
-    .catch((error) => {
-      console.log(error.response)
-    })
+// comment 비동기 emote
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelector('body').addEventListener('submit', (e) => {
+    if(e.target.matches('.comment-emote-form')) {
+      e.preventDefault()
+      const emoteClass = e.target.dataset.emoteClass
+      const planetName = e.target.dataset.planetName
+      const postPk = e.target.dataset.postPk
+      const commentPk = e.target.dataset.commentPk 
+      const emotionCount = document.querySelector(`#comment-emote-form-${commentPk}> p > .emotion-${emoteClass}-count`)
+      axios({
+        method:'post',
+        url:`/planets/${planetName}/posts/${postPk}/comments/${commentPk}/emotes/${emoteClass}`,
+        headers:{'X-CSRFToken': csrftoken,}
+      })
+      .then((response) => {
+        emotionCount.innerHTML = response.data.emotion_count
+      })
+      .catch((error) => {
+        console.log(error.response)
+      })
+    }
   })
 })
-
-// comment 비동기 emote
-// const commentEmoteForms = document.querySelectorAll('.comment-emote-form')
-// postEmoteForms.forEach((emoteForm) => {
-//   emoteForm.addEventListener('submit', (e) => {
-//     e.preventDefault()
-    
-//     const emoteClass = e.target.dataset.emoteClass
-//     const planetName = e.target.dataset.planetName
-//     const commentPk = e.target.dataset.commentPk
-//     const postPk = e.target.dataset.postPk
-//     const emotionCount = document.querySelector(`.comment-emote-form > p > .emotion-${emoteClass}-count`)
-
-//     axios({
-//       method:'post',
-//       url:`/planets/${planetName}/posts/${postPk}/commments/${commentPk}/emotes/${emoteClass}`,
-//       headers:{'X-CSRFToken': csrftoken,}
-//     })
-//     .then((response) => {
-//       emotionCount.innerHTML = response.data.emotion_count
-//     })
-//     .catch((error) => {
-//       console.log(error.response)
-//     })
-//   })
-// })
