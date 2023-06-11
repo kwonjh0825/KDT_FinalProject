@@ -1,63 +1,173 @@
 {% extends 'base_nav.html' %}
-
+{% load static %}
 {% block title %}
   planet settings
 {% endblock title %}
 
+{% block style %}
+
+.tag_crop {
+  height: 150px;
+  width: 450px; 
+  object-fit: cover;
+  position: relative;
+}
+
+.tag_img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  vertical-align: middle;
+}
+{% endblock style %}
+
 {% block content %}
-  <h1>planet settings</h1>
-  <form action="{% url 'planets:planet_admin' planet.name %}" method="POST">
-    {% csrf_token %}
-    {{form_planet.as_p}}
-    <div class="grid my-4 gap-y-3">
-      <div class="flex gap-5">
+<div class="container mx-auto flex justify-center">
+  <div class="w-full max-w-md pt-10">
+    <p class="text-4xl mb-3 pb-4 font-bold">Update</p>
+    <hr class="border-t-2 border-yellow-300">
+    <form action="{% url 'planets:planet_admin' planet.name %}" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      {% comment %} {{form_planet.as_p}} {% endcomment %}
+      <div class="grid my-4 gap-y-3">
         <div>
           <label for="name" class="block text-sm font-medium text-slate-300">행성 이름</label>
           <input type="text" id="name" name="name" value="{{ planet.name }}" class="form-input mt-1 block w-full rounded-md bg-[#101013]">
         </div>
-        <div>  
-          <label for="category" class="block text-sm font-medium text-slate-300">카테고리</label>
-          <select name="category" placeholder="" required="" id="category" selected="{{ planet.category }}" class="form-input p-2 mt-1 block w-full rounded-md bg-[#101013]">
-            <option value="">---------</option>
-            <option value="Tech">Tech</option>
-            <option value="Game">Game</option>
-            <option value="Music">Music</option>
-            <option value="Sports">Sports</option>
-            <option value="Food">Food</option>
-            <option value="Hobby">Hobby</option>
-          </select>
+        <div>
+          <label for="description" class="block text-sm font-medium text-slate-300">설명</label>
+          <textarea type="text" id="description" name="description"  class="form-input mt-1 block w-full rounded-md bg-[#101013]">{{ planet.description }}</textarea>
         </div>
-        <div>  
-          <label for="is_public" class="block text-sm font-medium text-slate-300" >공개여부</label>
-          <select name="is_public" id="is_public" class="form-input p-2 mt-1 block w-half rounded-md bg-[#101013]">
-            <option value="Private">Private</option>
-            <option value="Public">Public</option>
-          </select>
+        <div class="flex gap-4">
+          <div>  
+            <label for="category" class="block text-sm font-medium text-slate-300">카테고리</label>
+            <select name="category" placeholder="" required="" id="category" selected="{{ planet.category }}" class="form-input p-2 mt-1 block w-32 rounded-md bg-[#101013]">
+              <option value="">---------</option>
+              <option value="Tech" {% if planet.category == 'Tech' %}selected{% endif %}>Tech</option>
+              <option value="Game" {% if planet.category == 'Game' %}selected{% endif %}>Game</option>
+              <option value="Music" {% if planet.category == 'Music' %}selected{% endif %}>Music</option>
+              <option value="Sports" {% if planet.category == 'Sports' %}selected{% endif %}>Sports</option>
+              <option value="Food" {% if planet.category == 'Food' %}selected{% endif %}>Food</option>
+              <option value="Hobby" {% if planet.category == 'Hobby' %}selected{% endif %}>Hobby</option>
+            </select>
+          </div>
+          <div>  
+            <label for="is_public" class="block text-sm font-medium text-slate-300" >공개여부</label>
+            <select name="is_public" id="is_public" class="form-input p-2 mt-1 block w-32 rounded-md bg-[#101013]">
+              <option value="Private" {% if planet.is_public == 'Private' %}selected{% endif %}>Private</option>
+              <option value="Public" {% if planet.is_public == 'Public' %}selected{% endif %}>Public</option>
+            </select>
+          </div>
+          <div>
+            <label for="maximum_capacity" class="block text-sm font-medium text-slate-300">최대 인원</label>
+            <input type="text" id="maximum_capacity" name="maximum_capacity" value="{{ planet.maximum_capacity }}" class="form-input mt-1 block w-40 rounded-md bg-[#101013]">
+          </div>
         </div>
-      </div>
-      <div>
-        <label for="description" class="block text-sm font-medium text-slate-300">설명</label>
-        <textarea type="text" id="description" name="description"  class="form-input mt-1 block w-3/4 rounded-md bg-[#101013]">{{ planet.description }}</textarea>
-      </div>
-      
+        <div>
+          <label for="image" class="block text-sm font-medium text-slate-300">행성 사진</label>
+          <div class="bg-gray-700" style="position: relative; display: inline-block ">
+            <div class="tag_crop">
+              <img src="{% if planet.image %} {{ planet.image.url}} {% else %} {% static 'img/no_planet_img.png' %} {% endif %}" class="absolute inset-0 m-auto tag_img" id="preview1" style="width: 100%; height: 100%;">
+            </div>
+            <button type="button" onclick="document.getElementById('image').click();" class="absolute inset-0 m-auto block text-lg font-medium text-slate-300" style="top: 50%; transform: translateY(-50%);">
+              <span id="symbol1" class="material-symbols-outlined text-4xl" style="display:none;">
+                person_add
+              </span>
+            </button>
+            <input onchange="readURL1(this);" type="file" id="image" name="image" class="form-input" style="display: none;">
+          </div>
+        </div>
+        
 
 
 
-    <input type="submit" value="완료">
-  </form>
+      <div class="grid mt-8">
+        <button class="btn bg-[#ffd951] text-white font-bold py-2 px-4 rounded" type="submit">완료</button>
+      </div> 
+    </form>
+  </div>
+  <div class="flex gap-8 justify-end">
 
-  {% if planet.need_confirm == True %}
+    {% if planet.need_confirm == True %}
     <a href="{% url 'planets:planet_join_admin' planet.name %}">가입 관리</a>
-  {% endif %}
+    {% endif %}
+    {% if is_manager %}
+    <a href="{% url 'planets:admin_member' planet.name %}">회원 관리</a>
+    {% comment %} {% include 'planets/admin_member.html' with planet_name=planet.name %} {% endcomment %}
+    {% endif %}
+    
+    <a href="{% url 'planets:planet_tos_admin' planet.name %}">약관 수정</a>
+    <a href="{% url 'planets:admin_report' planet.name %}">게시글 신고 관리</a>
+    <button data-popover-target="popover-default" type="button" class="">행성 초대 코드</button>
+  </div>
+
+
+<div data-popover id="popover-default" role="tooltip" class="absolute z-10 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
+    <div class="px-3 py-2 bg-gray-100 border-b border-gray-200 rounded-t-lg dark:border-gray-600 dark:bg-gray-700">
+      <h3 class="font-semibold text-gray-900 dark:text-white">초대코드</h3>
+    </div>
+    <div class="px-3 py-2">
+      <div class="flex">
+        <p>초대코드 : <span id="invite-code">{{ planet.invite_code }}</span></p>
+        <button type="button" class="material-symbols-outlined" style="font-size:18px;" onclick="copyInviteCode()">
+          content_copy
+        </button>
+      </div>
+      <p>유효기간 : {{ planet.expiration_date|date:'m d, Y' }}</p>
+    </div>
+    <div data-popper-arrow></div>
+</div>
+
+
+</div>
+{% endblock content %}
+
+
+{% block script %}
+<script>
+    function readURL1(input) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('preview1').src = e.target.result;
+        };
+        var spanElement = document.getElementById('symbol1');
+        spanElement.style.display = 'none';
+  
+        reader.readAsDataURL(input.files[0]);
+      } else {
+        document.getElementById('preview1').src = "";
+      }
+    }
   
 
+  function resetImages1() {
+        document.getElementById('preview1').src = "";
+    }
+  </script>
 
-
-  {% if is_manager %}
-    <a href="{% url 'planets:admin_member' planet.name %}">회원 관리</a>
-  {% endif %}
-  <a href="{% url 'planets:planet_tos_admin' planet.name %}">약관 수정</a>
-  <a href="{% url 'planets:admin_report' planet.name %}">게시글 신고 관리</a>
-  <p>초대코드: {{planet.invite_code}}</p>
-  <p>초대코드 유효기간: {{planet.expiration_date}}</p>
-{% endblock content %}
+  <script>
+    function copyInviteCode() {
+      // 초대 코드 텍스트 요소 가져오기
+      var inviteCodeElement = document.getElementById("invite-code");
+      
+      // 텍스트 선택하고 복사하기
+      var range = document.createRange();
+      range.selectNode(inviteCodeElement);
+      window.getSelection().removeAllRanges();
+      window.getSelection().addRange(range);
+      document.execCommand("copy");
+      
+      // 선택 해제
+      window.getSelection().removeAllRanges();
+      
+      // 복사 완료 메시지 표시 (옵션)
+      Swal.fire(
+        'Good job!',
+        '초대 코드가 복사되었습니다.',
+        'success'
+      )
+    }
+    </script>
+{% endblock script %}

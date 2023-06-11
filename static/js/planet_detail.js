@@ -63,15 +63,9 @@ function loadComments() {
           $(window).off('scroll');
           return;
         }
-        createcommentContainer(
-          comment.profile_image_url,
-          comment.nickname,
-          comment.created_time,
-          comment.content,
-          comment.pk,
-          comment.user,
-          comment.recomments
-        );
+
+        createcommentContainer(comment.profile_image_url, comment.nickname, comment.created_time, comment.content, comment.pk, comment.user, comment.recomments, comment.comment_emote_heart, comment.comment_emote_thumbsup, comment.comment_emote_thumbsdown);
+
       }
     },
   });
@@ -83,19 +77,11 @@ $(document).ready(function () {
 });
 
 // 댓글 생성 container
-function createcommentContainer(
-  profile_image_url,
-  nickname,
-  created_time,
-  content,
-  comment_pk,
-  user,
-  recomments
-) {
-  var newCommentContainer = document
-    .getElementById('container')
-    .cloneNode(true);
-  var commentSection = newCommentContainer.querySelector('#section');
+
+function createcommentContainer(profile_image_url, nickname, created_time, content, comment_pk, user, recomments, comment_emote_heart, comment_emote_thumbsup, comment_emote_thumbsdown) {
+  var newCommentContainer = document.getElementById('container').cloneNode(true);
+  var commentSection = newCommentContainer.querySelector('#section')
+
   commentSection.style.display = 'flex';
   var newDiv = document.createElement('div');
   newDiv.innerHTML = `<svg width="30px" height="30px" id="Capa_1" style="enable-background:new 0 0 74.5 60;" version="1.1" viewBox="0 0 74.5 60" width="74.5px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M10,45h40.5v15l24-22l-24-22v15H14V0H0v35C0,40.523,4.477,45,10,45z" fill="#ffffff"/></g></svg>`;
@@ -121,23 +107,26 @@ function createcommentContainer(
   newCommentContainer.querySelector('#post-content').textContent = content;
   newCommentContainer.querySelector('#post-tags').remove();
   newCommentContainer.querySelector('#post-image').remove();
-  newCommentContainer.querySelector('#update-post-form').id =
-    'update-comment-form';
-  newCommentContainer
-    .querySelector('#update-comment-form')
-    .setAttribute('data-comment-pk', comment_pk);
-  newCommentContainer.querySelector('#report-post-url').id =
-    'report-comment-url';
-  newCommentContainer.querySelector('#report-comment-url').textContent =
-    '댓글 신고';
-  newCommentContainer.querySelector(
-    '#report-comment-url'
-  ).href = `/planets/${planetName}/report/comment/${comment_pk}/`;
-  newCommentContainer.querySelector('#delete-post-form').id =
-    'delete-comment-form';
-  newCommentContainer
-    .querySelector('#delete-comment-form')
-    .setAttribute('data-comment-pk', comment_pk);
+
+  newCommentContainer.querySelector('#update-post-form').id = "update-comment-form";
+  newCommentContainer.querySelector('#update-comment-form').setAttribute("data-comment-pk", comment_pk);
+  newCommentContainer.querySelector('#report-post-url').id = "report-comment-url";
+  newCommentContainer.querySelector('#report-comment-url').textContent = "댓글 신고";
+  newCommentContainer.querySelector('#report-comment-url').href = `/planets/${planetName}/report/comment/${comment_pk}/`
+  newCommentContainer.querySelector('#delete-post-form').id = "delete-comment-form";
+  newCommentContainer.querySelector('#delete-comment-form').setAttribute("data-comment-pk", comment_pk);
+
+  newCommentContainer.querySelectorAll('.post-emote-form').forEach((form) => {
+    form.setAttribute('data-comment-pk', comment_pk)
+  })
+  newCommentContainer.querySelector('.emotion-heart-count').textContent = 0;
+  newCommentContainer.querySelector('.emotion-thumbsup-count').textContent = 0;
+  newCommentContainer.querySelector('.emotion-thumbsdown-count').textContent = 0;
+  newCommentContainer.querySelectorAll('.post-emote-form').forEach((form) => {
+    form.classList.replace('post-emote-form', 'comment-emote-form')
+    form.id = `comment-emote-form-${comment_pk}`
+  })
+
   if (requestuser_nickname == nickname) {
     newCommentContainer.querySelector('#dropdown-delete').style.display =
       'block';
@@ -199,14 +188,11 @@ function createRecommentContainer(
   newDiv.innerHTML = `<svg width="30px" height="30px" id="Capa_1" style="enable-background:new 0 0 74.5 60;" version="1.1" viewBox="0 0 74.5 60" width="74.5px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M10,45h40.5v15l24-22l-24-22v15H14V0H0v35C0,40.523,4.477,45,10,45z" fill="#ffffff"/></g></svg>`;
   newRecommentContainer.insertBefore(newDiv, newRecommentContainer.children[0]);
   var newDiv2 = document.createElement('div');
-  newDiv2.style.width = '130px';
-  newRecommentContainer.insertBefore(
-    newDiv2,
-    newRecommentContainer.children[0]
-  );
-  newRecommentContainer.querySelector('#post-img img').src = profile_image_url
-    ? profile_image_url
-    : '/static/img/no_profile_img.png';
+
+  newDiv2.style.width = "50px";
+  newRecommentContainer.insertBefore(newDiv2, newRecommentContainer.children[0]);
+  newRecommentContainer.querySelector('#post-img img').src = profile_image_url ? profile_image_url : "/static/img/no_profile_img.png";
+
   newRecommentContainer.querySelector('#post-nickname').textContent = nickname;
   newRecommentContainer.querySelector('#post-nickname').href =
     '/planets/' + planetName + '/profile/' + nickname + '/';
@@ -265,7 +251,14 @@ function createRecommentContainer(
   var newp = document.createElement('p');
   newp.classList.add('w-1/5');
   svgDiv.insertBefore(newp, svgDiv.firstChild);
-  newRecommentContainer.querySelector('#comment_form').closest('p').remove();
+  var newp2 = document.createElement('p')
+  newp2.classList.add('w-1/5');
+  svgDiv.insertBefore(newp2, svgDiv.firstChild);
+  var newp3 = document.createElement('p')
+  newp3.classList.add('w-1/5');
+  svgDiv.insertBefore(newp3, svgDiv.firstChild);
+  Array.from(newRecommentContainer.querySelectorAll('.post-emote-form')).forEach(element => element.remove());
+  newRecommentContainer.querySelector('#comment_form').remove();
   newRecommentContainer.append(newDropdownMenu);
 
   return newRecommentContainer;
@@ -696,55 +689,29 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
-// post 비동기 emote
-const postEmoteForms = document.querySelectorAll('.post-emote-form');
-postEmoteForms.forEach((emoteForm) => {
-  emoteForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    const emoteClass = e.target.dataset.emoteClass;
-    const planetName = e.target.dataset.planetName;
-    const postPk = e.target.dataset.postPk;
-    const emotionCount = document.querySelector(
-      `.post-emote-form > p > .emotion-${emoteClass}-count`
-    );
-
-    axios({
-      method: 'post',
-      url: `/planets/${planetName}/posts/${postPk}/emotes/${emoteClass}`,
-      headers: { 'X-CSRFToken': csrftoken },
-    })
-      .then((response) => {
-        emotionCount.innerHTML = response.data.emotion_count;
-      })
-      .catch((error) => {
-        console.log(error.response);
-      });
-  });
-});
 
 // comment 비동기 emote
-// const commentEmoteForms = document.querySelectorAll('.comment-emote-form')
-// postEmoteForms.forEach((emoteForm) => {
-//   emoteForm.addEventListener('submit', (e) => {
-//     e.preventDefault()
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelector('body').addEventListener('submit', (e) => {
+    if(e.target.matches('.comment-emote-form')) {
+      e.preventDefault()
+      const emoteClass = e.target.dataset.emoteClass
+      const planetName = e.target.dataset.planetName
+      const postPk = e.target.dataset.postPk
+      const commentPk = e.target.dataset.commentPk 
+      const emotionCount = document.querySelector(`#comment-emote-form-${commentPk}> p > .emotion-${emoteClass}-count`)
+      axios({
+        method:'post',
+        url:`/planets/${planetName}/posts/${postPk}/comments/${commentPk}/emotes/${emoteClass}`,
+        headers:{'X-CSRFToken': csrftoken,}
+      })
+      .then((response) => {
+        emotionCount.innerHTML = response.data.emotion_count
+      })
+      .catch((error) => {
+        console.log(error.response)
+      })
+    }
+  })
+})
 
-//     const emoteClass = e.target.dataset.emoteClass
-//     const planetName = e.target.dataset.planetName
-//     const commentPk = e.target.dataset.commentPk
-//     const postPk = e.target.dataset.postPk
-//     const emotionCount = document.querySelector(`.comment-emote-form > p > .emotion-${emoteClass}-count`)
-
-//     axios({
-//       method:'post',
-//       url:`/planets/${planetName}/posts/${postPk}/commments/${commentPk}/emotes/${emoteClass}`,
-//       headers:{'X-CSRFToken': csrftoken,}
-//     })
-//     .then((response) => {
-//       emotionCount.innerHTML = response.data.emotion_count
-//     })
-//     .catch((error) => {
-//       console.log(error.response)
-//     })
-//   })
-// })

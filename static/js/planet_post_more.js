@@ -9,6 +9,10 @@ function createpostContainer(
   image_url,
   user,
   votetopics,
+
+  post_emote_heart,
+  post_emote_thumbsup,
+  post_emote_thumbsdown,
   vote_count,
   voted
 ) {
@@ -20,8 +24,11 @@ function createpostContainer(
   newPostContainer.querySelector('#post-nickname').textContent = nickname;
 
   // // 투표 주제 렌더링
+
   if (votetopics.length > 0) {
+
     votetopics.forEach(function (votetopic, index) {
+
       if (votetopic.title.trim() !== '') {
         var voteTopicContainer =
           newPostContainer.querySelector('#post-votetopics');
@@ -162,18 +169,27 @@ function createpostContainer(
   newPostContainer.querySelector('#post-createdtime p').textContent =
     created_time;
   newPostContainer.querySelector('#post-content').textContent = content;
+
   newPostContainer
     .querySelector('#delete-post-form')
     .setAttribute('data-post-pk', post_pk);
   newPostContainer
     .querySelector('#update-post-form')
     .setAttribute('data-post-pk', post_pk);
-  // newPostContainer.querySelector(
-  //   'a[href^="/planets/music/report/post/"]'
-  // ).href = '/planets/' + planetName + '/report/post/' + post_pk + '/';
+  newPostContainer.querySelector(
+    '#post-report'
+  ).href = '/planets/' + planetName + '/report/post/' + post_pk + '/';
   newPostContainer.querySelector('#post-detailpage').href =
     '/planets/' + planetName + '/' + post_pk + '/';
 
+
+  // emote
+  newPostContainer.querySelector('.emotion-heart-count').textContent = post_emote_heart
+  newPostContainer.querySelector('.emotion-thumbsup-count').textContent = post_emote_thumbsup
+  newPostContainer.querySelector('.emotion-thumbsdown-count').textContent = post_emote_thumbsdown
+  newPostContainer.querySelectorAll('.post-emote-form').forEach((form) => {
+    form.id = `post-emote-form-${post_pk}`
+  })
   if (tags) {
     tags.forEach(function (tag) {
       var tagContainer = newPostContainer.querySelector('#post-tags');
@@ -183,7 +199,7 @@ function createpostContainer(
       newTag.id = 'tag';
       var newA = document.createElement('a');
       newA.href = '/planets/' + planetName + '/tags/' + tag + '/';
-      newA.textContent = '#' + tag;
+      newA.textContent = '#' + tag + ' ';
       newTag.appendChild(newA);
       tagContainer.appendChild(newTag);
     });
@@ -196,8 +212,9 @@ function createpostContainer(
     newImage.classList.add('rounded-lg');
     imageContainer.append(newImage);
   }
-  if (user == requestuser) {
+  if (nickname == requestuser_nickname) {
     newPostContainer.querySelector('#dropdown-delete').style.display = 'block';
+    newPostContainer.querySelector('#dropdown-update').style.display = 'block';
   }
   return newPostContainer;
 }
@@ -289,6 +306,7 @@ document.addEventListener('DOMContentLoaded', function () {
           'Content-Type': 'multipart/form-data',
         },
       })
+
         .then(function (response) {
           if (response.data.success) {
             var formHtml = response.data.form_html;
@@ -345,6 +363,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .catch(function (error) {
           console.error('AJAX request failed:', error);
         });
+
     }
 
     // 게시글 수정 처리
@@ -422,3 +441,54 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 });
+
+// post 비동기 emote
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelector('body').addEventListener('submit', (e) => {
+    const postEmoteForms = document.querySelectorAll('.post-emote-form')
+    postEmoteForms.addEventListener('submit', (e) => {
+      e.preventDefault()
+      
+      const emoteClass = e.target.dataset.emoteClass
+      const planetName = e.target.dataset.planetName
+      const postPk = e.target.dataset.postPk
+      const emotionCount = document.querySelector(`#post-emote-form-${postPk}> p > .emotion-${emoteClass}-count`)
+  
+      axios({
+        method:'post',
+        url:`/planets/${planetName}/posts/${postPk}/emotes/${emoteClass}`,
+        headers:{'X-CSRFToken': csrftoken,}
+      })
+      .then((response) => {
+        emotionCount.innerHTML = response.data.emotion_count
+      })
+      .catch((error) => {
+        console.log(error.response)
+      })
+    })
+  })
+})
+
+// const postEmoteForms = document.querySelectorAll('.post-emote-form')
+// postEmoteForms.forEach((emoteForm) => {
+//   postEmoteForms.addEventListener('submit', (e) => {
+//     e.preventDefault()
+    
+//     const emoteClass = e.target.dataset.emoteClass
+//     const planetName = e.target.dataset.planetName
+//     const postPk = e.target.dataset.postPk
+//     const emotionCount = document.querySelector(`.post-emote-form > p > .emotion-${emoteClass}-count`)
+
+//     axios({
+//       method:'post',
+//       url:`/planets/${planetName}/posts/${postPk}/emotes/${emoteClass}`,
+//       headers:{'X-CSRFToken': csrftoken,}
+//     })
+//     .then((response) => {
+//       emotionCount.innerHTML = response.data.emotion_count
+//     })
+//     .catch((error) => {
+//       console.log(error.response)
+//     })
+//   })
+// })

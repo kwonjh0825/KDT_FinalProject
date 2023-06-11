@@ -1,3 +1,7 @@
+function scrollTopFixed() {
+  window.scrollTo(0, 0);
+}
+
 var weatherIcon = {
   '01': 'fas fa-sun',
   '02': 'fas fa-cloud-sun',
@@ -63,6 +67,7 @@ function success(position) {
   getWeatherData(lat, lon);
 }
 
+
 function error(error) {
   console.log('weather error');
 }
@@ -125,3 +130,181 @@ plusButton.addEventListener('click', function () {
 
   voteTopics.appendChild(inputWrapper);
 });
+
+navigator.geolocation.getCurrentPosition(success);
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelector('body').addEventListener('click', function (e) {
+    var target = e.target;
+
+    // 즐겨찾기
+    if (target.matches('#star')) {
+      e.preventDefault();
+
+      var starButton = target;
+      var planetName = starButton.dataset.planetName;
+      var value = starButton.value;
+
+      axios({
+        url: "/planets/" + planetName + "/star/",
+        method: 'POST',
+        data: value,
+        headers: {
+          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+        }
+      })
+      .then(function(response) {
+        if (response.data.success) {
+          if (response.data.star) {
+            target.classList.remove('fa-regular')
+            target.classList.add('fa-solid')
+            document.querySelector('#star-content').textContent = "행성 즐겨찾기에서 제거"
+          }
+          else {
+            target.classList.remove('fa-solid')
+            target.classList.add('fa-regular')
+            document.querySelector('#star-content').textContent = "행성 즐겨찾기에 추가"
+          }
+        } else {
+          console.error('Star failed.');
+        }
+      })
+      .catch(function(error) {
+        console.error('AJAX request failed:', error);
+      });
+    }
+
+  });
+  
+  document.querySelector('body').addEventListener('submit', function(e) {
+    var target = e.target;
+
+    // 메모 생성
+    if (target.matches('#create-memo-form')) {
+      e.preventDefault();
+
+      var createForm = target;
+      var updateButton = createForm.querySelector('#update-memo-button');
+      var indexmemoDiv = createForm.closest('#index-memo');
+      var planetName = createForm.dataset.planetName;
+      var formData = new FormData(createForm);
+
+      axios({
+        url: "/planets/" + planetName + "/memo/",
+        method: 'POST',
+        data: formData,
+        headers: {
+          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+        }
+      })
+      .then(function(response) {
+        if (response.data.success) {
+          var memo = response.data.memo;
+          var memoDiv = document.createElement('div');
+          memoDiv.id = "memo";
+          var memocontentDiv = document.createElement('div');
+          memocontentDiv.id = "memo-content";
+          memocontentDiv.textContent = memo;
+          var formElement = document.createElement('form');
+          formElement.id = "update-memo-form";
+          formElement.setAttribute("data-planet-name", planetName);
+          memoDiv.append(formElement);
+          var button = document.createElement('button');
+          button.id = "update-memo-button";
+          button.textContent = "메모 편집"
+          button.setAttribute("data-planet-name", planetName);
+          formElement.append(button)
+          memoDiv.append(memocontentDiv);
+          memoDiv.append(formElement);
+          indexmemoDiv.querySelector('#create-memo-form').remove();
+          indexmemoDiv.append(memoDiv);
+        } else {
+          console.error('Memo failed.');
+        }
+      })
+      .catch(function(error) {
+        console.error('AJAX request failed:', error);
+      });
+    }
+
+    // 메모 수정 form
+    else if (target.matches('#update-memo-form')) {
+      e.preventDefault();
+
+      var updateForm = target;
+      var updatebutton = target;
+      var indexmemoDiv = updateForm.closest('#index-memo');
+      var planetName = updatebutton.dataset.planetName;
+      var formData = new FormData(updateForm);
+
+      axios({
+        url: "/planets/" + planetName + "/memo/",
+        method: 'POST',
+        data: formData,
+        headers: {
+          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+        }
+      })
+      .then(function(response) {
+        if (response.data.success) {
+          indexmemoDiv.querySelector('#memo').style.display = "none";
+          var memoform = response.data.memoform;
+          var formContainer = document.createElement('div');
+          formContainer.innerHTML = memoform;
+          var formElement = document.createElement('form');
+          formElement.id = "edit-memo-form";
+          formElement.setAttribute("data-planet-name", planetName);
+          formElement.appendChild(formContainer);
+          var submitButton = document.createElement('button');
+          submitButton.id = "edit-post-button";
+          submitButton.textContent = '메모 수정';
+          submitButton.type = 'submit';
+          formElement.append(submitButton);
+          indexmemoDiv.append(formElement);
+        } else {
+          console.error('Memo failed.');
+        }
+      })
+      .catch(function(error) {
+        console.error('AJAX request failed:', error);
+      });
+    }
+
+    // 메모 수정 처리
+    else if (target.matches('#edit-memo-form')) {
+      e.preventDefault();
+
+      var updateForm = target;
+      var updatebutton = target;
+      var indexmemoDiv = updateForm.closest('#index-memo');
+      var planetName = updatebutton.dataset.planetName;
+      var formData = new FormData(updateForm);
+
+      axios({
+        url: "/planets/" + planetName + "/memo/",
+        method: 'POST',
+        data: formData,
+        headers: {
+          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+        }
+      })
+      .then(function(response) {
+        if (response.data.success) {
+          var memoDiv = indexmemoDiv.querySelector('#memo')
+          memoDiv.style.display = "block";
+          document.querySelectorAll('#memo-content').forEach(e => e.textContent = response.data.memo);
+          document.querySelectorAll('#edit-memo-form').forEach(e => e.remove());
+          document.querySelectorAll('#edit-memo-button').forEach(e => e.remove());
+        } else {
+          console.error('Memo failed.');
+        }
+      })
+      .catch(function(error) {
+        console.error('AJAX request failed:', error);
+      });
+    }
+
+  });
+});
+
+

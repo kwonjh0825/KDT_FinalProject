@@ -45,8 +45,12 @@ function loadPosts(page) {
             post.image_url,
             post.user,
             post.votetopics,
+            post.post_emote_heart,
+            post.post_emote_thumbsup,
+            post.post_emote_thumbsdown,
             post.vote_count,
             post.voted
+
           )
         );
       }
