@@ -1,5 +1,7 @@
 {% extends 'base_index.html' %}
 {% load static %}
+{% load humanize %}
+{% load mathfilters %}
 {% load tailwind_filters %}
 
 {% block title %}
@@ -9,6 +11,7 @@
 {% block head %}
   <link rel="stylesheet" href="{% static 'css/index.css' %}">
   <link rel="stylesheet" href="{% static 'css/planet_detail.css' %}">
+  <link rel="stylesheet" href="{% static 'css/planet_tags.css' %}">
 {% endblock head %}
 
 {% block content %}
@@ -16,11 +19,44 @@
 <div id="accordion-collapse-body-6" style="display:none" aria-labelledby="accordion-collapse-heading-6">
   <p class="border-b-2 border-[#393f4f] text-2xl text-white p-5">게시글 작성하기</p>
   <div class="p-5 border-b-2 border-[#393f4f]">
-    <form id="post-form" data-planet-name="{{ planet.name }}">
+    {% comment %} <form id="post-form" data-planet-name="{{ planet.name }}">
       {% csrf_token %}
       {{ postform | crispy }}
       <button type="submit" class="chatting-create-btn bg-[#bcbdbf] mx-auto" style="text-align: center;">
         게시글 작성
+      </button>
+    </form> {% endcomment %}
+    <form id="post-form" data-planet-name="{{ planet.name }}">
+      {% csrf_token %}
+
+      <div class="w-full mb-5">
+        <label for="id_content" class="block text-base text-slate-300 mb-2">내용</label>
+
+      </div>
+      <img src="{% static 'img/vote.png' %}" class="h-16 w-16 my-3" alt="투표" id="vote-toggle">
+      
+      <div class="w-full mb-5" id="vote-topics-container" style="display: none;">
+        <label class="block text-base text-slate-300 mb-2">투표 주제</label>
+        <button id="plus-button">+</button>
+        <div id="vote-topics">
+          <div class="vote-topic-input">
+            {{ votetopicform.title }}
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-row">
+        <div>
+          <label for="id_image" class="block text-base text-slate-300 mb-2"></label>
+          {{ postform.image }}
+        </div>
+        <div>
+          <label for="id_tags" class="block text-base text-slate-300 mb-2">태그</label>
+          {{ postform.tags }}
+        </div>
+      </div>
+      <button type="submit" class="chatting-create-btn bg-[#bcbdbf] mx-auto mt-10" style="text-align: center;">
+        <p>게시글 작성</p>
       </button>
     </form>
   </div>
@@ -66,6 +102,33 @@
             {% if post.image %}
               <img src="{{ post.image.url }}" alt="{{ post.image }}" class="rounded-lg">
             {% endif %}
+          </div>
+          <!--투표 여부-->
+          
+          <div class='mb-5 rounded-md border p-1' id="post-votetopics">
+          {% for votetopic, vote_count in votetopics_count %}
+            {% if voted == True %} 
+                <div class="border-b-2 border-[#393f4f]">
+                  <div>
+                    <div class="text-xl">
+                      선택: {{votetopic.title}}
+                    </div>
+                    <div class="text-sm text-[#bcbdbf]">
+                      투표수: {{vote_count}}
+                    </div>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress" style="width: {{ vote_count|mul:100|div:total_vote_count }}%;">
+                      {{ vote_count|mul:100|div:total_vote_count }}%
+                    </div>
+                  </div>
+                </div>
+            {% else %}
+            
+              <button class='text-[#bcbdbf] my-1 rounded-md p-2 border w-full' onclick="castVote({{ post.pk }}, '{{ votetopic.title }}')">{{votetopic.title}}</button>
+            
+            {% endif %}
+          {% endfor %}
           </div>
         </div>
 
@@ -157,7 +220,14 @@
 <script>
   var requestuser = "{{ request.user }}";
   var requestuser_nickname= "{{ user.nickname }}";
+  var votetopicsDiv = document.getElementById("post-votetopics");
+  if (votetopicsDiv.children.length === 0) {
+    votetopicsDiv.style.display = "none";
+  }
+  
+
 </script>
 <script src="{% static 'js/planet_detail.js' %}"></script>
 <script src="{% static 'js/planet_post_more.js' %}"></script>
+
 {% endblock script %}

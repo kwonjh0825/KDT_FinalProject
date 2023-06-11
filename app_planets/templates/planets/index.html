@@ -63,7 +63,12 @@
           <div class="mb-5" id="post-tags">
           </div>
           
+          {% comment %} {% for votetopic in votetopics %} {% endcomment %}
           <div class="mb-5 rounded-md border p-1" id="post-votetopics"></div>
+          {% comment %} {% endfor %} {% endcomment %}
+          
+        
+          
 
         </div>
         
@@ -123,6 +128,7 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
   var requestuser = "{{ request.user }}";
+  
 </script>
 <script src="{% static 'js/planet_index.js' %}"></script>
 <script src="{% static 'js/planet_post_more.js' %}"></script>

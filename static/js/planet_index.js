@@ -33,6 +33,7 @@ function loadPosts(page) {
           $(window).off('scroll');
           return;
         }
+
         $('#post-list').append(
           createpostContainer(
             post.profile_image_url,
@@ -94,7 +95,8 @@ document.addEventListener('DOMContentLoaded', function () {
               post_pk,
               response.data.image_url,
               response.data.user,
-              response.data.votetopic,
+              response.data.votetopics,
+              response.data.vote_count,
               response.data.voted
             );
 

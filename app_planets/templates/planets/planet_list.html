@@ -64,11 +64,24 @@
         <p class="text-sm mb-5">전송받은 초대코드를 입력하고 행성에 참여하세요.</p>
         <div class="p-3 rounded-md hover:bg-[#ffd951]">
           <a class="text-xl" href="#">
-            <p class="text-xl">초대 코드 입력하기</p>
+            <button id="modalButton" class="text-xl">초대 코드 입력하기</button>
           </a>
         </div>
       </div>
-
+      <!-- 초대코드 모달 -->
+      <div id="inviteModal" class="fixed inset-0 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg p-6">
+            <h1 class="text-2xl font-bold mb-4  text-black">초대코드 등록</h1>
+            <form id="inviteForm" method="POST" action="{% url 'planets:invite_create' %}">
+                {% csrf_token %}
+                <div class="flex items-center">
+                    <input type="text" id='user_input' name="user_input" class="text-black border border-gray-300 rounded-md px-3 py-2 mr-2">
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white rounded-md px-4 py-2">확인</button>
+                </div>
+            </form>
+            <p id="errorText" class="text-red-500 mt-2 hidden">존재하지 않는 코드입니다.</p>
+        </div>
+      </div>
 
       <!-- 메인 내용 -->
       <div class="w-full mb:w-3/4 ms-10 mb-20">
@@ -188,88 +201,5 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="{% static 'js/planet_list.js' %}"></script>
 
-<script>
-  const modalButton = document.getElementById('modalButton');
-  const inviteModal = document.getElementById('inviteModal');
-  const inviteForm = document.getElementById('inviteForm');
-  const errorText = document.getElementById('errorText');
-
-  modalButton.addEventListener('click', function() {
-    inviteModal.classList.toggle('hidden');
-    errorText.classList.add('hidden');
-  });
-
-    // 다른 창 클릭 시 모달 닫기
-  window.addEventListener('click', function(event) {
-    if (event.target === inviteModal) {
-      inviteModal.classList.add('hidden');
-      errorText.classList.add('hidden');
-    }
-  });
-
-
-  inviteForm.addEventListener('submit', function(event) {
-    // 기본 동작 방지
-    event.preventDefault();
-    
-    // 폼 데이터 가져오기
-    const userInput = inviteForm.querySelector('input[name="user_input"]').value;
-  
-    // 폼 데이터 처리
-    // 예: 서버로 전송하여 처리하거나, 다른 동작 수행 등
-  
-    // AJAX 요청 보내기
-    fetch('{% url "planets:invite_create" %}', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': '{{ csrf_token }}',
-      },
-      body: JSON.stringify({
-        user_input: userInput
-      })
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.result === false) {
-        // 초대코드가 유효하지 않은 경우에 대한 처리
-        errorText.classList.remove('hidden');
-        errorText.style.color = 'red';
-        errorText.textContent = '초대코드가 유효하지 않습니다.';
-      } else if (data.result === true) {
-      errorText.classList.add('hidden');
-      window.location.href = '/planets/invite_check/' + data.invite_code + '/';
-
-      }
-    })
-    .catch(error => {
-      // 에러 처리
-      console.error(error);
-    });
-  });
-  
-  
-
-  {% comment %} inviteModal.addEventListener('click', function(event) {
-    if (event.target === inviteModal) {
-      inviteModal.classList.add('hidden');
-      errorText.classList.add('hidden');
-    }
-  });
-
-  inviteForm.addEventListener('submit', function(event) {
-      // 기본 동작 방지
-    event.preventDefault();
-    
-    // 폼 데이터 가져오기
-    const userInput = inviteForm.querySelector('input[name="user_input"]').value;
-
-    // 폼 데이터 처리
-    // 예: 서버로 전송하여 처리하거나, 다른 동작 수행 등
-
-    // 폼 제출
-    inviteForm.submit();
-  }); {% endcomment %}
-
-</script>
+<script src="{% static 'js/private_join.js' %}"></script>
 {% endblock script %}

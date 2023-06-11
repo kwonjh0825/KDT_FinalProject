@@ -20,12 +20,9 @@ function createpostContainer(
   newPostContainer.querySelector('#post-nickname').textContent = nickname;
 
   // // 투표 주제 렌더링
-  if (votetopics && votetopics.length > 0) {
-    console.log('투표');
-    console.log(votetopics);
+  if (votetopics.length > 0) {
     votetopics.forEach(function (votetopic, index) {
       if (votetopic.title.trim() !== '') {
-        console.log(votetopic.title);
         var voteTopicContainer =
           newPostContainer.querySelector('#post-votetopics');
         var newVotetopic = document.createElement('button'); // 버튼 엘리먼트로 변경
@@ -45,7 +42,6 @@ function createpostContainer(
         //   newVotetopic.textContent += ' (' + vote_count[index] + ')';
         // }
         // vote_count && vote_count.length > 0 && vote_count[index] >= 0
-        console.log(voted);
         if (voted === true) {
           newVotetopic.textContent += ' (' + vote_count[index] + ')';
         } else {
@@ -58,7 +54,6 @@ function createpostContainer(
           var postPk = post_pk;
           var voteTitle = votetopic.title;
           var url = '/planets/post/' + postPk + '/' + voteTitle + '/';
-
           // AJAX 요청으로 투표 처리
           $.ajax({
             url: url,
@@ -68,9 +63,17 @@ function createpostContainer(
             },
             dataType: 'json',
             success: function (data) {
-              // 투표 처리 후에 필요한 동작 수행
-              // 예를 들어, 투표 수 업데이트 등
-              console.log('투표 성공');
+              if (data.result === 'success') {
+                // 투표 성공 시 동작 수행
+                var planetName = data.planet_name; // 행성 이름을 여기에 설정해주세요
+                var postPk = postPk; // 포스트 PK를 여기에 설정해주세요
+                var redirectUrl =
+                  '/planets/' + planetName + '/' + post_pk + '/';
+                location.href = redirectUrl; // 페이지 이동
+              } else {
+                // 투표 실패 시 동작 수행
+                console.error('투표 실패');
+              }
             },
             error: function (xhr, status, error) {
               // 투표 처리 실패 시에 대한 처리
@@ -86,6 +89,9 @@ function createpostContainer(
         voteTopicContainer.style.display = 'none';
       }
     });
+  } else {
+    var voteTopicContainer = newPostContainer.querySelector('#post-votetopics');
+    voteTopicContainer.style.display = 'none';
   }
 
   // 투표 주제 렌더링

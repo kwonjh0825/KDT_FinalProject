@@ -36,11 +36,11 @@
         </div> {% endcomment %}
 
         <!-- Modal toggle -->
-        <div class='ms-5'>
+        {% comment %} <div class='ms-5'>
           <button data-modal-target="defaultModal" data-modal-toggle="defaultModal" class="block text-white bg-[#282c37] hover:bg-[#ffd951] rounded-md text-sm px-5 py-2.5 mt-2 text-center" type="button">
             게시글 작성하기
           </button>
-        </div>
+        </div> {% endcomment %}
 
 
         <div class="ms-3 p-1">
@@ -211,7 +211,7 @@
 
                   <div class="flex flex-row">
                     <div>
-                      <label for="id_image" class="block text-base text-slate-300 mb-2">이미지</label>
+                      <label for="id_image" class="block text-base text-slate-300 mb-2"></label>
                       {{ postform.image }}
                     </div>
                     <div>
@@ -356,7 +356,76 @@
   </div>
 </body>
 {% comment %} <script type="text/javascript" src="/static/js/base_index.js"></script> {% endcomment %}
-<script src="{% static 'js/vote.js' %}"></script>
+<script>
+  // vote.js 내용(적용이 안되서 임시로 여기로 적용)
+  const voteToggle = document.getElementById('vote-toggle');
+  const voteTopicsContainer = document.getElementById('vote-topics-container');
+  const voteTopics = document.getElementById('vote-topics');
+  
+  voteToggle.addEventListener('click', function () {
+    const computedStyle = window.getComputedStyle(voteTopicsContainer);
+  
+    {% comment %} if (computedStyle.display === 'none') {
+      voteTopicsContainer.style.display = 'block';
+      // 첫 번째 주제를 제외한 주제들을 모두 삭제합니다.
+      const topicInputs = voteTopics.querySelectorAll('.vote-topic-input');
+      for (let i = topicInputs.length - 1; i > 0; i--) {
+        topicInputs[i].remove();
+      }
+      // 첫 번째 주제의 내용을 비웁니다.
+      const firstTopicInput = topicInputs[0].querySelector('input');
+      firstTopicInput.value = '';
+    } else {
+      voteTopicsContainer.style.display = 'none';
+      console.log('ㅎㅇㅎㅇ');
+    } {% endcomment %}
+    if (computedStyle.display === 'none') {
+      voteTopicsContainer.style.display = 'block';
+    } else {
+      voteTopicsContainer.style.display = 'none';
+      // 작성한 주제를 초기화합니다.
+      const topicInputs = voteTopics.querySelectorAll('.vote-topic-input');
+      for (let i = 0; i < topicInputs.length; i++) {
+        topicInputs[i].querySelector('input').value = '';
+      }
+    }
+  });
+  
+  
+  const plusButton = document.getElementById('plus-button');
+  
+  plusButton.addEventListener('click', function () {
+    console.log('플러스!');
+    event.preventDefault(); // 폼 제출 방지
+    const newTopicInput = document.createElement('input');
+    newTopicInput.type = 'text';
+    newTopicInput.name = 'title';
+    newTopicInput.classList.add(
+      'block',
+      'mt-2',
+      'w-full',
+      'bg-[#101013]',
+      'text-white',
+      'rounded-lg',
+      'py-2',
+      'px-3'
+    );
+  
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = '-';
+    deleteButton.setAttribute('class', 'delete-button');
+    deleteButton.addEventListener('click', function () {
+      voteTopics.removeChild(newTopicInput.parentNode);
+    });
+  
+    const inputWrapper = document.createElement('div');
+    inputWrapper.setAttribute('class', 'vote-topic-input');
+    inputWrapper.appendChild(newTopicInput);
+    inputWrapper.appendChild(deleteButton);
+  
+    voteTopics.appendChild(inputWrapper);
+  });</script>
+{% comment %} <script src="{% static 'js/vote.js' %}"></script> {% endcomment %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
 <script src="https://kit.fontawesome.com/96b2992191.js" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
