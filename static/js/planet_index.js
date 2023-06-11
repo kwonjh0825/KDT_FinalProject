@@ -43,7 +43,10 @@ function loadPosts(page) {
             post.pk,
             post.image_url,
             post.user,
-            post.votetopics
+            post.votetopics,
+            post.post_emote_heart,
+            post.post_emote_thumbsup,
+            post.post_emote_thumbsdown,
           )
         );
       }

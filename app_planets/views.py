@@ -199,6 +199,9 @@ def planet_posts(request, planet_name):
             'profile_image_url': post.accountbyplanet.profile_image.url if post.accountbyplanet.profile_image else None,
             'user': post.accountbyplanet.user.username,
             'votetopics': list(post.votetopic_set.values('title')),
+            'post_emote_heart': Emote.objects.filter(post=post, emote='heart').count(),
+            'post_emote_thumbsup': Emote.objects.filter(post=post, emote='thumbsup').count(),
+            'post_emote_thumbsdown': Emote.objects.filter(post=post, emote='thumbsdown').count(),
         })
         print(post_list)
     if posts.has_next():
@@ -315,6 +318,7 @@ def post_detail(request, planet_name, post_pk):
     post_emotion_thumbsup = Emote.objects.filter(post=post, emotion='thumbsup')
     post_emotion_thumbsdown = Emote.objects.filter(post=post, emotion='thumbsdown')
     
+    # comment_emotes = Emote.objects.exclude(comment__isnull=True)
     context = {
         'post': post,
         'comments': comments,
@@ -335,9 +339,16 @@ def detail_comments(request, planet_name, post_pk):
     comments = Comment.objects.filter(post_id=post_pk)
     comments_list = []
     for comment in comments:
+        comment_emote_heart = Emote.objects.filter(comment=comment, emotion='heart').count()
+        comment_emote_thumbsup = Emote.objects.filter(comment=comment, emotion='thumbsup').count()
+        comment_emote_thumbsdown = Emote.objects.filter(comment=comment, emotion='thumbsdown').count()
+        
         recomments = Recomment.objects.filter(comment=comment.pk)
         recomments_data = []
         for recomment in recomments:
+            # recomment_emote_heart = Emote.objects.filter(recomment=recomment, emotion='heart').count()
+            # recomment_emote_thumbsup = Emote.objects.filter(recomment=recomment, emotion='thumbsup').count()
+            # recomment_emote_thumbsdown = Emote.objects.filter(recomment=recomment, emotion='thumbsdown').count()
             recomments_data.append(
                 {
                     'pk': recomment.pk,
@@ -345,6 +356,9 @@ def detail_comments(request, planet_name, post_pk):
                     'created_time': recomment.created_time,
                     'nickname': recomment.accountbyplanet.nickname,
                     'profile_image_url': recomment.accountbyplanet.profile_image.url if recomment.accountbyplanet.profile_image else None,
+                    # 'recommment_emote_heart': recomment_emote_heart,
+                    # 'recommment_emote_thumbsup': recomment_emote_thumbsup,
+                    # 'recommment_emote_thumbsdown': recomment_emote_thumbsdown,
                 }
             )
         comments_list.append({
@@ -355,6 +369,9 @@ def detail_comments(request, planet_name, post_pk):
             'profile_image_url': comment.accountbyplanet.profile_image.url if comment.accountbyplanet.profile_image else None,
             'user': comment.accountbyplanet.user.username,
             'recomments': recomments_data,
+            'comment_emote_heart': comment_emote_heart,
+            'comment_emote_thumbsup': comment_emote_thumbsup,
+            'comment_emote_thumbsdown': comment_emote_thumbsdown,
         })
     return JsonResponse(comments_list, safe=False)
 
@@ -829,18 +846,20 @@ def post_emote(request, planet_name, post_pk, emotion):
 
 # 비동기 comment emote 
 @login_required
-def comment_emote(request, planet_name, post_pk, emotion):
+def comment_emote(request, planet_name, post_pk, comment_pk, emotion):
+    print(1)
     planet = Planet.objects.get(name=planet_name)
-    comment = Comment.objects.get(pk=post_pk)
+    comment = Comment.objects.get(pk=comment_pk)
     user = Accountbyplanet.objects.get(planet=planet, user=request.user)
 
     emote = Emote.objects.filter(comment=comment, accountbyplanet=user, emotion=emotion)
-
+    print(2)
     if emote.exists():
         emote.delete()
     else:
         Emote.objects.create(comment=comment, accountbyplanet=user, emotion=emotion)
 
+    print(3)
     context = {
         'emotion_count': Emote.objects.filter(comment=comment, emotion=emotion).count()
     }
