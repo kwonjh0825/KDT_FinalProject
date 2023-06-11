@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'imagekit',
     'taggit',
     'mathfilters',
+    'corsheaders',
     'django_apscheduler', # 스케쥴러
     'django.contrib.admin',
     'django.contrib.auth',
@@ -57,6 +58,7 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 CRISPY_TEMPLATE_PACK = "tailwind"
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware'
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -188,4 +190,4 @@ SCHEDULER_DEFAULT = True
 
 PASSWORD_RESET_TIMEOUT=1800 # 메일 토큰 유효기간 30분(회원가입시 인증, 비밀번호 초기화)
 
-SECURE_CROSS_ORIGIN_OPENER_POLICY = None
+CORS_ORIGIN_ALLOW_ALL = True
