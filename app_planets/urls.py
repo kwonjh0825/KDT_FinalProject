@@ -9,12 +9,16 @@ urlpatterns = [
     path('planets/create/', views.planet_create, name='planet_create'),
     path('planets/search/', views.search, name='search'),
     path('planets/<str:planet_name>/join/', views.planet_join, name='planet_join'),
+    # 마이 플래닛 필터 기능
+    path('planets/my_planet_filter/', views.my_planet_filter, name='my_planet_filter'),
+
     # private 조인
     path('planets/invite_create/', views.invite_create, name='invite_create'),
     path('planets/invite_check/<str:invite_code>/', views.invite_check, name='invite_check'),
     path('planets/<str:planet_name>/contract/', views.planet_contract, name='planet_contract'),
     path('planets/<str:planet_name>/delete/', views.planet_delete, name='planet_delete'),
     path('planets/<str:planet_name>/', views.index, name='index'),
+    path('planets/<str:planet_name>/index_list/', views.index_list, name='index_list'),
     path('planets/<str:planet_name>/posts/', views.planet_posts, name='planet_posts'),
     path('planets/<str:planet_name>/create/', views.post_create, name='post_create'),
     path('planets/<str:planet_name>/<int:post_pk>/update/', views.post_create, name='post_create'),
@@ -62,10 +66,13 @@ urlpatterns = [
     # 팔로잉
     path('planets/<str:planet_name>/follow/<int:user_pk>/', views.following, name='following'),
     # 투표
-    # path('planets/post/<int:post_pk>/<str:vote_title>/', views.vote, name='vote'),
+    path('planets/post/<int:post_pk>/<str:vote_title>/', views.vote, name='vote'),
     # 게시글 감정표현 
     path('planets/<str:planet_name>/posts/<int:post_pk>/emotes/<str:emotion>', views.post_emote, name='post_emote'),
     # 댓글 감정 표현
     path('planets/<str:planet_name>/posts/<int:post_pk>/comments/<int:comment_pk>/emotes/<str:emotion>', views.comment_emote, name='comment_emote'),
-
+    # 행성 별 메모
+    path('planets/<str:planet_name>/memo/', views.planet_memo, name='planet_memo'),
+    # 행성 즐겨찾기
+    path('planets/<str:planet_name>/star/', views.planet_star, name='planet_star'),
 ]

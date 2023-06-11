@@ -63,12 +63,13 @@ function createcommentContainer(profile_image_url, nickname, created_time, conte
   newCommentContainer.querySelector('#report-comment-url').href = `/planets/${planetName}/report/comment/${comment_pk}/`
   newCommentContainer.querySelector('#delete-post-form').id = "delete-comment-form";
   newCommentContainer.querySelector('#delete-comment-form').setAttribute("data-comment-pk", comment_pk);
+
   newCommentContainer.querySelectorAll('.post-emote-form').forEach((form) => {
     form.setAttribute('data-comment-pk', comment_pk)
   })
-  newCommentContainer.querySelector('.emotion-heart-count').textContent = comment_emote_heart
-  newCommentContainer.querySelector('.emotion-thumbsup-count').textContent = comment_emote_thumbsup
-  newCommentContainer.querySelector('.emotion-thumbsdown-count').textContent = comment_emote_thumbsdown
+  newCommentContainer.querySelector('.emotion-heart-count').textContent = 0;
+  newCommentContainer.querySelector('.emotion-thumbsup-count').textContent = 0;
+  newCommentContainer.querySelector('.emotion-thumbsdown-count').textContent = 0;
   newCommentContainer.querySelectorAll('.post-emote-form').forEach((form) => {
     form.classList.replace('post-emote-form', 'comment-emote-form')
     form.id = `comment-emote-form-${comment_pk}`
@@ -108,7 +109,7 @@ function createRecommentContainer(profile_image_url, nickname, created_time, con
   newDiv.innerHTML = `<svg width="30px" height="30px" id="Capa_1" style="enable-background:new 0 0 74.5 60;" version="1.1" viewBox="0 0 74.5 60" width="74.5px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M10,45h40.5v15l24-22l-24-22v15H14V0H0v35C0,40.523,4.477,45,10,45z" fill="#ffffff"/></g></svg>`;
   newRecommentContainer.insertBefore(newDiv, newRecommentContainer.children[0]);
   var newDiv2 = document.createElement('div');
-  newDiv2.style.width = "130px";
+  newDiv2.style.width = "50px";
   newRecommentContainer.insertBefore(newDiv2, newRecommentContainer.children[0]);
   newRecommentContainer.querySelector('#post-img img').src = profile_image_url ? profile_image_url : "/static/img/no_profile_img.png";
   newRecommentContainer.querySelector('#post-nickname').textContent = nickname;
@@ -140,7 +141,14 @@ function createRecommentContainer(profile_image_url, nickname, created_time, con
   var newp = document.createElement('p')
   newp.classList.add('w-1/5');
   svgDiv.insertBefore(newp, svgDiv.firstChild);
-  newRecommentContainer.querySelector('#comment_form').closest('p').remove();
+  var newp2 = document.createElement('p')
+  newp2.classList.add('w-1/5');
+  svgDiv.insertBefore(newp2, svgDiv.firstChild);
+  var newp3 = document.createElement('p')
+  newp3.classList.add('w-1/5');
+  svgDiv.insertBefore(newp3, svgDiv.firstChild);
+  Array.from(newRecommentContainer.querySelectorAll('.post-emote-form')).forEach(element => element.remove());
+  newRecommentContainer.querySelector('#comment_form').remove();
   newRecommentContainer.append(newDropdownMenu);
 
   return newRecommentContainer;

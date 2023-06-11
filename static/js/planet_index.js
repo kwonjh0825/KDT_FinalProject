@@ -20,8 +20,8 @@ function loadPosts(page) {
     url: '/planets/' + planetName + '/posts/',
     type: 'POST',
     data: {
-        'page': page,
-        'csrfmiddlewaretoken': csrftoken,
+      page: page,
+      csrfmiddlewaretoken: csrftoken,
     },
     dataType: 'json',
 
@@ -47,6 +47,9 @@ function loadPosts(page) {
             post.post_emote_heart,
             post.post_emote_thumbsup,
             post.post_emote_thumbsdown,
+            post.vote_count,
+            post.voted
+
           )
         );
       }
@@ -94,8 +97,9 @@ document.addEventListener('DOMContentLoaded', function () {
               response.data.tags,
               post_pk,
               response.data.image_url,
-              response.data.user
-              // response.data.votetopic
+              response.data.user,
+              response.data.votetopic,
+              response.data.voted
             );
 
             postList.insertBefore(newPostContainer, postList.children[1]);

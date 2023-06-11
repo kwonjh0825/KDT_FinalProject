@@ -4,13 +4,18 @@
 {% endblock title %}
 
 {% block content %}
-<div class="max-w-[540px] h-screen mx-auto text-center">
+<div class=" container mx-auto flex justify-center">
+    <div class="w-full max-w-md pt-10">
+      <p class="text-4xl mb-3 pb-4 font-bold">계정 활성화</p>
+      <hr class="border-t-2 border-yellow-300">
+        <div class="my-6 text-center p-10 border border-gray-700 bg-gray-700 rounded-lg">
+            <p class="text-lg mb-4 text-gray-300">계정 활성화가 완료되었습니다.</p>
 
-<p class="text-2xl py-5">계정 활성화</p>
-<p class="text-sm mb-4 text-gray-400">계정 활성화가 완료되었습니다.</p>
-
-<button class="bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-20 rounded" ><a href="{% url 'accounts:login' %}">로그인</a></button>
+            <button class="bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-20 rounded" ><a href="{% url 'accounts:login' %}">로그인</a></button>
+        </div>
+    </div>
 </div>
+
 {% endblock content %}
 
 

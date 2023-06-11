@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm, PasswordChangeForm
-from .models import Accountbyplanet
+from .models import Accountbyplanet, Memobyplanet
 from django.contrib.auth.forms import SetPasswordForm
 from app_planets.forms import validate_inappropriate_words
 
@@ -177,3 +177,17 @@ class AdminLevelForm(forms.ModelForm):
         model = Accountbyplanet
         fields = ('admin_level',)
 
+
+class MemobyplanetForm(forms.ModelForm):
+    class Meta:
+        model = Memobyplanet
+        fields = ('memo',)
+
+    memo = forms.CharField(
+        label = "메모",
+        widget = forms.TextInput(
+            attrs={
+                "class": "form-input mt-1 rounded-md bg-[#101013]",
+                "style": "width: 100px; height: 47px;",
+            }),
+    )

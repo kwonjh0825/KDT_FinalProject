@@ -40,14 +40,14 @@
 <div id="post-list">
   <div id="container">
     <div id="section" style="display: flex;">
-      <div id="post-detail">
+      <div id="post-detail" style="width:100%;">
         <div class="p-3">
           <div class="flex flex-row justify-between">
             <div class="flex flex-row">
               <div id="post-img"><img src="{% if post.accountbyplanet.profile_image %}{{ post.accountbyplanet.profile_image.url }}{% else %}{% static 'img/no_profile_img.png' %}{% endif %}" alt="img" style="width:48px; height:48px;"></div>
               <div class="ms-2">
                 <a id="post-nickname" ref="{% url 'planets:planet_profile' post.accountbyplanet.planet.name post.accountbyplanet.nickname %}">{{ post.accountbyplanet.nickname }}</a>
-                <p class="text-sm text-[#bcbdbf]">@{{ post.accountbyplanet.nickname }}</p>
+                <p class="text-sm text-[#bcbdbf]">@{{ planet.name }}</p>
               </div>
             </div>
             <div class="me-3">
@@ -124,7 +124,7 @@
           <li>
             <a href="{% url 'planets:report' planet.name 'post' post.pk %}" class="block px-4 py-2 hover:bg-gray-100" id="report-post-url">게시글 신고</a>
           </li>
-          <li>
+          <li id="dropdown-update" style="display:none;">
             <form id="update-post-form" class="block px-4 py-2 hover:bg-gray-100" data-planet-name="{{ planet.name }}" data-post-pk="{{ post.pk }}">
               {% csrf_token %}
               <button type="submit" id="update-post-button">게시글 수정</button>
@@ -139,7 +139,7 @@
 
     <form id="comment-create-form" style="display:none" data-planet-name="{{ planet.name }}" data-post-pk="{{ post.pk }}">
       {% csrf_token %}
-      {{ commentform | crispy }}
+      {{ commentform }}
       <button type="submit" id="create-button" class="chatting-create-btn bg-[#bcbdbf] mx-auto" style="text-align: center;">
         댓글 작성
       </button>
