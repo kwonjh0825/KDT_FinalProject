@@ -70,7 +70,7 @@ def planet_list(request):
 
 # 조회 기능
 def filter(request, category):
-    planets = Planet.objects.filter(category=category).order_by('-created_at')
+    planets = Planet.objects.filter(category=category, is_public='Public').order_by('-created_at')
     user = request.user
     user_planets = Accountbyplanet.objects.filter(user=user, planet__in=planets)
     joined_planets = [user_planet.planet for user_planet in user_planets]
@@ -251,13 +251,13 @@ def index_list(request, planet_name):
     
     # 1. Get all planets the user has joined
     user_planets = Accountbyplanet.objects.filter(user=user)
-
+    
     # 2. Extract unique categories from these planets
     user_categories = user_planets.values_list('planet__category', flat=True).distinct()
 
     # 3. Find all the planets that have their category in the list of user's categories but aren't joined by the user
-    planet_recommends = Planet.objects.filter(category__in=user_categories).exclude(accountbyplanet__in=user_planets).order_by('?')[:5]
-    planet_not_recommends = Planet.objects.exclude(category__in=user_categories).exclude(accountbyplanet__in=user_planets).order_by('?')[:5]
+    planet_recommends = Planet.objects.filter(category__in=user_categories, is_public='Public').exclude(accountbyplanet__in=user_planets).order_by('?')[:5]
+    planet_not_recommends = Planet.objects.exclude(category__in=user_categories).exclude(accountbyplanet__in=user_planets).exclude(is_public='Private').order_by('?')[:5]
     num_not_recommended = max(0, 5 - len(planet_recommends))
     planet_not_recommends = planet_not_recommends[:num_not_recommended]
     
@@ -279,6 +279,7 @@ def index_list(request, planet_name):
         'user_by_planets_not_star':user_by_planets_not_star,
         'first_post': Post.objects.filter(planet=planet).first(),
         'user': Accountbyplanet.objects.get(planet=planet, user=request.user),
+        'user_categories' : user_categories,
         'planet_recommends': planet_recommends,
         'planet_not_recommends': planet_not_recommends,
 

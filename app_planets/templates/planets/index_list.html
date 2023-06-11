@@ -59,7 +59,7 @@
       </div>
       {% endif %}
 
-      {% if planet_recommends %}
+      {% if planet_recommends or planet_not_recommends %}
       <div class="flex flex-row justify-between pt-5 mb-5 border-t-2 border-[#393f4f]">
         <p class="text-xl">이런 행성은 어때요?</p>
         <p class="text-xs mt-2 me-2 text-slate-400"><a href="{% url 'planets:planet_list' %}">행성 리스트로 이동하기</a></p>
