@@ -22,6 +22,7 @@ from django.db.models import Q
 from taggit.models import Tag
 
 
+
 EMOTIONS = [
     {'label': '좋아요', 'value': 1},
     {'label': '재밌어요', 'value': 2},
@@ -323,6 +324,8 @@ def planet_posts(request, planet_name):
             Vote.objects.filter(voter=user, votetopic__in=vote_topics).values_list('votetopic_id', flat=True)
         )
         
+
+        
         post_list.append({
             'pk': post.pk,
             'content': post.content,
@@ -339,10 +342,10 @@ def planet_posts(request, planet_name):
             'post_emote_thumbsdown': Emote.objects.filter(post=post, emote='thumbsdown').count(),
 
             'vote_count':[Vote.objects.filter(votetopic=vote_topic).count() for vote_topic in vote_topics],
-            # 'voted': post.votetopic_set.vote.filter(voter=user).exists(),
             'voted': True if voted_topics else False,
 
         })
+
     if posts.has_next():
         return JsonResponse(post_list, safe=False)
     else:
@@ -354,13 +357,11 @@ def planet_posts(request, planet_name):
 @require_POST
 def post_create(request, planet_name, post_pk=None):
     planet = Planet.objects.get(name=planet_name)
-    # print(request.POST)
     form = PostForm(request.POST, request.FILES)
     votetopicform = VoteTopicForm(request.POST)
-    # print('-------------')
-    # print(form)
-    # print('-------------')
-    # print(form.cleaned_data['content'])
+
+    accountbyplanet = Accountbyplanet.objects.get(planet=planet, user=request.user)
+
     if post_pk:  # 기존 게시글 수정 처리
         try:
             post = Post.objects.get(pk=post_pk, planet=planet)
@@ -377,38 +378,30 @@ def post_create(request, planet_name, post_pk=None):
     else:  # 새로운 게시글 생성
         if form.is_valid():
             post = form.save(commit=False)
-            post.accountbyplanet = Accountbyplanet.objects.get(planet=planet, user=request.user)
+            post.accountbyplanet = accountbyplanet
             post.planet = planet
-            # print('testest------------------')
-            # print(form.cleaned_data['content'])
-            # print(request.POST.getlist('content')[0])
-            # post.content = request.POST.getlist('content')[0]
             post.image = form.cleaned_data['image']
             post.save()
-            # print('생성이요~~~~~~~')
             form.save_m2m()
         #투표 주제
         if votetopicform.is_valid():
-            # print('----------------')
-            # print(request.POST)
             titles = request.POST.getlist('title')
-            # print(titles)
             for title in titles:
-                # print(title)
+                if title == '':
+                    continue
                 votetopic = VoteTopic()
                 votetopic.title = title
                 votetopic.post = post
                 votetopic.save()
-                # votetopic = votetopicform.save(commit=False) 
-                # votetopic.title = title
-                # votetopic.post = post
-                # votetopic.save()
-                # votetopicform.save_m2m()
 
         else:
             errors = form.errors.as_json()
             return JsonResponse({'success': False, 'errors': errors})
 
+    vote_topics = VoteTopic.objects.filter(post=post)
+    voted_topics = list(
+            Vote.objects.filter(voter=accountbyplanet, votetopic__in=vote_topics).values_list('votetopic_id', flat=True)
+        )
     response_data = {
         'success': True,
         'post_pk': post.pk,
@@ -420,9 +413,10 @@ def post_create(request, planet_name, post_pk=None):
         'profile_image_url': post.accountbyplanet.profile_image.url if post.accountbyplanet.profile_image else None,
         'user': post.accountbyplanet.user.username,
         'form_html': form.as_p() if form.as_p() else None,
-        # 'votetopics': list(post.votetopic_set.values('title')),
-        # 'vote_count':[Vote.objects.filter(votetopic=vote_topic).count() for vote_topic in vote_topics],
-        # 'voted': True if voted_topics else False,
+
+        'votetopics': list(post.votetopic_set.values('title')),
+        'vote_count':[Vote.objects.filter(votetopic=vote_topic).count() for vote_topic in vote_topics],
+        'voted': True if voted_topics else False,
 
     }
     try:
@@ -463,6 +457,19 @@ def post_detail(request, planet_name, post_pk):
     post_emotion_thumbsup = Emote.objects.filter(post=post, emotion='thumbsup')
     post_emotion_thumbsdown = Emote.objects.filter(post=post, emotion='thumbsdown')
 
+    vote_topics = VoteTopic.objects.filter(post=post)
+    voted_topics = list(
+            Vote.objects.filter(voter=accountbyplanet, votetopic__in=vote_topics).values_list('votetopic_id', flat=True)
+        )
+    vote_count = [Vote.objects.filter(votetopic=vote_topic).count() for vote_topic in vote_topics]
+
+    postform = PostForm()
+    votetopicform = VoteTopicForm()
+
+    
+        
+
+
     try:
         memo = Memobyplanet.objects.get(accountbyplanet=accountbyplanet)
     except:
@@ -470,7 +477,10 @@ def post_detail(request, planet_name, post_pk):
     memoform = MemobyplanetForm()
     
     # comment_emotes = Emote.objects.exclude(comment__isnull=True)
+
     context = {
+        'votetopicform': votetopicform,
+        'postform': postform,
         'post': post,
         'comments': comments,
         'planet': planet,
@@ -482,6 +492,11 @@ def post_detail(request, planet_name, post_pk):
         'post_emotion_thumbsup': post_emotion_thumbsup,
         'post_emotion_thumbsdown': post_emotion_thumbsdown,
         'user': Accountbyplanet.objects.get(user=request.user.pk, planet=planet),
+        # 'votetopics': list(post.votetopic_set.values('title')),
+        # 'vote_count':[Vote.objects.filter(votetopic=vote_topic).count() for vote_topic in vote_topics],
+        'votetopics_count': zip(vote_topics, vote_count),
+        'total_vote_count': sum(vote_count),
+        'voted': True if voted_topics else False,
     }
     return render(request, 'planets/planet_detail.html', context)
 
@@ -586,6 +601,7 @@ def comment_delete(request, planet_name, comment_pk):
             comment.save()
             return JsonResponse({'success': 'Change', 'comment_content': comment.content})
         else:
+
             comment.delete()
             return JsonResponse({'success': True})
     else:
@@ -954,6 +970,9 @@ def following(request, planet_name, user_pk):
 # 투표
 @login_required
 def vote(request, post_pk, vote_title):
+
+    user = Accountbyplanet.objects.get(user=request.user)
+
     post = Post.objects.get(pk=post_pk)
     user = Accountbyplanet.objects.get(user=request.user, planet=post.planet)
     vote_topic = VoteTopic.objects.get(title=vote_title, post=post)
@@ -961,12 +980,18 @@ def vote(request, post_pk, vote_title):
 
         # 중복 투표 x
         if Vote.objects.filter(voter=user, votetopic__post=post).exists():
-            return redirect('planets:planet_posts', post.planet.name)
-
+            return redirect('planets:index', post.planet.name)
+            # return redirect('planets:planet_posts', post.planet.name)
+            
         # 새로운 투표 생성
         vote = Vote(votetopic=vote_topic, voter=user)
         vote.save()
-        return redirect('planets:planet_posts', post.planet.name)
+        context = {
+            'result':'success',
+            'planet_name':post.planet.name,
+        }
+        return JsonResponse(context)
+        
 
 
 # 비동기 post emote

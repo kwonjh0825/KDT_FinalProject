@@ -126,15 +126,30 @@
 
         <p class="text-2xl mt-20 border-b-2 border-[#393f4f] pt-3 mb-3">초대 코드 입력</p>
         <p class="text-sm mb-5">전송받은 초대코드를 입력하고 행성에 참여하세요.</p>
+
         <div class="p-3 rounded-md">
           <div class="p-3">
             <button id="modalButton" data-modal-target="defaultModal2" data-modal-toggle="defaultModal2" class="block text-white bg-[#282c37] hover:bg-[#ffd951] rounded-md text-base w-[92%] py-4 my-5 text-center" type="button">
               <p class="text-xl">초대 코드 입력하기</p>
             </button>
           </div>
+
         </div>
       </div>
-
+      <!-- 초대코드 모달 -->
+      <div id="inviteModal" class="fixed inset-0 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg p-6">
+            <h1 class="text-2xl font-bold mb-4  text-black">초대코드 등록</h1>
+            <form id="inviteForm" method="POST" action="{% url 'planets:invite_create' %}">
+                {% csrf_token %}
+                <div class="flex items-center">
+                    <input type="text" id='user_input' name="user_input" class="text-black border border-gray-300 rounded-md px-3 py-2 mr-2">
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white rounded-md px-4 py-2">확인</button>
+                </div>
+            </form>
+            <p id="errorText" class="text-red-500 mt-2 hidden">존재하지 않는 코드입니다.</p>
+        </div>
+      </div>
 
       <!-- 메인 내용 -->
       <div class="w-full mb:w-3/4 ms-10 mb-20">
@@ -289,6 +304,7 @@
 {% block script %}
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="{% static 'js/planet_list.js' %}"></script>
+
 
 <script>
   const modalButton = document.getElementById('modalButton');
@@ -501,4 +517,5 @@ Object.keys(sectionButtonMap).forEach((section) => {
 
 
 </script>
+
 {% endblock script %}
