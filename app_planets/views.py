@@ -990,7 +990,6 @@ def vote(request, post_pk, vote_title):
 # 비동기 post emote
 @login_required
 def post_emote(request, planet_name, post_pk, emotion):
-    print(1)
     planet = Planet.objects.get(name=planet_name)
     post = Post.objects.get(pk=post_pk)
     user = Accountbyplanet.objects.get(planet=planet, user=request.user)
