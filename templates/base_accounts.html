@@ -30,12 +30,14 @@
   <div class="max-w-[540px] h-screen mx-auto">
   <!-- 로고 -->
   <div class="pt-14 flex justify-center">
-    <a href="{% url 'planets:main' %}">
-      <img type="button" style="height:200px;" src="{% static 'img/catsmos_logo.png' %}" alt="">
+    <a class="pb-10" href="{% url 'planets:main' %}">
+      <img type="button" style="width:400px;" src="{% static 'img/catsmos_logo.png' %}" alt="">
     </a>
   </div>
   {% block content %}
   {% endblock content %}
+  <div style="height:100px;"></div>
+
   </div>
 </body>
 <script type="text/javascript" src="/static/js/base_accounts.js"></script>
