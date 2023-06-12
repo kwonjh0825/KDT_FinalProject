@@ -9,7 +9,6 @@ function createpostContainer(
   image_url,
   user,
   votetopics,
-
   post_emote_heart,
   post_emote_thumbsup,
   post_emote_thumbsdown,
@@ -455,7 +454,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const emotionCount = document.querySelector(`#post-emote-form-${postPk}> p > .emotion-${emoteClass}-count`)
   
       axios({
-        method:'post',
+        method:'POST',
         url:`/planets/${planetName}/posts/${postPk}/emotes/${emoteClass}`,
         headers:{'X-CSRFToken': csrftoken,}
       })
