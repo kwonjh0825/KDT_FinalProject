@@ -966,9 +966,6 @@ def following(request, planet_name, user_pk):
 # 투표
 @login_required
 def vote(request, post_pk, vote_title):
-
-    user = Accountbyplanet.objects.get(user=request.user)
-
     post = Post.objects.get(pk=post_pk)
     user = Accountbyplanet.objects.get(user=request.user, planet=post.planet)
     vote_topic = VoteTopic.objects.get(title=vote_title, post=post)
