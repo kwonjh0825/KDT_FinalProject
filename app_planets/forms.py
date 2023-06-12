@@ -164,7 +164,6 @@ class VoteTopicForm(forms.ModelForm):
         widgets = {
             'title': forms.TextInput(attrs={
                 'class': 'bg-[#101013] text-white mt-1 block w-full rounded-lg',
-                'placeholder': 'ㄴㅇ',
             }),
         }
     
