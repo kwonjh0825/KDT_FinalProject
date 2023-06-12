@@ -22,16 +22,15 @@ Catsmos
     border-left : 1px solid gray;
     height : auto;
   }
+
+.line-break {
+    word-wrap: break-word;
+    width: 500px;
+}
+  
+
 {% endblock style %}
 {% block content %}
-<div class="mt-5">
-    <a href="javascript:history.back()" class="block  flex items-center pl-5  text-[#ffd951] " style="height: 50px;">
-        <span class="material-symbols-outlined">
-            chevron_left
-        </span>
-        Back
-    </a>
-</div>
     
 <div class="container mx-auto max-w-[900px] ">
 {% comment %} 
@@ -87,24 +86,13 @@ Catsmos
     </div>
 
 
-    <div class="mx-auto pt-6">
-        <!-- 개수 -->
-        {% comment %} <div class="my-4 ml-2">
-            <p>{{ user_by_planet.post_set.all|length }} <span class="text-slate-500">Posts</span> </p>
-            <p>{{ user_by_planet.followings.all|length }} <span class="text-slate-500">Followings</span> </p>
-            <p>{{ user_by_planet.followers.all|length }} <span class="text-slate-500">Followers</span> </p>
-        </div>  {% endcomment %}
-
-          <!--  1. posts - planet.user 가 작성한 postslists 나열
-                2. 팔로잉 중인 유저들 나열
-                3. user 를 팔로우 하는 another users 나열
-        
-            -->
-
-            
+    <div class=" pt-6">
+    </div>
+    <p class="text-gray-300 text-2xl">posts</p>
         {% for post in user_by_planet.post_set.all %}
-        <div class="pl-5 py-3 my-3 rounded-lg bg-[#181A20] relative tag_crop">
-            <div class="flex gap-3">
+        <div class="pl-5 py-3 my-3 rounded-lg bg-[#181A20] relative tag_crop max-w-xl mx-auto">
+            <div class="flex gap-3 mb-5 ">
+                
                 <!-- 프로필 이미지 -->
                 {% if user_by_planet.profile_image %}
                     <img src="{{ user_by_planet.profile_image.url }}" alt="post_image" class="inline-block rounded-md" width="50">
@@ -113,32 +101,43 @@ Catsmos
                 {% endif %}
                 <div>
                     <p class="text-slate-200 text-ml">{{ user_by_planet.nickname }}</p>
-                    <p class="text-slate-500 text-sm">@{{ user_by_planet.planet.name }}</p>
+                    <p class="text-slate-500 text-sm">🪐 {{ user_by_planet.planet.name }}</p>
                 </div>
             </div>
-            <p class="my-3">{{ post.content }}</p>
-            {% if post.image %}
-            <img class="tag_img rounded-md" src="{{ post.image.url }}" alt="#">
-            {% endif %}
+            <div class="">
+                {% if post.image %}
+                <div id="imageContainer{{ forloop.counter }}" class="hidden mb-3">
+                    <img id="image{{ forloop.counter }}" class="tag_img rounded-md" src="{{ post.image.url }}" alt="#" style="width:50%; height:50%;">
+                </div>
+                <button id="showImageBtn{{ forloop.counter }}" class="absolute right-4 top-12 text-slate-400 text-xs"><span class="material-symbols-outlined">
+                    image
+                </span></button>
+                {% endif %}
+                <p class="line-break">{{ post.content }}</p>
+            </div>
             <p class="absolute right-4 top-3 text-slate-400 text-xs">{{ post.created_at|date:'m d' }}</p>
+            <a href="{% url 'planets:post_detail' planet_name=post.planet.name post_pk=post.pk %}" class="absolute right-4 bottom-3 text-slate-400 text-xs">행성에서 보기</a>
             
-            <!-- 게시글 삭제 -->
-            {% comment %} 
-            {% if request.user == post.accountbyplanet.user %}
-            <form class="delete-post-form" data-planet-name="{{ planet.name }}" data-post-pk="{{ post.pk }}">
-              {% csrf_token %}
-              <input type="submit" class="delete-post-button" value="게시글 삭제">
-            </form>
-            <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="defaultModal">
-                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                <span class="sr-only">Close modal</span>
-            </button>
-            {% endif %} 
-            {% endcomment %}
-        </div>
 
-        {% endfor %}
-    </div>
+
+            <script>
+                var showImageBtn{{ forloop.counter }} = document.getElementById("showImageBtn{{ forloop.counter }}");
+                var imageContainer{{ forloop.counter }} = document.getElementById("imageContainer{{ forloop.counter }}");
+
+                showImageBtn{{ forloop.counter }}.addEventListener("click", function() {
+                    if (imageContainer{{ forloop.counter }}.classList.contains("hidden")) {
+                        imageContainer{{ forloop.counter }}.classList.remove("hidden");
+                        showImageBtn{{ forloop.counter }}.innerHTML = '<span class="material-symbols-outlined">hide_image</span>';
+                        imageContainer{{ forloop.counter }}.classList.add("block");
+                    } else {
+                        imageContainer{{ forloop.counter }}.classList.add("hidden");
+                        showImageBtn{{ forloop.counter }}.innerHTML = '<span class="material-symbols-outlined">image</span>';
+                    }
+                });
+            </script>
+        </div>
+    {% endfor %}
+
     
 
 </div>
@@ -221,7 +220,41 @@ Catsmos
 {% endblock content %}
 
 {% block script %}
+
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="{% static 'js/planet_profile.js' %}"></script>
+<script>
+  var requestuser = "{{ request.user }}";
+  var requestuser_nickname= "{{ user.nickname }}";
+</script>
+<script src="{% static 'js/planet_index.js' %}"></script>
+<script src="{% static 'js/planet_post_more.js' %}"></script>
 
 {% endblock script %}
+
+<!-- 게시글 삭제 -->
+{% comment %} 
+{% if request.user == post.accountbyplanet.user %}
+<form class="delete-post-form" data-planet-name="{{ planet.name }}" data-post-pk="{{ post.pk }}">
+    {% csrf_token %}
+    <input type="submit" class="delete-post-button" value="게시글 삭제">
+</form>
+<button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="defaultModal">
+    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+    <span class="sr-only">Close modal</span>
+</button>
+{% endif %} 
+{% endcomment %}
+
+<!-- 개수 -->
+{% comment %} <div class="my-4 ml-2">
+    <p>{{ user_by_planet.post_set.all|length }} <span class="text-slate-500">Posts</span> </p>
+    <p>{{ user_by_planet.followings.all|length }} <span class="text-slate-500">Followings</span> </p>
+    <p>{{ user_by_planet.followers.all|length }} <span class="text-slate-500">Followers</span> </p>
+</div>  {% endcomment %}
+
+    <!--  1. posts - planet.user 가 작성한 postslists 나열
+        2. 팔로잉 중인 유저들 나열
+        3. user 를 팔로우 하는 another users 나열
+
+    -->
