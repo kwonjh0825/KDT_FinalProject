@@ -68,7 +68,7 @@
         <a id="avatarButton" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start" class="rounded-full cursor-pointer" src="/docs/images/people/profile-picture-5.jpg" alt="User dropdown">{{ user.username }}</a>
         {% comment %} href="{% url 'accounts:profile' user %}" {% endcomment %}
         {% else %}
-        <a href="{% url 'accounts:login' %}" class="text-sm text-white ">login</a>
+        <a href="{% url 'accounts:login' %}" class="text-sm text-white me-5">login</a>
         <a href="{% url 'accounts:contract' %}" class="text-sm text-white ">Signup</a>
         {% endif %}
         

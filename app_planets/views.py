@@ -902,26 +902,31 @@ def report(request, planet_name, report_category, pk):
 
 def admin_report(request, planet_name):
     planet = Planet.objects.get(name=planet_name)
+    is_manager = True if Accountbyplanet.objects.get(planet=planet, user=request.user).admin_level == 3 else False
+    if is_manager:
+             
+        post_reports = Report.objects.exclude(post__isnull=True)
+        comment_reports = Report.objects.exclude(comment__isnull=True)
+        recomment_reports = Report.objects.exclude(recomment__isnull=True)
+        
+        post_reports_count = Report.objects.exclude(post__isnull=True).values('post').annotate(Count('pk'))
+        comment_reports_count = Report.objects.exclude(comment__isnull=True).values('comment').annotate(Count('pk'))
+        recomment_reports_count = Report.objects.exclude(recomment__isnull=True).values('recomment').annotate(Count('pk'))
+        
+        context = {
+            'planet': planet,
+            'post_reports': post_reports,
+            'post_reports_count': post_reports_count,
+            'comment_reports': comment_reports,
+            'comment_reports_count': comment_reports_count,
+            'recomment_reports': recomment_reports,
+            'recomment_reports_count': recomment_reports_count,
+        }
+        return render(request, 'planets/admin_report.html', context)
 
-    post_reports = Report.objects.exclude(post__isnull=True)
-    comment_reports = Report.objects.exclude(comment__isnull=True)
-    recomment_reports = Report.objects.exclude(recomment__isnull=True)
-    
-    post_reports_count = Report.objects.exclude(post__isnull=True).values('post').annotate(Count('pk'))
-    comment_reports_count = Report.objects.exclude(comment__isnull=True).values('comment').annotate(Count('pk'))
-    recomment_reports_count = Report.objects.exclude(recomment__isnull=True).values('recomment').annotate(Count('pk'))
-    
-    context = {
-        'planet': planet,
-        'post_reports': post_reports,
-        'post_reports_count': post_reports_count,
-        'comment_reports': comment_reports,
-        'comment_reports_count': comment_reports_count,
-        'recomment_reports': recomment_reports,
-        'recomment_reports_count': recomment_reports_count,
-    }
-    return render(request, 'planets/admin_report.html', context)
-
+    else:
+        messages.warning(request, '매니저만 접근 가능합니다.')
+        return redirect('planets:main')
 
 # 행성 회원 관리
 def admin_member(request, planet_name):

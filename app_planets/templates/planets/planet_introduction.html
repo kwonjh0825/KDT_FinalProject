@@ -21,7 +21,7 @@
     <div class="flex flex-row justify-between">
       <p class="text-2xl pt-5 mb-2">{{ planet.name }}</p>
       {% if user.star %}
-      <div class="flex ms-5 me-auto pt-5">
+      <div class="flex ms-5 me-auto pt-6">
         <div>
           <button>
             <i id="star" class="fa-solid fa-star fa-lg hover-grow" data-planet-name="{{ planet.name }}" value="{{ user.star }}" style="color: #ffc800;"></i>
@@ -29,7 +29,7 @@
         </div>
       </div>
       {% else %}
-        <div class="flex ms-5 me-auto pt-5">
+        <div class="flex ms-5 me-auto pt-6">
           <div>
             <button><i id="star" class="fa-regular fa-star fa-lg" data-planet-name="{{ planet.name }}" value="{{ user.star }}" style="color: #ffc800;"></i></button>
           </div>
@@ -41,10 +41,7 @@
       <p class="text-xl pt-5 mb-5 border-t-2 border-[#393f4f]">행성 소개</p>
       <p class="mb-5">{{ planet.description }}</p>
     </div>
-    <div>
-      <p class="text-xl pt-5 mb-5 border-t-2 border-[#393f4f]">행성 개설자</p>
-      <p>{{ user.name }}</p>
-    </div>
+    <p class="text-xl pt-5 mb-5 border-t-2 border-[#393f4f]">행성 개설자</p>
     {% for account in accounts %}
       <div>
         {% if account.admin_level == 3 %}
@@ -63,8 +60,15 @@
         {% endif %}
       </div>
     {% endfor %}
-    <div class="my-4 mx-auto border-t-2 border-[#393f4f]">
-      <p class='text-sm text-[#bcbdbf] mt-2'>행성 개설일 {{ planet.created_at | date:"Y. n. j." }}</p>
+    {% comment %} # 게시글 신고 관리
+    path('planets/<str:planet_name>/admin/report/', views.admin_report, name='admin_report'),
+    # 행성 내 회원 관리
+    path('planets/<str:planet_name>/admin/member/', views.admin_member, name='admin_member'), {% endcomment %}
+    <div class="flex flex-row text-xl pt-5 mb-5 border-t-2 border-[#393f4f]">
+      {% if user.admin_level == 3 %}
+        <a href="{% url 'planets:admin_report' planet.name %}" class="button-big button-color-join bg-[#ffc800] p-2 me-10 text-base text-center rounded-md">게시글 신고 관리</a>
+        <a href="{% url 'planets:admin_member' planet.name %}" class="button-big button-color-join bg-[#ffc800] p-2 text-base text-center rounded-md">행성 내 회원 관리</a>
+      {% endif %} 
     </div>
   </div>
 </div>
