@@ -177,6 +177,8 @@ function createpostContainer(
     '/planets/' + planetName + '/report/post/' + post_pk + '/';
   newPostContainer.querySelector('#post-detailpage').href =
     '/planets/' + planetName + '/' + post_pk + '/';
+  newPostContainer.querySelector('#a-comment_form').href = 
+    '/planets/' + planetName + '/' + post_pk + '/';
 
   // emote
   newPostContainer.querySelector('.emotion-heart-count').textContent =
@@ -189,6 +191,7 @@ function createpostContainer(
     form.id = `post-emote-form-${post_pk}`;
     form.setAttribute('data-post-pk', post_pk)
   });
+
   if (tags) {
     tags.forEach(function (tag) {
       var tagContainer = newPostContainer.querySelector('#post-tags');
@@ -232,8 +235,8 @@ document.addEventListener('DOMContentLoaded', function () {
       var dropdownMenu = parentDiv.querySelector('#dropdown-menu');
       var buttonRect = target.getBoundingClientRect();
 
-      dropdownMenu.style.top = buttonRect.top + window.scrollY + 'px';
-      dropdownMenu.style.left = buttonRect.right + window.scrollX + 'px';
+      dropdownMenu.style.top = buttonRect.top + window.scrollY + 10 + 'px';
+      dropdownMenu.style.left = buttonRect.left + window.scrollX - 120 + 'px';
 
       if (dropdownMenu.style.display == 'none') {
         dropdownMenu.style.display = 'block';
