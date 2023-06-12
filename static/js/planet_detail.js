@@ -119,9 +119,9 @@ function createcommentContainer(profile_image_url, nickname, created_time, conte
   newCommentContainer.querySelectorAll('.post-emote-form').forEach((form) => {
     form.setAttribute('data-comment-pk', comment_pk)
   })
-  newCommentContainer.querySelector('.emotion-heart-count').textContent = 0;
-  newCommentContainer.querySelector('.emotion-thumbsup-count').textContent = 0;
-  newCommentContainer.querySelector('.emotion-thumbsdown-count').textContent = 0;
+  newCommentContainer.querySelector('.emotion-heart-count').textContent = comment_emote_heart;
+  newCommentContainer.querySelector('.emotion-thumbsup-count').textContent = comment_emote_thumbsup;
+  newCommentContainer.querySelector('.emotion-thumbsdown-count').textContent = comment_emote_thumbsdown;
   newCommentContainer.querySelectorAll('.post-emote-form').forEach((form) => {
     form.classList.replace('post-emote-form', 'comment-emote-form')
     form.id = `comment-emote-form-${comment_pk}`
