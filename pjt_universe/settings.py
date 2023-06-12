@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'imagekit',
     'taggit',
     'mathfilters',
+    'django_prometheus',
     'django_apscheduler', # 스케쥴러
     'django.contrib.admin',
     'django.contrib.auth',
