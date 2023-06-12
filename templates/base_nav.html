@@ -62,7 +62,7 @@
       <a class="ml-3 py-6" href="{% url 'planets:main' %}">
         <img type="button" style="width:150px;" src="{% static 'img/catsmos_logo.png' %}" alt="">
       </a>
-      <div class="flex items-center text-sm text-white px-3 gap-5">
+      <div class="flex items-center text-sm text-white px-3">
 
         {% if user.is_authenticated %}
         <a id="avatarButton" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start" class="rounded-full cursor-pointer" src="/docs/images/people/profile-picture-5.jpg" alt="User dropdown">{{ user.username }}</a>
@@ -144,9 +144,9 @@
         </div> {% endcomment %}
         
         <div class="p-1">
-          {% comment %} <button data-collapse-toggle="navbar-hamburger" type="button" class="md:hidden inline-flex items-center p-2 ml-3 text-sm" aria-controls="navbar-hamburger" aria-expanded="false">
+          <button data-collapse-toggle="navbar-hamburger" type="button" class="md:hidden inline-flex items-center p-2 ml-3 text-sm" aria-controls="navbar-hamburger" aria-expanded="false">
             <svg viewBox="0 0 32 32" width="25" height="25" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 32 32"><path d="M4 10h24a2 2 0 0 0 0-4H4a2 2 0 0 0 0 4zm24 4H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4zm0 8H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4z" fill="#ffd951" class="fill-000000"></path></svg>
-          </button> {% endcomment %}
+          </button>
           {% comment %} <button class="hidden md:flex inline-flex items-center p-2 ml-3 text-sm" type="button" data-drawer-target="drawer-right-example" data-drawer-show="drawer-right-example" data-drawer-placement="right" aria-controls="drawer-right-example">
             <svg viewBox="0 0 32 32" width="25" height="25" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 32 32"><path d="M4 10h24a2 2 0 0 0 0-4H4a2 2 0 0 0 0 4zm24 4H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4zm0 8H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4z" fill="#ffd951" class="fill-000000"></path></svg>
           </button> {% endcomment %}

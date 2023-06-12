@@ -13,24 +13,28 @@
 {% endblock head %}
 
 {% block content %}
-  <span id="top5_tag" class="text-2xl">최근 2주간 상위 5개 태그</span>
-  {% for tag in tags %}
-    <div id="tag" class="border-b-2 border-[#393f4f]">
-      <div>
-        <a href="{% url 'planets:post_tag' planet.name tag %}">
-          <div class="text-xl">
-            #{{ tag }}
-          </div>
-          <div class="text-sm text-[#bcbdbf]">
-            총 {{ tag.tag_count }}개의 게시글이 존재합니다
-          </div>
-        </a>
+<div class="container mx-auto max-w-4xl my-8">
+  <div class="my-4 mx-auto w-[95%] border-b-2 border-[#393f4f]">
+    <p class="text-xl pt-5 mb-5 border-t-2 border-[#393f4f]">최근 2주간 상위 5개 태그</p> <!-- Planet lists -->
+    {% for tag in tags %}
+      <div id="tag" class="border-b-2 border-[#393f4f]">
+        <div>
+          <a href="{% url 'planets:post_tag' planet.name tag %}">
+            <div class="text-base">
+              #{{ tag }}
+            </div>
+            <div class="text-xs text-[#bcbdbf]">
+              총 {{ tag.tag_count }}개의 게시글이 존재합니다
+            </div>
+          </a>
+        </div>
+        <div class="progress-bar">
+          <div class="progress" style="width: {{ tag.tag_count|mul:100|div:total_posts|floatformat:1 }}%;">{{ tag.tag_count|mul:100|div:total_posts|floatformat:1 }}%</div>
+        </div>
       </div>
-      <div class="progress-bar">
-        <div class="progress" style="width: {{ tag.tag_count|mul:100|div:total_posts|floatformat:1 }}%;">{{ tag.tag_count|mul:100|div:total_posts|floatformat:1 }}%</div>
-      </div>
-    </div>
-  {% endfor %}
+    {% endfor %}
+  </div>
+</div>
 {% endblock content %}
 
 {% block script %}

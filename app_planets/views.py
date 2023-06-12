@@ -244,6 +244,7 @@ def index(request, planet_name):
     return render(request, 'planets/index.html', context)
 
 
+# 행성 내부 이동 페이지
 def index_list(request, planet_name):
     planet = Planet.objects.get(name=planet_name)
     user = request.user
@@ -287,6 +288,43 @@ def index_list(request, planet_name):
     }
     return render(request, 'planets/index_list.html', context)
 
+
+# 행성 소개 페이지
+def planet_introduction(request, planet_name):
+    planet = Planet.objects.get(name=planet_name)
+    
+    try:
+        memo = Memobyplanet.objects.get(accountbyplanet=Accountbyplanet.objects.get(planet=planet, user=request.user))
+    except:
+        memo = None
+    memoform = MemobyplanetForm()
+    
+    planet.current_capacity = Accountbyplanet.objects.filter(planet=planet).count()
+    postform = PostForm()
+    
+    if request.method == 'POST':    
+        accounts = request.POST.getlist('account_pk')
+        admin_levels = request.POST.getlist('admin_level')
+        for pk, level in zip(accounts, admin_levels):
+            temp = Accountbyplanet.objects.get(planet=planet, pk=pk)
+            temp.admin_level = level
+            temp.save()
+        
+        return redirect('planets:planet_introduction', planet_name)
+
+    else:
+        accounts = Accountbyplanet.objects.filter(planet=planet)
+        
+    context = {
+        'accounts': accounts,
+        'planet': planet,
+        'memo': memo,
+        'memoform': memoform,
+        'user': Accountbyplanet.objects.get(planet=planet, user=request.user),
+        'postform':postform,
+    }
+
+    return render(request, 'planets/planet_introduction.html', context)
 
 
 # 행성 삭제
