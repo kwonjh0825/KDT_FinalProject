@@ -38,9 +38,14 @@ Catsmos
 
 
 {% if message %}
-  <script>
-    alert('{{message}}')
-  </script>
+<script>
+  const message = "{{ message }}";
+  Swal.fire({
+    icon: 'error',
+    title: 'Oops...',
+    text: message,
+  });
+</script>
 {% endif %}
 {% endblock content %}
 

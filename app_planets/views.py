@@ -167,7 +167,7 @@ def planet_contract(request,planet_name):
         return redirect('planets:index', planet_name)
     
     if Accountbyplanet.objects.filter(planet=planet).count() >= planet.maximum_capacity:
-        messages.info(request, '서버 최대 인원을 초과하여 가입을 진행할 수 없습니다. ')
+        messages.warning(request, '서버 최대 인원을 초과하여 가입을 진행할 수 없습니다. ')
         return redirect('planets:main')
     
     #private 행성

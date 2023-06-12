@@ -62,37 +62,6 @@
   </div>
 </div>
 
-{% if messages %}
-  {% for message in messages %}
-    {% comment %} <script>
-      alert('{{message}}')
-    </script> {% endcomment %}
-    <script>
-      // 신고가 완료되었습니다. 메시지를 sweetalert2로 대체
-      {% for message in messages %}
-        {% if message.tags == 'info' %}
-          Swal.fire({
-            icon: 'success',
-            title: 'Good job!',
-            text: '{{ message }}',
-          });
-        {% endif %}
-      {% endfor %}
-    
-      // 이미 신고한 게시글입니다. 메시지를 sweetalert2로 대체
-      {% for message in messages %}
-        {% if message.tags == 'warning' %}
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: '{{ message }}',
-            footer: '<a href="">Why do I have this issue?</a>',
-          });
-        {% endif %}
-      {% endfor %}
-    </script>
-  {% endfor %}
-{% endif %}
 <div class="left-side-bar">
 </div>
 
