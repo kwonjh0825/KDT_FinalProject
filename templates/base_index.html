@@ -268,18 +268,15 @@
                     {{ postform.content }}
                   </div>
                   <img src="{% static 'img/vote.png' %}" class="h-16 w-16 my-3" alt="투표" id="vote-toggle">
-                  
+                  <label class="block text-base text-slate-300 mb-2">투표 주제</label>
                   <div class="w-full mb-5" id="vote-topics-container" style="display: none;">
-                    <label class="block text-base text-slate-300 mb-2">투표 주제</label>
+                    
                     <button id="plus-button">+</button>
                     <div id="vote-topics">
-                      <!-- 원래 있던 주제 입력란들 -->
-                      {% comment %} {% for form in votetopicform %} {% endcomment %}
+                      
                       <div class="vote-topic-input">
-                        {% comment %} {{ form.title }} {% endcomment %}
                         {{ votetopicform.title }}
                       </div>
-                      {% comment %} {% endfor %} {% endcomment %}
                     </div>
                   </div>
 

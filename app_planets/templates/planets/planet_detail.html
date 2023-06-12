@@ -98,19 +98,16 @@
           </div>
           <!--투표 여부-->
           
-          <div class='mb-5 rounded-md border p-1' id="post-votetopics">
+          <div class='mb-5 rounded-md border p-1' id="post-votetopics" style="text-align:center;">
           {% for votetopic, vote_count in votetopics_count %}
             {% if voted == True %} 
                 <div class="border-b-2 border-[#393f4f]">
                   <div>
                     <div class="text-xl">
-                      선택: {{votetopic.title}}
-                    </div>
-                    <div class="text-sm text-[#bcbdbf]">
-                      투표수: {{vote_count}}
+                      선택: {{votetopic.title}} <span class="text-sm text-[#bcbdbf]">투표수: {{vote_count}}</span>
                     </div>
                   </div>
-                  <div class="progress-bar">
+                  <div class="progress-bar" style="width:100%">
                     <div class="progress" style="width: {{ vote_count|mul:100|div:total_vote_count }}%;">
                       {{ vote_count|mul:100|div:total_vote_count }}%
                     </div>
