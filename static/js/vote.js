@@ -1,4 +1,3 @@
-console.log('뭔데~~~~~~~~~~~~~');
 // // 이미지를 눌러야 투표 폼이 생김
 // const voteToggle = document.getElementById('vote-toggle');
 // const voteTopicsContainer = document.getElementById('vote-topics-container');
