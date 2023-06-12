@@ -30,19 +30,44 @@
   <!-- nav 바-->
   <nav class="fixed top-0 w-full bg-[#191b22] z-[100]">
     <div class="flex items-center justify-between border-b-2 border-[#393f4f] bg-[#191b22] text-[#ffd951] font-bold w-full">
-      <a href="{% url 'planets:main' %}">
-        <img type="button" style="height:70px;" src="{% static 'img/catsmos_logo.png' %}" alt="">
+      <a class="ml-3 py-6" href="{% url 'planets:main' %}">
+        <img type="button" style="width:150px;" src="{% static 'img/catsmos_logo.png' %}" alt="">
       </a>
       <div class="flex items-center text-sm text-white px-3 gap-5">
 
         {% if user.is_authenticated %}
-        <a href="{% url 'accounts:profile' user %}">{{ user.username }}</a>
-
+        <a id="avatarButton" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start" class="rounded-full cursor-pointer" src="/docs/images/people/profile-picture-5.jpg" alt="User dropdown">{{ user.username }}</a>
+        {% comment %} href="{% url 'accounts:profile' user %}" {% endcomment %}
         {% else %}
         <a href="{% url 'accounts:login' %}" class="text-sm text-white ">login</a>
         <a href="{% url 'accounts:contract' %}" class="text-sm text-white ">Signup</a>
         {% endif %}
         
+        <!-- Dropdown menu -->
+        <div id="userDropdown" class="z-10 hidden divide-y rounded-lg shadow w-44 bg-[#191b22] divide-gray-600">
+          <div class="px-4 py-3 text-sm text-white">
+            <div>Menu</div>
+          </div>
+          <ul class="py-2 text-sm text-gray-200" aria-labelledby="avatarButton">
+            <li>
+              <a href="{% url 'accounts:profile' user %}" class="block px-4 py-2  hover:text-yellow-400">내 프로필</a>
+            </li>
+            <li>
+              <a href="{% url 'accounts:profile_update' %}" class="block px-4 py-2  hover:text-yellow-400">프로필 수정</a>
+            </li>
+            <li>
+              <a href="{% url 'planets:planet_list' %}" class="block px-4 py-2  hover:text-yellow-400">행성 둘러보기</a>
+            </li>
+          </ul>
+          <div class="py-1">
+            <form action="{% url 'accounts:logout' %}" method="POST">
+              {% csrf_token %}
+              <button type="submit" class="block px-4 py-2 text-sm  text-gray-200 hover:text-yellow-400">로그아웃</button>
+            </form>
+          </div>
+        </div>
+
+
         {% comment %} <!-- Dropdown button --><div>
           <a id="dropdownHoverButton" data-dropdown-toggle="dropdownHover" data-dropdown-trigger="hover" class="text-white text-sm px-4 py-2.5 text-center inline-flex items-center" href="#" role="button">추가 정보<svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></a>
           <!-- Dropdown menu -->
@@ -90,12 +115,12 @@
         </div> {% endcomment %}
         
         <div class="p-1">
-          <button data-collapse-toggle="navbar-hamburger" type="button" class="md:hidden inline-flex items-center p-2 ml-3 text-sm" aria-controls="navbar-hamburger" aria-expanded="false">
+          {% comment %} <button data-collapse-toggle="navbar-hamburger" type="button" class="md:hidden inline-flex items-center p-2 ml-3 text-sm" aria-controls="navbar-hamburger" aria-expanded="false">
             <svg viewBox="0 0 32 32" width="25" height="25" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 32 32"><path d="M4 10h24a2 2 0 0 0 0-4H4a2 2 0 0 0 0 4zm24 4H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4zm0 8H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4z" fill="#ffd951" class="fill-000000"></path></svg>
-          </button>
-          <button class="hidden md:flex inline-flex items-center p-2 ml-3 text-sm" type="button" data-drawer-target="drawer-right-example" data-drawer-show="drawer-right-example" data-drawer-placement="right" aria-controls="drawer-right-example">
+          </button> {% endcomment %}
+          {% comment %} <button class="hidden md:flex inline-flex items-center p-2 ml-3 text-sm" type="button" data-drawer-target="drawer-right-example" data-drawer-show="drawer-right-example" data-drawer-placement="right" aria-controls="drawer-right-example">
             <svg viewBox="0 0 32 32" width="25" height="25" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 32 32"><path d="M4 10h24a2 2 0 0 0 0-4H4a2 2 0 0 0 0 4zm24 4H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4zm0 8H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4z" fill="#ffd951" class="fill-000000"></path></svg>
-          </button>
+          </button> {% endcomment %}
         </div>
       </div>
     </div>
@@ -129,13 +154,6 @@
   <div id="drawer-right-example" class="fixed top-24 right-0 z-40 h-screen p-4 overflow-y-auto transition-transform translate-x-full bg-[#191b22] w-60" tabindex="-1" aria-labelledby="drawer-right-label">
     <div class="bg-[#191b22] max-w-screen-xl flex flex-row items-center justify-between mx-auto">
       <div class="w-full" id="navbar-hamburger">
-        <div>
-          <a href="#" class="block py-2 pl-3 pr-4 my-2 text-white text-center rounded hover:bg-[#ffd951]">Home</a>
-        </div>
-        <div>
-          <a href="#" class="block py-2 pl-3 pr-4 my-2  text-white text-center rounded hover:bg-[#ffd951]">Services</a>
-        </div>
-
         {% if user.is_authenticated %}
         <div>
           <a href="{% url 'accounts:profile_update' %}" class="block py-2 pl-3 pr-4 my-2  text-white text-center rounded hover:bg-[#ffd951]">프로필 수정</a>
@@ -150,21 +168,13 @@
       </div>
     </div>
   </div>
+  <div class="flex mt-16">
 
-
-  <div class="mx-auto" style=" color: aliceblue; height: 100vh;">
-    <div class="flex">
-      <a href="javascript:history.back()" class="flex items-center pl-5  text-[#ffd951] " style="height: 50px;">
-          <span class="material-symbols-outlined">
-              chevron_left
-          </span>
-          Back
-      </a>
-    </div>
-
+</div>
     {% block content %}
     {% endblock content %}
   </div>
+  <div style="height:100px;"></div>
 
 
  {% comment %} <footer class="mt-auto bg-[#191b22]">
@@ -189,5 +199,29 @@
 <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 
 {% block script %}
+<script>
+  // 신고가 완료되었습니다. 메시지를 sweetalert2로 대체
+  {% for message in messages %}
+    {% if message.tags == 'info' %}
+      Swal.fire({
+        icon: 'success',
+        title: 'Good job!',
+        text: '{{ message }}',
+      });
+    {% endif %}
+  {% endfor %}
+
+  // 이미 신고한 게시글입니다. 메시지를 sweetalert2로 대체
+  {% for message in messages %}
+    {% if message.tags == 'warning' %}
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: '{{ message }}',
+      });
+    {% endif %}
+  {% endfor %}
+</script>
+
 {% endblock script %}
 </html>

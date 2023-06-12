@@ -33,13 +33,13 @@
       const postPk = e.target.dataset.postPk;
       const planetName = e.target.dataset.planetName;
       Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
+        title: '삭제하시겠습니까?',
+        text: "삭제하면 되돌릴 수 없습니다!",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonText: 'OK!'
       }).then((result) => {
         if (result.isConfirmed) {
           axios({
