@@ -745,7 +745,7 @@ def planet_join_admin(request, planet_name):
             'planet': planet,
             'confirms': confirms,
         }
-        return render(request, 'planets/planet_joinㅋㅁ_admin.html', context)
+        return render(request, 'planets/planet_join_admin.html', context)
     else:
         messages.warning(request, '관리자만 접근 가능합니다. ')
         return redirect('planets:main')

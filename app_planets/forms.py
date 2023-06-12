@@ -13,7 +13,7 @@ def validate_inappropriate_words(value):
 class PlanetForm(forms.ModelForm):
     class Meta:
         model = Planet
-        fields = ('name', 'description', 'category', 'is_public', 'image', 'maximum_capacity',)
+        fields = ('name', 'description', 'category', 'is_public', 'need_confirm', 'image', 'maximum_capacity',)
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -32,6 +32,9 @@ class PlanetForm(forms.ModelForm):
         
         self.fields['is_public'].label = '<span class="text-white">공개 여부</span>'
         self.fields['is_public'].help_text = ''
+
+        self.fields['need_confirm'].label = '<span class="text-white">가입 방식</span>'
+        self.fields['need_confirm'].help_text = ''
         
         self.fields['image'].label = '<span class="text-white">행성 사진</span>'
         self.fields['image'].help_text = ''
