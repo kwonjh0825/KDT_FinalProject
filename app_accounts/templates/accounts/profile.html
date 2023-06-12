@@ -74,7 +74,7 @@ Catsmos
                 <img class="relative w-full" style="height:200px;" src="{% static 'img/no_background_img.jpeg' %}" alt="no_image">
                 {% endif %} {% endcomment %}
                 {% if user_by_planet_not_star.background_image %}
-                <img class="" style="" src="{{ user_by_planet.background_image.url }}" alt="#">
+                <img class="" style="" src="{{ user_by_planet_not_star.background_image.url }}" alt="#">
                 {% else %}
                 <img class="" style="" src="{% static 'img/no_background_img.jpeg' %}" alt="no_image">
                 {% endif %}
