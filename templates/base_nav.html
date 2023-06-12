@@ -26,7 +26,36 @@
 
 
 <body class="">
-
+{% if messages %}
+  {% for message in messages %}
+    {% comment %} <script>
+      alert('{{message}}')
+    </script> {% endcomment %}
+    <script>
+      // 신고가 완료되었습니다. 메시지를 sweetalert2로 대체
+      {% for message in messages %}
+        {% if message.tags == 'info' %}
+          Swal.fire({
+            icon: 'success',
+            title: 'Good job!',
+            text: '{{ message }}',
+          });
+        {% endif %}
+      {% endfor %}
+    
+      // 이미 신고한 게시글입니다. 메시지를 sweetalert2로 대체
+      {% for message in messages %}
+        {% if message.tags == 'warning' %}
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: '{{ message }}',
+          });
+        {% endif %}
+      {% endfor %}
+    </script>
+  {% endfor %}
+{% endif %}
   <!-- nav 바-->
   <nav class="fixed top-0 w-full bg-[#191b22] z-[100]">
     <div class="flex items-center justify-between border-b-2 border-[#393f4f] bg-[#191b22] text-[#ffd951] font-bold w-full">
@@ -168,7 +197,7 @@
       </div>
     </div>
   </div>
-  <div class="flex mt-16">
+  <div class="flex mt-20">
 
 </div>
     {% block content %}
@@ -199,29 +228,5 @@
 <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 
 {% block script %}
-<script>
-  // 신고가 완료되었습니다. 메시지를 sweetalert2로 대체
-  {% for message in messages %}
-    {% if message.tags == 'info' %}
-      Swal.fire({
-        icon: 'success',
-        title: 'Good job!',
-        text: '{{ message }}',
-      });
-    {% endif %}
-  {% endfor %}
-
-  // 이미 신고한 게시글입니다. 메시지를 sweetalert2로 대체
-  {% for message in messages %}
-    {% if message.tags == 'warning' %}
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: '{{ message }}',
-      });
-    {% endif %}
-  {% endfor %}
-</script>
-
 {% endblock script %}
 </html>

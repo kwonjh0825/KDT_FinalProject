@@ -20,6 +20,36 @@
 </head>
 
 <body>
+{% if messages %}
+  {% for message in messages %}
+    {% comment %} <script>
+      alert('{{message}}')
+    </script> {% endcomment %}
+    <script>
+      // 신고가 완료되었습니다. 메시지를 sweetalert2로 대체
+      {% for message in messages %}
+        {% if message.tags == 'info' %}
+          Swal.fire({
+            icon: 'success',
+            title: 'Good job!',
+            text: '{{ message }}',
+          });
+        {% endif %}
+      {% endfor %}
+    
+      // 이미 신고한 게시글입니다. 메시지를 sweetalert2로 대체
+      {% for message in messages %}
+        {% if message.tags == 'warning' %}
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: '{{ message }}',
+          });
+        {% endif %}
+      {% endfor %}
+    </script>
+  {% endfor %}
+{% endif %}
   <!-- nav 바, md:hidden -->
   <nav class="sticky top-0 w-full z-[1] lg:hidden">
     <div class="flex justify-between border-b-2 border-[#393f4f] bg-[#191b22] text-[#ffd951] font-bold p-5 w-full">
@@ -85,15 +115,19 @@
   
   <!-- nav 바 아래, sm:hidden -->
   <div class="w-full text-[#d9e1e8] bg-[#191b22] sm:hidden">
-    <div class="flex flex-col">
+    <div class="flex flex-col ">
 
-      <div class="flex flex-row justify-center items-center">
-        <div class="bg-[#282c37] h-36 w-36 justify-center items-center text-center m-5 p-3">
-          <div class="weather_icon"></div>
-          <div class="current_temp"></div>
-          <div class="weather_description"></div>
-          <div class="temp_min"></div>
-          <div class="temp_max"></div>
+      <div class="flex flex-row justify-center items-center ">
+        <div class="relative text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 h-36 w-36 m-5 p-3 rounded-lg ">
+          <div class="weather_icon text-right mr-2"></div>
+          <div class="weather_description text-right"></div>
+          <div class="text-xs absolute top-3 left-3">
+            <div class="temp_min"></div>
+            <div class="temp_max"></div>
+          </div>
+          <div class="absolute bottom-5">
+            <div class="current_temp" style="font-size:35px;"></div>
+          </div>
           {% comment %} <div class="humidity"></div>
           <div class="wind"></div>
           <div class="cloud"></div> {% endcomment %}
@@ -145,16 +179,20 @@
           </div>
           <div class="flex flex-col justify-center items-center">
             {% comment %} 날씨 {% endcomment %}
-            <div class="bg-[#282c37] h-36 w-36 justify-center items-center text-center m-5 p-3">
-              <div class="weather_icon"></div>
-              <div class="current_temp"></div>
-              <div class="weather_description"></div>
+          <div class="relative text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 h-36 w-36 m-5 p-3 rounded-lg ">
+            <div class="weather_icon text-right mr-2"></div>
+            <div class="weather_description text-right"></div>
+            <div class="text-xs absolute top-3 left-3">
               <div class="temp_min"></div>
               <div class="temp_max"></div>
-              {% comment %} <div class="humidity"></div>
-              <div class="wind"></div>
-              <div class="cloud"></div> {% endcomment %}
             </div>
+            <div class="absolute bottom-5">
+              <div class="current_temp" style="font-size:35px;"></div>
+            </div>
+            {% comment %} <div class="humidity"></div>
+            <div class="wind"></div>
+            <div class="cloud"></div> {% endcomment %}
+          </div>
             <div class="bg-[#282c37] h-36 w-36 justify-center items-center text-center m-5 p-3">
               <div id="index-memo">
                 {% if memo %}
