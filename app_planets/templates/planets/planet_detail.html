@@ -137,7 +137,7 @@
         <div class="border-b-2 border-[#393f4f]">
           <div class="w-full mt-3 flex justify-center">
             <div class="flex flex-row w-full text-center text-[#bcbdbf]">
-              <form class="post-emote-form emote-heart" data-emote-class="heart" data-post-pk="{{post.pk}}" data-planet-name="{{planet.name}}">
+              <form class="post-emote-form emote-heart" data-emote-class="heart" data-post-pk="{{post.pk}}" data-planet-name="{{planet.name}}" id="post-emote-form-{{post.pk}}">
                 {% csrf_token %}
                 <p class="ms-12 w-1/5">
                   <button type="submit">
@@ -146,7 +146,7 @@
                   <span class="emotion-heart-count">{{post_emotion_heart.count}}</span>
                 </p>
               </form>
-              <form class="post-emote-form emote-thumbsup" data-emote-class="thumbsup" data-post-pk="{{post.pk}}" data-planet-name="{{planet.name}}">
+              <form class="post-emote-form emote-thumbsup" data-emote-class="thumbsup" data-post-pk="{{post.pk}}" data-planet-name="{{planet.name}}" id="post-emote-form-{{post.pk}}">
                 {% csrf_token %}
                 <p class="w-1/5">
                   <button type="submit">
@@ -155,7 +155,7 @@
                   <span class="emotion-thumbsup-count">{{post_emotion_thumbsup.count}}</span>
                 </p>
               </form>
-              <form class="post-emote-form emote-thumbsdown" data-emote-class="thumbsdown" data-post-pk="{{post.pk}}" data-planet-name="{{planet.name}}">
+              <form class="post-emote-form emote-thumbsdown" data-emote-class="thumbsdown" data-post-pk="{{post.pk}}" data-planet-name="{{planet.name}}" id="post-emote-form-{{post.pk}}">
                 {% csrf_token %}
                 <p class="w-1/5">
                   <button type="submit">

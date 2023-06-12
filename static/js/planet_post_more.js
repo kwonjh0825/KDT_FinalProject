@@ -188,6 +188,7 @@ function createpostContainer(
   newPostContainer.querySelector('.emotion-thumbsdown-count').textContent = post_emote_thumbsdown
   newPostContainer.querySelectorAll('.post-emote-form').forEach((form) => {
     form.id = `post-emote-form-${post_pk}`
+    form.setAttribute('data-post-pk', post_pk)
   })
   if (tags) {
     tags.forEach(function (tag) {
@@ -438,21 +439,14 @@ document.addEventListener('DOMContentLoaded', function () {
           console.error('AJAX request failed:', error);
         });
     }
-  });
-});
-
-// post 비동기 emote
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelector('body').addEventListener('submit', (e) => {
-    const postEmoteForms = document.querySelectorAll('.post-emote-form')
-    postEmoteForms.addEventListener('submit', (e) => {
+    // post emote 비동기
+    else if (target.matches('.post-emote-form')) {
       e.preventDefault()
-      
       const emoteClass = e.target.dataset.emoteClass
       const planetName = e.target.dataset.planetName
       const postPk = e.target.dataset.postPk
       const emotionCount = document.querySelector(`#post-emote-form-${postPk}> p > .emotion-${emoteClass}-count`)
-  
+
       axios({
         method:'POST',
         url:`/planets/${planetName}/posts/${postPk}/emotes/${emoteClass}`,
@@ -464,30 +458,6 @@ document.addEventListener('DOMContentLoaded', () => {
       .catch((error) => {
         console.log(error.response)
       })
-    })
-  })
-})
-
-// const postEmoteForms = document.querySelectorAll('.post-emote-form')
-// postEmoteForms.forEach((emoteForm) => {
-//   postEmoteForms.addEventListener('submit', (e) => {
-//     e.preventDefault()
-    
-//     const emoteClass = e.target.dataset.emoteClass
-//     const planetName = e.target.dataset.planetName
-//     const postPk = e.target.dataset.postPk
-//     const emotionCount = document.querySelector(`.post-emote-form > p > .emotion-${emoteClass}-count`)
-
-//     axios({
-//       method:'post',
-//       url:`/planets/${planetName}/posts/${postPk}/emotes/${emoteClass}`,
-//       headers:{'X-CSRFToken': csrftoken,}
-//     })
-//     .then((response) => {
-//       emotionCount.innerHTML = response.data.emotion_count
-//     })
-//     .catch((error) => {
-//       console.log(error.response)
-//     })
-//   })
-// })
+    }
+  });
+});
