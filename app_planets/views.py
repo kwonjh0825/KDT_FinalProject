@@ -324,8 +324,6 @@ def planet_posts(request, planet_name):
             Vote.objects.filter(voter=user, votetopic__in=vote_topics).values_list('votetopic_id', flat=True)
         )
         
-
-        
         post_list.append({
             'pk': post.pk,
             'content': post.content,
@@ -336,11 +334,9 @@ def planet_posts(request, planet_name):
             'profile_image_url': post.accountbyplanet.profile_image.url if post.accountbyplanet.profile_image else None,
             'user': post.accountbyplanet.user.username,
             'votetopics': list(post.votetopic_set.values('title')),
-
-            'post_emote_heart': Emote.objects.filter(post=post, emote='heart').count(),
-            'post_emote_thumbsup': Emote.objects.filter(post=post, emote='thumbsup').count(),
-            'post_emote_thumbsdown': Emote.objects.filter(post=post, emote='thumbsdown').count(),
-
+            'post_emote_heart': Emote.objects.filter(post=post, emotion='heart').count(),
+            'post_emote_thumbsup': Emote.objects.filter(post=post, emotion='thumbsup').count(),
+            'post_emote_thumbsdown': Emote.objects.filter(post=post, emotion='thumbsdown').count(),
             'vote_count':[Vote.objects.filter(votetopic=vote_topic).count() for vote_topic in vote_topics],
             'voted': True if voted_topics else False,
 
