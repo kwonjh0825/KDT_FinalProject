@@ -100,6 +100,8 @@ document.addEventListener('DOMContentLoaded', function () {
               response.data.image_url,
               response.data.user,
               response.data.votetopics,
+              // emote heart, thumbsup, thumbsdown은 새 게시물에서 0으로 시작
+              0,0,0,
               response.data.vote_count,
               response.data.voted
             );
