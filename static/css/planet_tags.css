@@ -11,19 +11,18 @@
 }
 
 .progress-bar {
-  width: 50%;
+  /* width: 100%; 적용이 안되는중 */
   height: 20px;
   background-color: #dedede;
   font-weight: 600;
-  font-size: .8rem;
+  font-size: 0.8rem;
   border-radius: 0.2rem;
 }
 
 .progress-bar .progress {
   height: 20px;
   padding: 0;
-  border-radius: 0.2rem;  
-  text-align: center;
+  border-radius: 0.2rem;
   background-color: #ffd951;
   color: #111;
 }
