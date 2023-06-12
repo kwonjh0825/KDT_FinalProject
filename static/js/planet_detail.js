@@ -292,13 +292,13 @@ function createRecommentContainer(
     .closest('p')
     .closest('div');
   var newp = document.createElement('p');
-  newp.classList.add('w-1/5');
+  newp.classList.add('w-1/2');
   svgDiv.insertBefore(newp, svgDiv.firstChild);
   var newp2 = document.createElement('p');
-  newp2.classList.add('w-1/5');
+  newp2.classList.add('w-1/2');
   svgDiv.insertBefore(newp2, svgDiv.firstChild);
   var newp3 = document.createElement('p');
-  newp3.classList.add('w-1/5');
+  newp3.classList.add('w-1/2');
   svgDiv.insertBefore(newp3, svgDiv.firstChild);
   Array.from(
     newRecommentContainer.querySelectorAll('.post-emote-form')

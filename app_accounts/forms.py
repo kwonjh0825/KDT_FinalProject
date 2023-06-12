@@ -190,4 +190,5 @@ class MemobyplanetForm(forms.ModelForm):
                 "class": "form-input mt-1 rounded-md bg-[#101013]",
                 "style": "width: 100px; height: 47px;",
             }),
+        required=False,
     )

@@ -76,6 +76,6 @@ class Accountbyplanet(models.Model):
 
 
 class Memobyplanet(models.Model):
-    memo = models.TextField()
+    memo = models.TextField(blank=True, null=True)
     accountbyplanet = models.ForeignKey(Accountbyplanet, on_delete=models.CASCADE, related_name='accountbyplanet')
 
