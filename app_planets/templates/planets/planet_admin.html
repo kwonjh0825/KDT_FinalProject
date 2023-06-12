@@ -39,6 +39,10 @@
           <label for="description" class="block text-sm font-medium text-slate-300">설명</label>
           <textarea type="text" id="description" name="description"  class="form-input mt-1 block w-full rounded-md bg-[#101013]">{{ planet.description }}</textarea>
         </div>
+        <div>
+          <label for="maximum_capacity" class="block text-sm font-medium text-slate-300">최대 인원</label>
+          <input type="text" id="maximum_capacity" name="maximum_capacity" value="{{ planet.maximum_capacity }}" class="form-input mt-1 block w-full rounded-md bg-[#101013]">
+        </div>
         <div class="flex gap-4">
           <div>  
             <label for="category" class="block text-sm font-medium text-slate-300">카테고리</label>
@@ -59,23 +63,30 @@
               <option value="Public" {% if planet.is_public == 'Public' %}selected{% endif %}>Public</option>
             </select>
           </div>
-          <div>
-            <label for="maximum_capacity" class="block text-sm font-medium text-slate-300">최대 인원</label>
-            <input type="text" id="maximum_capacity" name="maximum_capacity" value="{{ planet.maximum_capacity }}" class="form-input mt-1 block w-40 rounded-md bg-[#101013]">
+          <div>  
+            <label for="need_confirm" class="block text-sm font-medium text-slate-300" >가입방식</label>
+            <select name="need_confirm" id="need_confirm" class="form-input p-2 mt-1 block w-40 rounded-md bg-[#101013]">
+              <option value="Approval" {% if planet.need_confirm %}selected{% endif %}>Approval</option>
+              <option value="Direct" {% if not planet.need_confirm %}selected{% endif %}>Direct</option>
+            </select>
           </div>
         </div>
         <div>
           <label for="image" class="block text-sm font-medium text-slate-300">행성 사진</label>
           <div class="bg-gray-700" style="position: relative; display: inline-block ">
             <div class="tag_crop">
-              <img src="{% if planet.image %} {{ planet.image.url}} {% else %} {% static 'img/no_planet_img.png' %} {% endif %}" class="absolute inset-0 m-auto tag_img" id="preview1" style="width: 100%; height: 100%;">
+            {% if planet.image %}
+              <img src=" {{ planet.image.url}}" class="absolute inset-0 m-auto tag_img" id="background_id" style="width: 100%; height: 100%;">
+              {% else %}
+              <img src="{% static 'img/no_planet_img.png' %}" class="absolute inset-0 m-auto tag_img" id="background_id" style="width: 100%; height: 100%;">
+            {% endif %}
             </div>
-            <button type="button" onclick="document.getElementById('image').click();" class="absolute inset-0 m-auto block text-lg font-medium text-slate-300" style="top: 50%; transform: translateY(-50%);">
-              <span id="symbol1" class="material-symbols-outlined text-4xl" style="display:none;">
-                person_add
+            <button type="button" onclick="document.getElementById('id_background_image').click();" class="absolute inset-0 m-auto block text-lg font-medium text-slate-300" style="top: 50%; transform: translateY(-50%);">
+              <span id="symbol2" class="material-symbols-outlined text-4xl" style="display:none;">
+                add_photo_alternate 
               </span>
             </button>
-            <input onchange="readURL1(this);" type="file" id="image" name="image" class="form-input" style="display: none;">
+            <input onchange="readURL2(this);" type="file" id="id_background_image" name="image" class="form-input" style="display: none;">
           </div>
         </div>
         
@@ -121,53 +132,52 @@
 
 
 </div>
+</div>
 {% endblock content %}
 
 
 {% block script %}
 <script>
-    function readURL1(input) {
-      if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-          document.getElementById('preview1').src = e.target.result;
-        };
-        var spanElement = document.getElementById('symbol1');
-        spanElement.style.display = 'none';
-  
-        reader.readAsDataURL(input.files[0]);
-      } else {
-        document.getElementById('preview1').src = "";
-      }
-    }
-  
+  var defaultBackgroundImage = "{% static 'img/no_planet_img.png' %}";
+  function readURL2(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('background_id').src = e.target.result;
+      };
+      var spanElement = document.getElementById('symbol2');
+      spanElement.style.display = 'none';
 
-  function resetImages1() {
-        document.getElementById('preview1').src = "";
+      reader.readAsDataURL(input.files[0]);
+    } else {
+      {% if planet.image %}
+      document.getElementById('background_id').src = "{{ planet.image.url}}";
+      {% else %}
+      document.getElementById('background_id').src = defaultBackgroundImage;
+      {% endif %}
     }
+  }
+
+  function copyInviteCode() {
+    // 초대 코드 텍스트 요소 가져오기
+    var inviteCodeElement = document.getElementById("invite-code");
+    
+    // 텍스트 선택하고 복사하기
+    var range = document.createRange();
+    range.selectNode(inviteCodeElement);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+    document.execCommand("copy");
+    
+    // 선택 해제
+    window.getSelection().removeAllRanges();
+    
+    // 복사 완료 메시지 표시 (옵션)
+    Swal.fire(
+      'Good job!',
+      '초대 코드가 복사되었습니다.',
+      'success'
+    )
+  }
   </script>
-
-  <script>
-    function copyInviteCode() {
-      // 초대 코드 텍스트 요소 가져오기
-      var inviteCodeElement = document.getElementById("invite-code");
-      
-      // 텍스트 선택하고 복사하기
-      var range = document.createRange();
-      range.selectNode(inviteCodeElement);
-      window.getSelection().removeAllRanges();
-      window.getSelection().addRange(range);
-      document.execCommand("copy");
-      
-      // 선택 해제
-      window.getSelection().removeAllRanges();
-      
-      // 복사 완료 메시지 표시 (옵션)
-      Swal.fire(
-        'Good job!',
-        '초대 코드가 복사되었습니다.',
-        'success'
-      )
-    }
-    </script>
 {% endblock script %}

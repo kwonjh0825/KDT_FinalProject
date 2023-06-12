@@ -15,10 +15,10 @@ Catsmos
         {% comment %} <p class="text-4xl mb-3 pb-4 font-bold">Catsmos profile</p>
         <hr class="border-t-2 border-yellow-300 mb-6"> {% endcomment %}
         <!-- 개인정보 -->
-        <p class="text-4xl">ID : {{ user.username }}</p>
+        {% comment %} <p class="text-4xl">ID : {{ user.username }}</p>
         <p class="text-4xl">E-mail : {{ user.email }}</p>
         <p class=""></p>
-        <p class="text-sm text-right  ">Joined : {{ user.created_at|date:'m d, Y' }}</p>
+        <p class="text-sm text-right  ">Joined : {{ user.created_at|date:'m d, Y' }}</p> {% endcomment %}
 
 
             
@@ -26,11 +26,11 @@ Catsmos
     </div>
 </div>
 
-<hr class="border-t-2 border-yellow-300 my-6 w-3/4 mx-auto">
+{% comment %} <hr class="border-t-2 border-yellow-300 my-6 w-3/4 mx-auto"> {% endcomment %}
 
 <div class="container mx-auto max-w-[1400px] my-8">
     <div class="my-4 ml-5">
-        <p class="text-3xl mb-5 ml-5">Favorite Lists</p>
+        <p class="text-3xl mb-5 ml-5">Favorite Lists ⭐️</p>
         <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-10">
             {% for user_by_planet_star in user_by_planets_star %}
             {% comment %} <div class="col">
@@ -75,7 +75,7 @@ Catsmos
         </div>
     </div>
 </div>
-<hr class="border-t-2 border-yellow-300 my-6 w-3/4 mx-auto">
+<hr class="border-t-2 border-yellow-300 my-6 w-4/5 mx-auto">
 
 <div class="container mx-auto max-w-[1400px] my-8">
     <div class="my-4 ml-5">
