@@ -14,14 +14,14 @@
     <!-- main content bar -->
     <div class="md:hidden w-full flex planet-main_bar bg-[#191b22] border-b-2 border-[#393f4f] py-2 gap-20 z-[10]">
       <div class="flex w-full">
-        <div class="w-1/4 justify-center planet-main_bar-list"><button id="btn1" class="text-xs font-semibold">행성 생성하기</button></div>
-        <div class="w-1/4 justify-center planet-main_bar-list"><button id="btn2" class="text-xs font-semibold">행성 종류</button></div>
-        <div class="w-1/4 justify-center planet-main_bar-list"><button id="btn3"  class="text-xs font-semibold">초대코드 입력</button></div>
-        <div class="w-1/4 justify-center planet-main_bar-list"><button id="btn4"  class="text-xs font-semibold">행성 둘러보기</button></div>
+        <div class="w-1/4 justify-center planet-main_bar-list"><button id="btn1" class="text-2xs font-semibold">행성 생성하기</button></div>
+        <div class="w-1/4 justify-center planet-main_bar-list"><button id="btn2" class="text-2xs font-semibold">행성 종류</button></div>
+        <div class="w-1/4 justify-center planet-main_bar-list"><button id="btn3"  class="text-2xs font-semibold">초대코드 입력</button></div>
+        <div class="w-1/4 justify-center planet-main_bar-list"><button id="btn4"  class="text-2xs font-semibold">행성 둘러보기</button></div>
       </div>
     </div>
 
-    <div class="flex flex-col">
+    <div class="hidden md:flex flex-col">
       <div class="flex flex-col justify-center items-center pt-32 p-20">
         <p class="text-4xl text-[#ffffff]">"Create your own world"</p>
         <p class="text-4xl text-[#ffffff]">"within the confines of Space."</p>
@@ -82,7 +82,7 @@
         </div>
 
         <p class="text-2xl border-b-2 border-[#393f4f] mt-20 pt-3 mb-3">행성 종류</p>
-        <p class="text-sm pb-3 mb-5">관심있는 종류의 행성들을 만나보세요.</p>
+        <p class="text-sm pb-3 mb-5">관심있는 행성들을 만나보세요.</p>
         <div class="p-3 rounded-md hover:bg-[#ffd951]">
           <a class="text-x" href="{% url 'planets:my_planet_filter'%}">
             <p class="text-xl">내가 가입한 행성</p>
@@ -142,7 +142,7 @@
         <div class="md:hidden flex flex-col justify-between border-b-2 border-[#393f4f]">
           
           <!-- md크기 이하, 좌측 사이드바였던 것 -->   
-          <div class="md:hidden pe-10 me-10 mb-20 pt-20 ps-5">
+          <div class="md:hidden pe-10 me-10 mb-20 pt-10 ps-5">
             <div id="sec1">
               <p class="text-2xl border-b-2 border-[#393f4f] pt-3 mb-3">행성 생성하기</p>
               <p class="text-sm pb-3 mb-5">행성을 직접 만들어보세요.</p>
@@ -155,7 +155,7 @@
 
             <div id="sec2">
               <p class="text-2xl border-b-2 border-[#393f4f] pt-3 mt-20 mb-3">행성 종류</p>
-              <p class="text-sm pb-3 mb-5">관심있는 종류의 행성들을 만나보세요.</p>
+              <p class="text-sm pb-3 mb-5">관심있는 행성들을 만나보세요.</p>
               <div class="p-3 rounded-md hover:bg-[#ffd951]">
                 <a class="text-x" href="{% url 'planets:my_planet_filter'%}">
                   <p class="text-xl">내가 가입한 행성</p>
@@ -203,7 +203,7 @@
               <p class="text-sm mb-5">전송받은 초대코드를 입력하고 행성에 참여하세요.</p>
               <div class="p-3">
                 <button data-modal-target="defaultModal2" data-modal-toggle="defaultModal2" class="block text-white bg-[#282c37] hover:bg-[#ffd951] rounded-md text-base w-[92%] py-4 my-5 text-center" type="button">
-                  <p class="text-xl">초대 코드 입력하기</p>
+                  <p class="text-base">초대 코드 입력하기</p>
                 </button>
               </div>
             </div>
@@ -277,8 +277,8 @@
             {% endfor %}
           </div>
         {% else %}
-        <div class="w-full h-full flex items-center justify-center">
-          <p class="text-xl">현재 검색 조건에 맞는 행성이 존재하지 않습니다.</p>
+        <div class="w-full h-[400px] sm:h-[800px] flex items-center justify-center">
+          <p class="text-sm sm:text-xl">현재 검색 조건에 맞는 행성이 존재하지 않습니다.</p>
         </div>
         {% endif %}
       </div>

@@ -65,3 +65,29 @@ body {
 .planet-main_bar-list:hover {
   color: #ffd951;
 }
+
+.chatting-create-btn {
+  margin-top: 20px;
+  width: 100%;
+  height: 50px;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+}
+
+.chatting-create-btn:hover {
+  background-color: #ffd951;
+}
+
+#dropdown-menu {
+  z-index: 10;
+  position: absolute;
+  background-color: rgb(40, 44, 55);
+  top: 0;
+  left: 100%;
+}
+
+.hover-grow:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s ease-in-out;
+}

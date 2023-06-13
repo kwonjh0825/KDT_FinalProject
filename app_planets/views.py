@@ -244,6 +244,7 @@ def index(request, planet_name):
     return render(request, 'planets/index.html', context)
 
 
+# 행성 내부 이동 페이지
 def index_list(request, planet_name):
     planet = Planet.objects.get(name=planet_name)
     user = request.user
@@ -287,6 +288,43 @@ def index_list(request, planet_name):
     }
     return render(request, 'planets/index_list.html', context)
 
+
+# 행성 소개 페이지
+def planet_introduction(request, planet_name):
+    planet = Planet.objects.get(name=planet_name)
+    
+    try:
+        memo = Memobyplanet.objects.get(accountbyplanet=Accountbyplanet.objects.get(planet=planet, user=request.user))
+    except:
+        memo = None
+    memoform = MemobyplanetForm()
+    
+    planet.current_capacity = Accountbyplanet.objects.filter(planet=planet).count()
+    postform = PostForm()
+    
+    if request.method == 'POST':    
+        accounts = request.POST.getlist('account_pk')
+        admin_levels = request.POST.getlist('admin_level')
+        for pk, level in zip(accounts, admin_levels):
+            temp = Accountbyplanet.objects.get(planet=planet, pk=pk)
+            temp.admin_level = level
+            temp.save()
+        
+        return redirect('planets:planet_introduction', planet_name)
+
+    else:
+        accounts = Accountbyplanet.objects.filter(planet=planet)
+        
+    context = {
+        'accounts': accounts,
+        'planet': planet,
+        'memo': memo,
+        'memoform': memoform,
+        'user': Accountbyplanet.objects.get(planet=planet, user=request.user),
+        'postform':postform,
+    }
+
+    return render(request, 'planets/planet_introduction.html', context)
 
 
 # 행성 삭제
@@ -865,26 +903,31 @@ def report(request, planet_name, report_category, pk):
 
 def admin_report(request, planet_name):
     planet = Planet.objects.get(name=planet_name)
+    is_manager = True if Accountbyplanet.objects.get(planet=planet, user=request.user).admin_level == 3 else False
+    if is_manager:
+             
+        post_reports = Report.objects.exclude(post__isnull=True)
+        comment_reports = Report.objects.exclude(comment__isnull=True)
+        recomment_reports = Report.objects.exclude(recomment__isnull=True)
+        
+        post_reports_count = Report.objects.exclude(post__isnull=True).values('post').annotate(Count('pk'))
+        comment_reports_count = Report.objects.exclude(comment__isnull=True).values('comment').annotate(Count('pk'))
+        recomment_reports_count = Report.objects.exclude(recomment__isnull=True).values('recomment').annotate(Count('pk'))
+        
+        context = {
+            'planet': planet,
+            'post_reports': post_reports,
+            'post_reports_count': post_reports_count,
+            'comment_reports': comment_reports,
+            'comment_reports_count': comment_reports_count,
+            'recomment_reports': recomment_reports,
+            'recomment_reports_count': recomment_reports_count,
+        }
+        return render(request, 'planets/admin_report.html', context)
 
-    post_reports = Report.objects.exclude(post__isnull=True)
-    comment_reports = Report.objects.exclude(comment__isnull=True)
-    recomment_reports = Report.objects.exclude(recomment__isnull=True)
-    
-    post_reports_count = Report.objects.exclude(post__isnull=True).values('post').annotate(Count('pk'))
-    comment_reports_count = Report.objects.exclude(comment__isnull=True).values('comment').annotate(Count('pk'))
-    recomment_reports_count = Report.objects.exclude(recomment__isnull=True).values('recomment').annotate(Count('pk'))
-    
-    context = {
-        'planet': planet,
-        'post_reports': post_reports,
-        'post_reports_count': post_reports_count,
-        'comment_reports': comment_reports,
-        'comment_reports_count': comment_reports_count,
-        'recomment_reports': recomment_reports,
-        'recomment_reports_count': recomment_reports_count,
-    }
-    return render(request, 'planets/admin_report.html', context)
-
+    else:
+        messages.warning(request, '매니저만 접근 가능합니다.')
+        return redirect('planets:main')
 
 # 행성 회원 관리
 def admin_member(request, planet_name):
