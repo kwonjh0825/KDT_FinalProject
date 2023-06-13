@@ -30,9 +30,9 @@ function getWeatherData(lat, lon) {
       // var $wind = '바람&nbsp;&nbsp;' + resp.wind.speed + ' m/s';
       // var $cloud = '구름&nbsp;&nbsp;' + resp.clouds.all + "%";
       var $temp_min =
-        '최저&nbsp;&nbsp;' + Math.floor(resp.main.temp_min) + '°C';
+        '&nbsp;&nbsp;' + Math.floor(resp.main.temp_min) + '°C';
       var $temp_max =
-        '최고&nbsp;&nbsp;' + Math.floor(resp.main.temp_max) + '°C';
+        '&nbsp;&nbsp;' + Math.floor(resp.main.temp_max) + '°C';
 
       $('.weather_icon').empty();
       $('.weather_description').empty();
