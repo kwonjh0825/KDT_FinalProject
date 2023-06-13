@@ -11,7 +11,7 @@
 }
 
 .progress-bar {
-  /* width: 100%; 적용이 안되는중 */
+  width: 50%;
   height: 20px;
   background-color: #dedede;
   font-weight: 600;
