@@ -184,8 +184,7 @@ document.addEventListener('DOMContentLoaded', function() {
       e.preventDefault();
 
       var createForm = target;
-      var updateButton = createForm.querySelector('#update-memo-button');
-      var indexmemoDiv = createForm.closest('#index-memo');
+      var indexmemoDivs = document.querySelectorAll('#index-memo');
       var planetName = createForm.dataset.planetName;
       var formData = new FormData(createForm);
 
@@ -200,25 +199,34 @@ document.addEventListener('DOMContentLoaded', function() {
       .then(function(response) {
         if (response.data.success) {
           var memo = response.data.memo;
-          var memoDiv = document.createElement('div');
-          memoDiv.id = "memo";
-          var memocontentDiv = document.createElement('div');
-          memocontentDiv.id = "memo-content";
-          memocontentDiv.textContent = memo;
-          var formElement = document.createElement('form');
-          formElement.id = "update-memo-form";
-          formElement.setAttribute("data-planet-name", planetName);
-          memoDiv.append(formElement);
-          var button = document.createElement('button');
-          button.id = "update-memo-button";
-          button.innerHTML = "<span class='material-symbols-outlined'>edit</span>"
-          button.classList.add("absolute", "bottom-2", "right-2");
-          button.setAttribute("data-planet-name", planetName);
-          formElement.append(button)
-          memoDiv.append(memocontentDiv);
-          memoDiv.append(formElement);
-          indexmemoDiv.querySelector('#create-memo-form').remove();
-          indexmemoDiv.append(memoDiv);
+    
+          // 각 index-memo 요소에 대해 작업 수행
+          indexmemoDivs.forEach(function(indexmemoDiv) {
+            var memoDiv = document.createElement('div');
+            memoDiv.id = "memo";
+            var memocontentDiv = document.createElement('div');
+            memocontentDiv.id = "memo-content";
+            memocontentDiv.classList.add("ml-3", "mt-3");
+            memocontentDiv.style.wordBreak = "break-all";
+            memocontentDiv.style.maxWidth = "90%";
+            memocontentDiv.style.overflow = "auto";
+            memocontentDiv.style.maxHeight = "4.5em";
+            memocontentDiv.textContent = memo;
+            var formElement = document.createElement('form');
+            formElement.id = "update-memo-form";
+            formElement.setAttribute("data-planet-name", planetName);
+            memoDiv.append(formElement);
+            var button = document.createElement('button');
+            button.id = "update-memo-button";
+            button.innerHTML = "<span class='material-symbols-outlined'>edit</span>"
+            button.classList.add("absolute", "bottom-2", "right-2");
+            button.setAttribute("data-planet-name", planetName);
+            formElement.append(button);
+            memoDiv.append(memocontentDiv);
+            memoDiv.append(formElement);
+            indexmemoDiv.querySelector('#create-memo-form').remove();
+            indexmemoDiv.append(memoDiv);
+          });
         } else {
           console.error('Memo failed.');
         }
@@ -278,7 +286,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       var updateForm = target;
       var updatebutton = target;
-      var indexmemoDiv = updateForm.closest('#index-memo');
+      var indexmemoDivList = document.querySelectorAll('#index-memo');
       var planetName = updatebutton.dataset.planetName;
       var formData = new FormData(updateForm);
 
@@ -291,14 +299,50 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       })
       .then(function(response) {
-        if (response.data.success) {
-          var memoDiv = indexmemoDiv.querySelector('#memo')
-          memoDiv.style.display = "block";
-          document.querySelectorAll('#memo-content').forEach(e => e.textContent = response.data.memo);
-          document.querySelectorAll('#edit-memo-form').forEach(e => e.remove());
-          document.querySelectorAll('#edit-memo-button').forEach(e => e.remove());
+        if (response.data.success && response.data.memo) {
+          indexmemoDivList.forEach(function(indexmemoDiv) {
+            var memoDiv = indexmemoDiv.querySelector('#memo')
+            memoDiv.style.display = "block";
+            document.querySelectorAll('#memo-content').forEach(e => e.textContent = response.data.memo);
+            document.querySelectorAll('#edit-memo-form').forEach(e => e.remove());
+            document.querySelectorAll('#edit-memo-button').forEach(e => e.remove());
+          });
         } else {
-          console.error('Memo failed.');
+          indexmemoDivList.forEach(function(indexmemoDiv) {
+            indexmemoDiv.innerHTML = '';
+            // create-memo-form 생성
+            var createForm = document.createElement('form');
+            createForm.id = "create-memo-form";
+            createForm.setAttribute("data-planet-name", "Musicismylife");
+
+            // memo 입력 필드 생성
+            var memoInput = document.createElement('input');
+            memoInput.type = "text";
+            memoInput.name = "memo";
+            memoInput.classList.add("form-input", "mt-1", "rounded-md", "border-yellow-100", "bg-yellow-100", "focus:outline-none", "focus:ring-0", "appearance-none", "placeholder-gray-600", "placeholder:text-sm");
+            memoInput.style.width = "100%";
+            memoInput.style.height = "80%";
+            memoInput.placeholder = "메모 작성";
+            memoInput.id = "id_memo";
+
+            // create-memo-button 생성
+            var createButton = document.createElement('button');
+            createButton.classList.add("absolute", "bottom-2", "right-2");
+            createButton.id = "create-memo-button";
+
+            var spanElement = document.createElement('span');
+            spanElement.classList.add("material-symbols-outlined");
+            spanElement.textContent = "edit";
+
+            createButton.appendChild(spanElement);
+
+            // create-memo-form에 memo 입력 필드와 create-memo-button 추가
+            createForm.appendChild(memoInput);
+            createForm.appendChild(createButton);
+
+            // index-memo에 create-memo-form 추가
+            indexmemoDiv.appendChild(createForm);
+          });
         }
       })
       .catch(function(error) {
