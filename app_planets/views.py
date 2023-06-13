@@ -713,12 +713,10 @@ def planet_admin(request, planet_name):
     if is_staff or is_manager:
         confirms = Accountbyplanet.objects.filter(planet=planet, is_confirmed=False)
         if request.method == 'POST':
-            form_planet = PlanetForm(request.POST,request.FILES, instance=planet)            
+            form_planet = PlanetForm(request.POST,request.FILES, instance=planet)
             if form_planet.is_valid():
-                print(1)
-
                 form_planet.save()
-                return redirect('planets:planet_list')
+                return redirect('planets:index', planet.name)
         else:
             form_planet = PlanetForm(instance=planet)
         
@@ -769,7 +767,8 @@ def planet_tos_admin(request, planet_name):
     else:
         messages.warning(request, '관리자만 접근 가능합니다. ')
         return redirect('planets:main')
-    
+
+
 # 행성 가입 관리
 @login_required
 def planet_join_admin(request, planet_name):

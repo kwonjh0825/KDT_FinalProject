@@ -66,8 +66,8 @@
           <div>  
             <label for="need_confirm" class="block text-sm font-medium text-slate-300" >가입방식</label>
             <select name="need_confirm" id="need_confirm" class="form-input p-2 mt-1 block w-40 rounded-md bg-[#101013]">
-              <option value="1" {% if planet.need_confirm %}selected{% endif %}>Approval</option>
-              <option value="0" {% if not planet.need_confirm %}selected{% endif %}>Direct</option>
+              <option value="True" {% if planet.need_confirm %}selected{% endif %}>Approval</option>
+              <option value="False" {% if not planet.need_confirm %}selected{% endif %}>Direct</option>
             </select>
           </div>
         </div>
