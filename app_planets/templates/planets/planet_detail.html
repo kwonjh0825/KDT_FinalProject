@@ -213,10 +213,10 @@
 <script>
   var requestuser = "{{ request.user }}";
   var requestuser_nickname= "{{ user.nickname }}";
-  var votetopicsDiv = document.getElementById("post-votetopics");
-  if (votetopicsDiv.children.length === 0) {
+  {% comment %} var votetopicsDiv = document.getElementById("post-votetopics"); {% endcomment %}
+  {% comment %} if (votetopicsDiv.children.length === 0) {
     votetopicsDiv.style.display = "none";
-  }
+  } {% endcomment %}
 </script>
 <script src="{% static 'js/planet_detail.js' %}"></script>
 <script src="{% static 'js/planet_post_more.js' %}"></script>
