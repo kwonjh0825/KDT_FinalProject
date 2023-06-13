@@ -204,6 +204,10 @@ def planet_join(request, planet_name):
             elif planet.need_confirm == False:
                 accountbyplanet.is_confirmed = True
             
+            elif planet.need_confirm == True:
+                messages.success(request, '신청이 완료되었습니다!')
+
+
             accountbyplanet.save()
             return redirect('planets:index', planet_name)
     else:
