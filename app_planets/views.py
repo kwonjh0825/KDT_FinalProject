@@ -1136,11 +1136,15 @@ def planet_memo(request, planet_name):
     
     if memo:  # 기존 메모 수정 처리
         try:
-            if memoform.is_valid():
-                memoform = MemobyplanetForm(request.POST, instance=memo)
+            if memoform.is_valid() and request.POST:
                 if memoform.has_changed():  # 폼 데이터가 변경되었는지 확인
-                    memo = memoform.save(commit=False)
-                    memo.save()
+                    if memoform.cleaned_data['memo']:
+                        memoform = MemobyplanetForm(request.POST, instance=memo)
+                        memo = memoform.save(commit=False)
+                        memo.save()
+                else:
+                    memo.delete()
+                    memo = None
             else:
                 memoform = MemobyplanetForm(instance=memo)
         except Memobyplanet.DoesNotExist:
@@ -1153,10 +1157,10 @@ def planet_memo(request, planet_name):
         else:
             errors = memoform.errors.as_json()
             return JsonResponse({'success': False, 'errors': errors})
-    
+
     response_data = {
         'success': True,
-        'memo': memo.memo,
+        'memo': memo.memo if memo else memo,
         'memoform': memoform.as_p() if memoform.as_p() else None,
     }
     
