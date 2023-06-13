@@ -211,7 +211,8 @@ document.addEventListener('DOMContentLoaded', function() {
           memoDiv.append(formElement);
           var button = document.createElement('button');
           button.id = "update-memo-button";
-          button.textContent = "메모 편집"
+          button.innerHTML = "<span class='material-symbols-outlined'>edit</span>"
+          button.classList.add("absolute", "bottom-2", "right-2");
           button.setAttribute("data-planet-name", planetName);
           formElement.append(button)
           memoDiv.append(memocontentDiv);
@@ -257,7 +258,8 @@ document.addEventListener('DOMContentLoaded', function() {
           formElement.appendChild(formContainer);
           var submitButton = document.createElement('button');
           submitButton.id = "edit-post-button";
-          submitButton.textContent = '메모 수정';
+          submitButton.classList.add("absolute", "bottom-2", "right-2");
+          submitButton.innerHTML = '<span class="material-symbols-outlined">edit</span>';
           submitButton.type = 'submit';
           formElement.append(submitButton);
           indexmemoDiv.append(formElement);

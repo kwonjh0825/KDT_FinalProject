@@ -6,25 +6,35 @@
 {% endblock title %}
 
 {% block content %}
-  <div class="planet_name">{{planet.name}}</div>
-  <div class="confirm-list">
-    {% for confirm in confirms %}
-    <div id="join-form-{{ confirm.user.pk }}">  
-      <form class="join-confirm" data-user-pk="{{ confirm.user.pk }}" method="POST">
-        {% csrf_token %}
-        {{ confirm.user }} 
-        <input type="submit" value="가입 승인"></input> 
-      </form>
-      <form class="join-reject" data-user-pk="{{ confirm.user.pk }}" method="POST">
-        {% csrf_token %}
-        <input type="submit" value="가입 거절"></input>
-      </form> 
-    </div> 
-    {% empty %}
-    <p>가입 대기중인 유저가 없습니다</p>
-    {% endfor %}
+<div class="container mx-auto flex justify-center">
+  <div class="w-full max-w-lg pt-10">
+    <p class="text-4xl mb-3 pb-4 font-bold">가입 관리</p>
+    <hr class="border-t-2 border-yellow-300">
+    <div class="planet_name">{{planet.name}}</div>
+    <div class="confirm-list">
+      {% for confirm in confirms %}
+      <div id="join-form-{{ confirm.user.pk }}">  
+        <form class="join-confirm" data-user-pk="{{ confirm.user.pk }}" method="POST">
+          {% csrf_token %}
+          {{ confirm.user }} 
+          <input type="submit" value="가입 승인"></input> 
+        </form>
+        <form class="join-reject" data-user-pk="{{ confirm.user.pk }}" method="POST">
+          {% csrf_token %}
+          <input type="submit" value="가입 거절"></input>
+        </form> 
+      </div> 
+      {% empty %}
+      <p>가입 대기중인 유저가 없습니다</p>
+      {% endfor %}
+    </div>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</div>
 
-  <script src="{% static 'js/planet_join_admin.js' %}"></script>
 {% endblock content %}
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script src="{% static 'js/planet_join_admin.js' %}"></script>
+{% endblock script %}

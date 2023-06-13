@@ -122,25 +122,34 @@
                 <div class="wind"></div>
                 <div class="cloud"></div> {% endcomment %}
               </div>
-              <div class="bg-[#282c37] h-36 w-36 justify-center items-center text-center m-5 p-3">
+
+              
+              
+              <div class="relative bg-yellow-100 h-36 w-72 justify-center items-center m-5 p-3 rounded-md text-black">
                 <div id="index-memo">
                   {% if memo %}
                   <div id="memo">
-                    <div id="memo-content">
+                    <div id="memo-content" class="ml-3 mt-3" style="word-break: break-all; max-width: 90%; overflow: auto; max-height: 4.5em;">
                       {{ memo.memo }}
                     </div>
                     <form id="update-memo-form" data-planet-name="{{ planet.name }}">
-                      <button id="update-memo-button" data-planet-name="{{ planet.name }}">메모 편집</button>
+                      <button class="absolute bottom-2 right-2" id="update-memo-button" data-planet-name="{{ planet.name }}"><span class="material-symbols-outlined">
+                        edit_note
+                        </span></button>
                     </form>
+                    {% comment %} <textarea id="comment" rows="4" class="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Write a comment..." required></textarea> {% endcomment %}
                   </div>
                   {% else %}
                     <form id="create-memo-form" data-planet-name="{{ planet.name }}">
                       {{ memoform }}
-                      <button id="create-memo-button">메모 작성</button>
+                      <button class="absolute bottom-2 right-2" id="create-memo-button"><span class="material-symbols-outlined">
+                        edit
+                        </span></button>
                     </form>
                   {% endif %}
                 </div>
               </div>
+
               {% comment %} <div class="bg-[#282c37] h-36 w-36 justify-center items-center text-center m-5 p-3">
                 <p>widget3</p>
               </div> {% endcomment %}

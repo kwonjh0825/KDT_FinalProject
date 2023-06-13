@@ -184,11 +184,12 @@ class MemobyplanetForm(forms.ModelForm):
         fields = ('memo',)
 
     memo = forms.CharField(
-        label = "메모",
+        label = "",
         widget = forms.TextInput(
             attrs={
-                "class": "form-input mt-1 rounded-md bg-[#101013]",
-                "style": "width: 100px; height: 47px;",
+                "class": "form-input mt-1 rounded-md border-yellow-100 bg-yellow-100 focus:outline-none focus:ring-0 appearance-none placeholder-gray-600 placeholder:text-sm",
+                "style": "width: 100%; height: 80%;",
+                "placeholder": "여기에 메모를 작성하세요.",
             }),
         required=False,
     )
