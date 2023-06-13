@@ -715,6 +715,7 @@ def planet_admin(request, planet_name):
         if request.method == 'POST':
             form_planet = PlanetForm(request.POST,request.FILES, instance=planet)            
             if form_planet.is_valid():
+                print(1)
 
                 form_planet.save()
                 return redirect('planets:planet_list')
