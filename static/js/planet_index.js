@@ -50,7 +50,6 @@ function loadPosts(page) {
             post.post_emote_thumbsdown,
             post.vote_count,
             post.voted
-
           )
         );
       }
@@ -101,13 +100,23 @@ document.addEventListener('DOMContentLoaded', function () {
               response.data.user,
               response.data.votetopics,
               // emote heart, thumbsup, thumbsdown은 새 게시물에서 0으로 시작
-              0,0,0,
+              0,
+              0,
+              0,
               response.data.vote_count,
               response.data.voted
             );
 
             postList.insertBefore(newPostContainer, postList.children[1]);
             form.reset();
+
+            // 모달 닫기
+            var modal = document.getElementById('defaultModal');
+            modal.classList.add('hidden');
+            var modalBackdrop = document.querySelector('[modal-backdrop]');
+            if (modalBackdrop) {
+              modalBackdrop.classList.add('hidden');
+            }
           } else {
             var divIdContent = form.querySelector('#div_id_content');
             var newP = document.createElement('p');
