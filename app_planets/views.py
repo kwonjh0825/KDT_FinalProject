@@ -534,8 +534,10 @@ def post_detail(request, planet_name, post_pk):
         # 'vote_count':[Vote.objects.filter(votetopic=vote_topic).count() for vote_topic in vote_topics],
         'votetopics_count': zip(vote_topics, vote_count),
         'total_vote_count': sum(vote_count),
+        'vote_topics': vote_topics,
         'voted': True if voted_topics else False,
     }
+    print(vote_topics)
     return render(request, 'planets/planet_detail.html', context)
 
 
