@@ -87,79 +87,9 @@ function createpostContainer(
         });
 
         voteTopicContainer.appendChild(newVotetopic);
-      } else {
-        var voteTopicContainer =
-          newPostContainer.querySelector('#post-votetopics');
-        voteTopicContainer.style.display = 'none';
       }
     });
-  } else {
-    var voteTopicContainer = newPostContainer.querySelector('#post-votetopics');
-    voteTopicContainer.style.display = 'none';
   }
-
-  // 투표 주제 렌더링
-  // if (votetopics && votetopics.length > 0) {
-  //   console.log('투표');
-  //   console.log(votetopics);
-  //   votetopics.forEach(function (votetopic, index) {
-  //     if (votetopic.title.trim() !== '') {
-  //       console.log(votetopic.title);
-  //       var voteTopicContainer =
-  //         newPostContainer.querySelector('#post-votetopics');
-  //       var newVotetopic = document.createElement('button'); // 버튼 엘리먼트로 변경
-  //       newVotetopic.classList.add(
-  //         'text-[#bcbdbf]',
-  //         'my-1',
-  //         'rounded-md',
-  //         'p-2',
-  //         'border'
-  //       );
-  //       newVotetopic.id = 'votetopic';
-  //       newVotetopic.textContent = votetopic.title;
-
-  //       // 사용자가 투표한 경우에만 투표 수를 표시합니다
-  //       if (voted) {
-  //         newVotetopic.textContent += ' (' + vote_count[index] + ')';
-  //       } else {
-  //         newVotetopic.style.display = 'none'; // 투표를 안 한 경우 숨깁니다.
-  //       }
-
-  //       // 투표 주제 클릭 이벤트 핸들러 등록
-  //       newVotetopic.addEventListener('click', function () {
-  //         // 해당 투표 주제의 vote 뷰 호출
-  //         var postPk = post_pk;
-  //         var voteTitle = votetopic.title;
-  //         var url = '/planets/post/' + postPk + '/' + voteTitle + '/';
-
-  //         // AJAX 요청으로 투표 처리
-  //         $.ajax({
-  //           url: url,
-  //           type: 'POST',
-  //           data: {
-  //             csrfmiddlewaretoken: csrftoken,
-  //           },
-  //           dataType: 'json',
-  //           success: function (data) {
-  //             // 투표 처리 후에 필요한 동작 수행
-  //             // 예를 들어, 투표 수 업데이트 등
-  //             console.log('투표 성공');
-  //           },
-  //           error: function (xhr, status, error) {
-  //             // 투표 처리 실패 시에 대한 처리
-  //             console.error('투표 실패:', error);
-  //           },
-  //         });
-  //       });
-
-  //       voteTopicContainer.appendChild(newVotetopic);
-  //     } else {
-  //       var voteTopicContainer =
-  //         newPostContainer.querySelector('#post-votetopics');
-  //       voteTopicContainer.style.display = 'none';
-  //     }
-  //   });
-  // }
 
   newPostContainer.querySelector('#post-nickname').href =
     '/planets/' + planetName + '/profile/' + nickname + '/';
@@ -177,7 +107,7 @@ function createpostContainer(
     '/planets/' + planetName + '/report/post/' + post_pk + '/';
   newPostContainer.querySelector('#post-detailpage').href =
     '/planets/' + planetName + '/' + post_pk + '/';
-  newPostContainer.querySelector('#a-comment_form').href = 
+  newPostContainer.querySelector('#a-comment_form').href =
     '/planets/' + planetName + '/' + post_pk + '/';
 
   // emote
@@ -189,7 +119,7 @@ function createpostContainer(
     post_emote_thumbsdown;
   newPostContainer.querySelectorAll('.post-emote-form').forEach((form) => {
     form.id = `post-emote-form-${post_pk}`;
-    form.setAttribute('data-post-pk', post_pk)
+    form.setAttribute('data-post-pk', post_pk);
   });
 
   if (tags) {
@@ -440,9 +370,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
     // emote 비동기
-    else if(target.matches('.post-emote-form')) {
-      e.preventDefault()
-      
+    else if (target.matches('.post-emote-form')) {
+      e.preventDefault();
+
       const emoteClass = e.target.dataset.emoteClass;
       const planetName = e.target.dataset.planetName;
       const postPk = e.target.dataset.postPk;
@@ -455,61 +385,12 @@ document.addEventListener('DOMContentLoaded', function () {
         url: `/planets/${planetName}/posts/${postPk}/emotes/${emoteClass}`,
         headers: { 'X-CSRFToken': csrftoken },
       })
-      .then((response) => {
-        emotionCount.innerHTML = response.data.emotion_count;
-      })
-      .catch((error) => {
-        console.log(error.response);
-      });
+        .then((response) => {
+          emotionCount.innerHTML = response.data.emotion_count;
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
     }
   });
 });
-
-// // post 비동기 emote
-// document.addEventListener('DOMContentLoaded', () => {
-//   document.querySelector('body').addEventListener('submit', (e) => {
-//     e.preventDefault()
-//     const emoteClass = e.target.dataset.emoteClass;
-//     const planetName = e.target.dataset.planetName;
-//     const postPk = e.target.dataset.postPk;
-//     const emotionCount = document.querySelector(
-//       `#post-emote-form-${postPk}> p > .emotion-${emoteClass}-count`
-//     );
-//     axios({
-//       method: 'POST',
-//       url: `/planets/${planetName}/posts/${postPk}/emotes/${emoteClass}`,
-//       headers: { 'X-CSRFToken': csrftoken },
-//     })
-//     .then((response) => {
-//       emotionCount.innerHTML = response.data.emotion_count;
-//       })
-//     .catch((error) => {
-//       console.log(error.response);
-//     });
-//   });
-// });
-
-
-// const postEmoteForms = document.querySelectorAll('.post-emote-form')
-// postEmoteForms.forEach((emoteForm) => {
-//   postEmoteForms.addEventListener('submit', (e) => {
-//     e.preventDefault()
-
-//     const emoteClass = e.target.dataset.emoteClass
-//     const planetName = e.target.dataset.planetName
-//     const postPk = e.target.dataset.postPk
-//     const emotionCount = document.querySelector(`.post-emote-form > p > .emotion-${emoteClass}-count`)
-
-//     axios({
-//       method:'post',
-//       url:`/planets/${planetName}/posts/${postPk}/emotes/${emoteClass}`,
-//       headers:{'X-CSRFToken': csrftoken,}
-//     })
-//     .then((response) => {
-//       emotionCount.innerHTML = response.data.emotion_count
-//     })
-//     .catch((error) => {
-//       console.log(error.response)
-//     })
-//   })
-// })
