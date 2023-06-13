@@ -55,9 +55,20 @@
           });
         {% endif %}
       {% endfor %}
+
+      {% for message in messages %}
+        {% if message.tags == 'success' %}
+          Swal.fire({
+            icon: 'success',
+            title: '완료되었습니다!',
+            text: '{{ message }}',
+          });
+        {% endif %}
+      {% endfor %}
     </script>
   {% endfor %}
 {% endif %}
+
   <!-- nav 바-->
   <nav class="fixed top-0 w-full bg-[#191b22] z-[100]">
     <div class="flex items-center justify-between border-b-2 border-[#393f4f] bg-[#191b22] text-[#ffd951] font-bold w-full">
@@ -203,13 +214,12 @@
   </div>
 
 <div class="flex mt-16">
-
-
 </div>
+
     {% block content %}
     {% endblock content %}
   </div>
-  <div style="height:100px;"></div>
+<div style="height:100px;"></div>
 
 
  {% comment %} <footer class="mt-auto bg-[#191b22]">

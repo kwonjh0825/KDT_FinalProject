@@ -189,7 +189,7 @@ class MemobyplanetForm(forms.ModelForm):
             attrs={
                 "class": "form-input mt-1 rounded-md border-yellow-100 bg-yellow-100 focus:outline-none focus:ring-0 appearance-none placeholder-gray-600 placeholder:text-sm",
                 "style": "width: 100%; height: 80%;",
-                "placeholder": "여기에 메모를 작성하세요.",
+                "placeholder": "메모 작성",
             }),
         required=False,
     )

@@ -27,7 +27,7 @@
 </head>
 
 <body>
-{% if messages %}
+  {% if messages %}
   {% for message in messages %}
     {% comment %} <script>
       alert('{{message}}')
@@ -50,6 +50,16 @@
           Swal.fire({
             icon: 'error',
             title: 'Oops...',
+            text: '{{ message }}',
+          });
+        {% endif %}
+      {% endfor %}
+
+      {% for message in messages %}
+        {% if message.tags == 'success' %}
+          Swal.fire({
+            icon: 'success',
+            title: '완료되었습니다!',
             text: '{{ message }}',
           });
         {% endif %}

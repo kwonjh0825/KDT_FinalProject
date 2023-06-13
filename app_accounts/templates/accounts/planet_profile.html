@@ -31,7 +31,14 @@ Catsmos
 
 {% endblock style %}
 {% block content %}
-    
+<div class="flex">
+    <a href="javascript:history.back()" class="flex items-center pl-5  text-[#ffd951] " style="height: 50px;">
+        <span class="material-symbols-outlined">
+            chevron_left
+        </span>
+        Back
+    </a>
+  </div>
 <div class="container mx-auto max-w-[900px] ">
 {% comment %} 
     <div class=" relative" style="height:180px; background-color: #181A20;"> {% endcomment %}
@@ -88,7 +95,7 @@ Catsmos
 
     <div class=" pt-6">
     </div>
-    <p class="text-gray-300 text-2xl">posts</p>
+    <p class="text-gray-300 text-2xl">Posts</p>
         {% for post in user_by_planet.post_set.all %}
         <div class="pl-5 py-3 my-3 rounded-lg bg-[#181A20] relative tag_crop max-w-xl mx-auto">
             <div class="flex gap-3 mb-5 ">
@@ -136,6 +143,7 @@ Catsmos
                 });
             </script>
         </div>
+    
     {% endfor %}
 
     
