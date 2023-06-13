@@ -1,5 +1,5 @@
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
-    const planetName = document.querySelector('.planet_name').innerHTML
+const planetName = document.querySelector('.planet_name').innerHTML
     
 const joinConfirms = document.querySelectorAll('.join-confirm');
 
@@ -103,3 +103,4 @@ joinRejects.forEach((reject) => {
     });
   });
 });
+
