@@ -8,7 +8,7 @@
 
 .tag_crop {
   height: 150px;
-  width: 450px; 
+  width: 510px; 
   object-fit: cover;
   position: relative;
 }
@@ -24,7 +24,7 @@
 
 {% block content %}
 <div class="container mx-auto flex justify-center">
-  <div class="w-full max-w-md pt-10">
+  <div class="w-full max-w-lg pt-10">
     <p class="text-4xl mb-3 pb-4 font-bold">Update</p>
     <hr class="border-t-2 border-yellow-300">
     <form action="{% url 'planets:planet_admin' planet.name %}" method="POST" enctype="multipart/form-data">
@@ -46,7 +46,7 @@
         <div class="flex gap-4">
           <div>  
             <label for="category" class="block text-sm font-medium text-slate-300">카테고리</label>
-            <select name="category" placeholder="" required="" id="category" selected="{{ planet.category }}" class="form-input p-2 mt-1 block w-32 rounded-md bg-[#101013]">
+            <select name="category" placeholder="" required="" id="category" selected="{{ planet.category }}" class="form-input p-2 mt-1 block w-40 rounded-md bg-[#101013]">
               <option value="">---------</option>
               <option value="Tech" {% if planet.category == 'Tech' %}selected{% endif %}>Tech</option>
               <option value="Game" {% if planet.category == 'Game' %}selected{% endif %}>Game</option>
@@ -58,7 +58,7 @@
           </div>
           <div>  
             <label for="is_public" class="block text-sm font-medium text-slate-300" >공개여부</label>
-            <select name="is_public" id="is_public" class="form-input p-2 mt-1 block w-32 rounded-md bg-[#101013]">
+            <select name="is_public" id="is_public" class="form-input p-2 mt-1 block w-40 rounded-md bg-[#101013]">
               <option value="Private" {% if planet.is_public == 'Private' %}selected{% endif %}>Private</option>
               <option value="Public" {% if planet.is_public == 'Public' %}selected{% endif %}>Public</option>
             </select>
@@ -66,8 +66,8 @@
           <div>  
             <label for="need_confirm" class="block text-sm font-medium text-slate-300" >가입방식</label>
             <select name="need_confirm" id="need_confirm" class="form-input p-2 mt-1 block w-40 rounded-md bg-[#101013]">
-              <option value="Approval" {% if planet.need_confirm %}selected{% endif %}>Approval</option>
-              <option value="Direct" {% if not planet.need_confirm %}selected{% endif %}>Direct</option>
+              <option value="1" {% if planet.need_confirm %}selected{% endif %}>Approval</option>
+              <option value="0" {% if not planet.need_confirm %}selected{% endif %}>Direct</option>
             </select>
           </div>
         </div>
