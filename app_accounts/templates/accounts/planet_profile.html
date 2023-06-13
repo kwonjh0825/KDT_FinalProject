@@ -168,19 +168,21 @@ Catsmos
             <div class="p-6">
                 <div class="text-base leading-relaxed following-list">
                     {% if user_by_planet.followings.all %}
-                    {% for following in user_by_planet.followings.all %}
-                        <a href="{% url 'planets:planet_profile' planet_name=following.planet.name nickname=following.nickname %}" class="my-2 flex p-2 text-ml border-0 rounded-md bg-[#181A20]" id="following-{{following.pk}}">
-                            <!-- 프로필 이미지 -->
-                            {% if following.profile_image %}
-                                <img src="{{ following.profile_image.url }}" alt="post_image" class="inline-block rounded-md" width="40">
-                            {% else %}
-                                <img id="imgDino" src="https://i.pinimg.com/originals/fe/c1/6c/fec16c6f886c5d684da5ddcdacd21ffb.gif" alt="no_image" class="inline-block" width="40">
-                            {% endif %}
-                            <p class="text-slate-200 text-ml flex items-center ml-4">{{ following.nickname }}</p>
-                        </a>
-                    {% endfor %}
-                    {% else %}
-                        <p class="text-slate-400 text-center text-ml">팔로잉 한 사람이 없습니다.</p>
+                        {% for following in user_by_planet.followings.all %}
+                            <a href="{% url 'planets:planet_profile' planet_name=following.planet.name nickname=following.nickname %}" class="my-2 flex p-2 text-ml border-0 rounded-md bg-[#181A20]" id="following-{{following.pk}}">
+                                <!-- 프로필 이미지 -->
+                                {% if following.profile_image %}
+                                    <img src="{{ following.profile_image.url }}" alt="post_image" class="inline-block rounded-md" width="40">
+                                {% else %}
+                                    <img id="imgDino" src="https://i.pinimg.com/originals/fe/c1/6c/fec16c6f886c5d684da5ddcdacd21ffb.gif" alt="no_image" class="inline-block" width="40">
+                                {% endif %}
+                                <p class="text-slate-200 text-ml flex items-center ml-4">{{ following.nickname }}</p>
+                            </a>
+                        
+                        {% empty %}
+                            <p class="text-slate-400 text-center text-ml">팔로잉 한 사람이 없습니다.</p>
+
+                        {% endfor %}
                     {% endif %}
                 </div>
             </div>
@@ -215,9 +217,9 @@ Catsmos
                                 {% endif %}
                                 <p class="text-slate-200 text-ml flex items-center ml-4">{{ follower.nickname }}</p>
                             </a>
+                        {% empty %}
+                            <p class="text-slate-400 text-ml text-center">팔로워가 없습니다.</p>
                         {% endfor %}
-                    {% else %}
-                        <p class="text-slate-400 text-ml text-center">팔로워가 없습니다.</p>
                     {% endif %}
                 </div>
             </div>
