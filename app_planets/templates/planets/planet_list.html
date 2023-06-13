@@ -290,41 +290,44 @@
 
         <!-- 행성 리스트 출력 부분 -->
         {% if planets %}
-          <div class="flex flex-wrap text-white">
-            <p class="w-full mt-3"><span class="text-[#ffd951]">{{ planets|length }}</span>개의 행성이 있습니다.</p>
-            {% for planet in planets %}
-              <div class="planet-list-box w-full md:w-[45%] xl:w-[30%] m-3">
+        <div class="flex flex-wrap text-white">
+          <p class="w-full mt-3"><span class="text-[#ffd951]">{{ planets|length }}</span>개의 행성이 있습니다.</p>
+          {% for planet in planets %}
+            <div class="planet-list-box w-full md:w-[45%] xl:w-[30%] m-3">
+              <div class="planet-list-inner">
                 <div class="p-3">
-                  <img class="planet-list-img mb-5" src="{% if planet.image %}{{ planet.image.url }}{% else %}{% static 'img/no_planet_img.png' %}{% endif %}" alt="image" style="height: 172px;">
-                  <div class="planet-list-text">
+                  <img class="planet-list-img mb-5" src="{% if planet.image %}{{ planet.image.url }}{% else %}{% static 'img/no_planet_img.png' %}{% endif %}" alt="image" style="height: 126px;">
+                  <div class="planet-list-text mb-12">
                     <div class="flex justify-between">
                       <p class="text-[#999999]">{{ planet.is_public }}</p>
                       <p class="text-[#999999]">
-                        {{ planet.current_capacity }}/{{ planet.maximum_capacity }}명                      </p>
+                        {{ planet.current_capacity }}/{{ planet.maximum_capacity }}명
+                      </p>
                     </div>
                     <p class="mb-5">{{ planet.name }}</p>
                     <p id="description-{{ planet.id }}" class="text-sm min-h-[60px] mb-2 clamp-3-lines">{{ planet.description }}</p>
                     <button id="moreButton-{{ planet.id }}">더보기</button>
                   </div>
-                  <div class="mt-auto">
-                    {% if planet.name in joined_planet_list %}
+                </div>
+                <div class="planet-list-buttons">
+                  {% if planet.name in joined_planet_list %}
                     <a href="{% url 'planets:planet_contract' planet.name %}">
                       <button class="button-big button-color-enter my-3">
                         <p class="text-base">enter</p>
                       </button>
                     </a>
-                    {% else %}
-                      <a href="{% url 'planets:planet_contract' planet.name %}">
-                        <button class="button-big button-color-join my-3">
-                          <p class="text-base">join</p>
-                        </button>
-                      </a>
-                    {% endif %}
-                  </div>
+                  {% else %}
+                    <a href="{% url 'planets:planet_contract' planet.name %}">
+                      <button class="button-big button-color-join my-3">
+                        <p class="text-base">join</p>
+                      </button>
+                    </a>
+                  {% endif %}
                 </div>
               </div>
-            {% endfor %}
-          </div>
+            </div>
+          {% endfor %}
+        </div>
         {% else %}
         <div class="w-full h-[400px] sm:h-[800px] flex items-center justify-center">
           <p class="text-sm sm:text-xl">현재 검색 조건에 맞는 행성이 존재하지 않습니다.</p>

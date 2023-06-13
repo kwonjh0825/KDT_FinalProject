@@ -89,7 +89,7 @@ def filter(request, category):
 
 def my_planet_filter(request):
     user = request.user
-    user_planets = Accountbyplanet.objects.filter(user=user, planet__is_public='Public')
+    user_planets = Accountbyplanet.objects.filter(user=user)
     joined_planets = [user_planet.planet for user_planet in user_planets]
     joined_planet_list = [joined_planet.name for joined_planet in joined_planets]
     

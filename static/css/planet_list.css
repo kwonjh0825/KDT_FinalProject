@@ -1,6 +1,20 @@
 .planet-list-box {
+  position: relative;
   border: 1px solid white;
   border-radius: 10px;
+}
+
+.planet-list-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.planet-list-buttons {
+  position: absolute;
+  bottom: 0;
+  left: 2.5%;
+  right: 2.5%;
 }
 
 .planet-list-img {
@@ -11,6 +25,7 @@
 }
 
 .planet-list-text {
+  flex-grow: 1;
   width: 100%;
   min-height: 45%;
 }
