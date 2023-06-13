@@ -91,6 +91,7 @@ function createpostContainer(
       }
     });
   } else {
+    // votetopics 비어있으면 (주제가 없으면)
     var voteTopicContainer = newPostContainer.querySelector('#post-votetopics');
     if (voteTopicContainer) {
       voteTopicContainer.remove();

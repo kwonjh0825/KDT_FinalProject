@@ -99,7 +99,7 @@
           <!--투표 여부-->
           
           
-          {% comment %} {% if vote_topics %} {% endcomment %}
+          {% if vote_topics %} 
           <div class='mb-5 rounded-md border p-1' id="post-votetopics" style="text-align:center;">
           {% for votetopic, vote_count in votetopics_count %}
             {% if voted == True %} 
@@ -122,7 +122,7 @@
             {% endif %}
           {% endfor %}
           </div>
-          {% comment %} {% endif %} {% endcomment %}
+          {% endif %}
         </div>
 
         
