@@ -170,9 +170,9 @@ def planet_contract(request,planet_name):
         messages.warning(request, '서버 최대 인원을 초과하여 가입을 진행할 수 없습니다. ')
         return redirect('planets:main')
     
-    #private 행성
-    if planet.invite_code != request.GET.get('invite_code'):
-        return redirect('planets:main')
+    # #private 행성
+    # if planet.invite_code != request.GET.get('invite_code'):
+    #     return redirect('planets:main')
 
     termsofservice = TermsOfService.objects.filter(Planet_id=planet.pk)
 
@@ -968,7 +968,7 @@ def invite_create(request):
         planet.generate_invite_code() #초대코드 갱신
 
     try:
-        planet = Planet.objects.get(invite_code=invite_code, is_public='Private')
+        planet = Planet.objects.get(invite_code=invite_code)
         return JsonResponse({'result':True, 'invite_code':invite_code})
         
     except ObjectDoesNotExist:
@@ -977,7 +977,7 @@ def invite_create(request):
 
 @login_required
 def invite_check(request, invite_code):
-    planet = Planet.objects.get(invite_code=invite_code, is_public='Private')
+    planet = Planet.objects.get(invite_code=invite_code)
     return render(request, 'planets/invite_check.html', {'planet': planet, 'invite_code':invite_code})
 
 def following(request, planet_name, user_pk):
@@ -1053,19 +1053,16 @@ def post_emote(request, planet_name, post_pk, emotion):
 # 비동기 comment emote 
 @login_required
 def comment_emote(request, planet_name, post_pk, comment_pk, emotion):
-    print(1)
     planet = Planet.objects.get(name=planet_name)
     comment = Comment.objects.get(pk=comment_pk)
     user = Accountbyplanet.objects.get(planet=planet, user=request.user)
 
     emote = Emote.objects.filter(comment=comment, accountbyplanet=user, emotion=emotion)
-    print(2)
     if emote.exists():
         emote.delete()
     else:
         Emote.objects.create(comment=comment, accountbyplanet=user, emotion=emotion)
 
-    print(3)
     context = {
         'emotion_count': Emote.objects.filter(comment=comment, emotion=emotion).count()
     }
