@@ -10,6 +10,8 @@
   <link rel="stylesheet" href="{% static 'css/base_nav.css' %}">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <link rel="shortcut icon" type="image/x-icon" href="">
+
   {% block head %}{% endblock head %}
 
   <style>
@@ -65,7 +67,9 @@
       <div class="flex items-center text-sm text-white px-3">
 
         {% if user.is_authenticated %}
-        <a id="avatarButton" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start" class="rounded-full cursor-pointer" src="/docs/images/people/profile-picture-5.jpg" alt="User dropdown">{{ user.username }}</a>
+        <a id="avatarButton" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start" class="rounded-full cursor-pointer flex items-center hover:text-yellow-400" alt="User dropdown">{{ user.username }}<span class="material-symbols-outlined">
+          arrow_drop_down
+          </span></a>
         {% comment %} href="{% url 'accounts:profile' user %}" {% endcomment %}
         {% else %}
         <a href="{% url 'accounts:login' %}" class="text-sm text-white me-5">login</a>
