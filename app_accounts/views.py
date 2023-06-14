@@ -36,6 +36,9 @@ from django.contrib.auth.views import PasswordResetConfirmView
 def contract(request):
     return render(request, 'accounts/contract.html')
 
+def membership(request):
+    return render(request, 'accounts/membership.html')
+
 # def login(request):
 #     if request.user.is_authenticated:
 #         return redirect('planets:main')

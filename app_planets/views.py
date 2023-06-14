@@ -10,7 +10,7 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth import get_user_model
 from django.http import JsonResponse
 from django.contrib import messages
-from django.db.models import Count, Q, Sum, Case, When, IntegerField
+from django.db.models import Count
 from .models import Planet, TermsOfService, Post, Comment, Recomment, Emote, Report, Vote, VoteTopic
 from .forms import PlanetForm, PostForm, CommentForm, RecommentForm, VoteTopicForm
 from app_accounts.models import Accountbyplanet, User, Memobyplanet
@@ -18,7 +18,9 @@ from app_accounts.forms import AccountbyplanetForm, MemobyplanetForm
 from datetime import timedelta
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist # 예외처리
+from django.db.models import Q
 from taggit.models import Tag
+
 
 
 EMOTIONS = [
@@ -87,7 +89,7 @@ def filter(request, category):
 
 def my_planet_filter(request):
     user = request.user
-    user_planets = Accountbyplanet.objects.filter(user=user)
+    user_planets = Accountbyplanet.objects.filter(user=user, planet__is_public='Public')
     joined_planets = [user_planet.planet for user_planet in user_planets]
     joined_planet_list = [joined_planet.name for joined_planet in joined_planets]
     
@@ -203,7 +205,7 @@ def planet_join(request, planet_name):
                 accountbyplanet.is_confirmed = True
             
             elif planet.need_confirm == True:
-                messages.success(request, '신청이 완료되었습니다!')
+                messages.success(request, '신청이 완료되었습니다')
 
 
             accountbyplanet.save()
@@ -498,8 +500,13 @@ def post_detail(request, planet_name, post_pk):
             Vote.objects.filter(voter=accountbyplanet, votetopic__in=vote_topics).values_list('votetopic_id', flat=True)
         )
     vote_count = [Vote.objects.filter(votetopic=vote_topic).count() for vote_topic in vote_topics]
+
     postform = PostForm()
     votetopicform = VoteTopicForm()
+
+    
+        
+
 
     try:
         memo = Memobyplanet.objects.get(accountbyplanet=accountbyplanet)
@@ -527,7 +534,6 @@ def post_detail(request, planet_name, post_pk):
         # 'vote_count':[Vote.objects.filter(votetopic=vote_topic).count() for vote_topic in vote_topics],
         'votetopics_count': zip(vote_topics, vote_count),
         'total_vote_count': sum(vote_count),
-        'vote_topics': vote_topics,
         'voted': True if voted_topics else False,
     }
     return render(request, 'planets/planet_detail.html', context)
@@ -1093,37 +1099,12 @@ def tags_list(request, planet_name):
     return render(request, 'planets/planet_tags.html', context)
 
 
-# tag filter 페이지
+# tag 페이지
 @login_required
 def post_tag(request, planet_name, tag_name):
     planet = Planet.objects.get(name=planet_name)
-    accountbyplanet = Accountbyplanet.objects.get(planet=planet, user=request.user)
     tag = Tag.objects.get(name=tag_name)
-    posts = Post.objects.filter(planet=planet, tags=tag).order_by('-pk').annotate(
-        heart_count=Count('emote', filter=Q(emote__emotion='heart')),
-        thumbsup_count=Count('emote', filter=Q(emote__emotion='thumbsup')),
-        thumbsdown_count=Count('emote', filter=Q(emote__emotion='thumbsdown'))
-    )
-    for post in posts:
-        post.vote_topics = VoteTopic.objects.filter(post=post)
-        post.vote_counts = []
-        for vote_topic in post.vote_topics:
-            vote_count = Vote.objects.filter(votetopic=vote_topic).count()
-            post.vote_counts.append({
-                'vote_topic': vote_topic,
-                'vote_count': vote_count
-            })
-        post.voted = Vote.objects.filter(votetopic__in=post.vote_topics, voter=accountbyplanet).exists()
-        post.total_vote_count = Vote.objects.filter(votetopic__in=post.vote_topics).aggregate(
-            total=Sum(
-                Case(
-                    When(voter__isnull=False, then=1),
-                    default=0,
-                    output_field=IntegerField()
-                )
-            )
-        )['total']
-    
+    posts = Post.objects.filter(planet=planet, tags=tag).order_by('-pk')
     postform = PostForm()
     accountbyplanet = Accountbyplanet.objects.get(planet=planet, user=request.user)
     try:
@@ -1155,15 +1136,11 @@ def planet_memo(request, planet_name):
     
     if memo:  # 기존 메모 수정 처리
         try:
-            if memoform.is_valid() and request.POST:
+            if memoform.is_valid():
+                memoform = MemobyplanetForm(request.POST, instance=memo)
                 if memoform.has_changed():  # 폼 데이터가 변경되었는지 확인
-                    if memoform.cleaned_data['memo']:
-                        memoform = MemobyplanetForm(request.POST, instance=memo)
-                        memo = memoform.save(commit=False)
-                        memo.save()
-                else:
-                    memo.delete()
-                    memo = None
+                    memo = memoform.save(commit=False)
+                    memo.save()
             else:
                 memoform = MemobyplanetForm(instance=memo)
         except Memobyplanet.DoesNotExist:
@@ -1176,10 +1153,10 @@ def planet_memo(request, planet_name):
         else:
             errors = memoform.errors.as_json()
             return JsonResponse({'success': False, 'errors': errors})
-
+    
     response_data = {
         'success': True,
-        'memo': memo.memo if memo else memo,
+        'memo': memo.memo,
         'memoform': memoform.as_p() if memoform.as_p() else None,
     }
     
