@@ -73,9 +73,12 @@ Catsmos
                     <input type="submit" value="Follow" class="rounded-md bg-[#d1cb1d] hover:bg-[#ab9203] px-4 py-2 follow-btn">
                     {% endif %}
                 </form>
-            {% endif %}
+                {% else %}
+                <a type="button" class="rounded-md bg-gray-500 hover:bg-gray-400 px-4 py-2" href="{% url 'planets:planet_profile_update' user_by_planet.planet.name user_by_planet.nickname %}">프로필 수정</a>
+                {% endif %}
         {% endif %}
-        <a type="button" class="rounded-md bg-gray-500 hover:bg-gray-400 px-4 py-2" href="{% url 'planets:planet_profile_update' user_by_planet.planet.name user_by_planet.nickname %}">프로필 수정</a>
+        {% comment %} {% if request.user.is_authenticated %} {% endcomment %}
+        {% comment %} <a type="button" class="rounded-md bg-gray-500 hover:bg-gray-400 px-4 py-2" href="{% url 'planets:planet_profile_update' user_by_planet.planet.name user_by_planet.nickname %}">프로필 수정</a> {% endcomment %}
     </div>
     <!-- 개인정보 -->
     <div class=" ml-20 pl-12 pt-3 mb-5 flex items-end gap-4">
@@ -95,7 +98,11 @@ Catsmos
 
     <div class=" pt-6">
     </div>
-    <p class="text-gray-300 text-2xl">Posts</p>
+    <div class="flex justify-center w-1/3">
+        <p class="text-gray-300 text-4xl mb-3">게시물</p>
+    </div>
+    <hr class="border-t-2 border-yellow-300 w-3/4 mx-auto">
+
         {% for post in user_by_planet.post_set.all reversed %}
         <div class="pl-5 py-3 my-3 rounded-lg bg-[#181A20] relative tag_crop max-w-xl mx-auto">
             <div class="flex gap-3 mb-5 ">
@@ -128,20 +135,25 @@ Catsmos
 
 
             <script>
-                var showImageBtn{{ forloop.counter }} = document.getElementById("showImageBtn{{ forloop.counter }}");
-                var imageContainer{{ forloop.counter }} = document.getElementById("imageContainer{{ forloop.counter }}");
-
-                showImageBtn{{ forloop.counter }}.addEventListener("click", function() {
-                    if (imageContainer{{ forloop.counter }}.classList.contains("hidden")) {
-                        imageContainer{{ forloop.counter }}.classList.remove("hidden");
-                        showImageBtn{{ forloop.counter }}.innerHTML = '<span class="material-symbols-outlined">hide_image</span>';
-                        imageContainer{{ forloop.counter }}.classList.add("block");
-                    } else {
-                        imageContainer{{ forloop.counter }}.classList.add("hidden");
-                        showImageBtn{{ forloop.counter }}.innerHTML = '<span class="material-symbols-outlined">image</span>';
+                window.addEventListener('DOMContentLoaded', (event) => {
+                    var showImageBtn{{ forloop.counter }} = document.getElementById("showImageBtn{{ forloop.counter }}");
+                    var imageContainer{{ forloop.counter }} = document.getElementById("imageContainer{{ forloop.counter }}");
+            
+                    if (showImageBtn{{ forloop.counter }} && imageContainer{{ forloop.counter }}) {
+                        showImageBtn{{ forloop.counter }}.addEventListener("click", function() {
+                            if (imageContainer{{ forloop.counter }}.classList.contains("hidden")) {
+                                imageContainer{{ forloop.counter }}.classList.remove("hidden");
+                                showImageBtn{{ forloop.counter }}.innerHTML = '<span class="material-symbols-outlined">hide_image</span>';
+                                imageContainer{{ forloop.counter }}.classList.add("block");
+                            } else {
+                                imageContainer{{ forloop.counter }}.classList.add("hidden");
+                                showImageBtn{{ forloop.counter }}.innerHTML = '<span class="material-symbols-outlined">image</span>';
+                            }
+                        });
                     }
                 });
             </script>
+            
         </div>
     
     {% endfor %}
@@ -168,21 +180,17 @@ Catsmos
             <div class="p-6">
                 <div class="text-base leading-relaxed following-list">
                     {% if user_by_planet.followings.all %}
-                    <div id="following-container">
                         {% for following in user_by_planet.followings.all %}
                             <a href="{% url 'planets:planet_profile' planet_name=following.planet.name nickname=following.nickname %}" class="my-2 flex p-2 text-ml border-0 rounded-md bg-[#181A20]" id="following-{{following.pk}}">
                                 <!-- 프로필 이미지 -->
                                 {% if following.profile_image %}
                                     <img src="{{ following.profile_image.url }}" alt="post_image" class="inline-block rounded-md" width="40">
                                 {% else %}
-                                    <img id="imgDino" src="https://i.pinimg.com/originals/fe/c1/6c/fec16c6f886c5d684da5ddcdacd21ffb.gif" alt="no_image" class="inline-block" width="40">
+                                    <img src="{% static 'img/profile.png' %}" alt="no_image" class="inline-block" width="40">
                                 {% endif %}
                                 <p class="text-slate-200 text-ml flex items-center ml-4">{{ following.nickname }}</p>
                             </a>
                         {% endfor %}
-                    </div>
-                {% else %}
-                    <p id="following-text" class="text-slate-400 text-center text-ml">팔로잉 한 사람이 없습니다.</p>
                 {% endif %}
                 </div>
             </div>
@@ -207,21 +215,17 @@ Catsmos
             <div class="p-6">
                 <div class="text-base leading-relaxed follower-list">
                     {% if user_by_planet.followers.all %}
-                    <div id="follower-container">
                         {% for follower in user_by_planet.followers.all %}
                             <a href="{% url 'planets:planet_profile' planet_name=follower.planet.name nickname=follower.nickname %}" class="my-2 flex p-2 text-ml border-0 rounded-md bg-[#181A20]" id="follower-{{follower.pk}}">
                                 <!-- 프로필 이미지 -->
                                 {% if follower.profile_image %}
                                     <img src="{{ follower.profile_image.url }}" alt="post_image" class="inline-block rounded-md" width="40">
                                 {% else %}
-                                    <img id="imgDino" src="https://i.pinimg.com/originals/fe/c1/6c/fec16c6f886c5d684da5ddcdacd21ffb.gif" alt="no_image" class="inline-block" width="40">
+                                    <img src="{% static 'img/profile.png' %}" alt="no_image" class="inline-block" width="40">
                                 {% endif %}
                                 <p class="text-slate-200 text-ml flex items-center ml-4">{{ follower.nickname }}</p>
                             </a>
                         {% endfor %}
-                    </div>
-                {% else %}
-                    <p id="follower-text" class="text-slate-400 text-ml text-center">팔로워가 없습니다.</p>
                 {% endif %}
                 </div>
             </div>
@@ -241,26 +245,6 @@ Catsmos
 </script>
 <script src="{% static 'js/planet_index.js' %}"></script>
 <script src="{% static 'js/planet_post_more.js' %}"></script>
-<script>
-    // HTML 요소를 선택합니다.
-    var followerContainer = document.getElementById("follower-container");
-    var followerText = document.getElementById("follower-text");
-
-    // 팔로워가 있는 경우 텍스트를 숨깁니다.
-    if (followerContainer && followerContainer.children.length > 0) {
-        followerText.classList.add("hidden");
-    }
-</script>
-<script>
-    // HTML 요소를 선택합니다.
-    var followingContainer = document.getElementById("following-container");
-    var followingText = document.getElementById("following-text");
-
-    // 팔로잉이 있는 경우 텍스트를 숨깁니다.
-    if (followingContainer && followingContainer.children.length > 0) {
-        followingText.classList.add("hidden");
-    }
-</script>
 
 {% endblock script %}
 

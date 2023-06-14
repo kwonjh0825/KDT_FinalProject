@@ -51,7 +51,7 @@ Catsmos
         <label class="" for="delete">Delete account</label>
         <br>
         <input type="hidden" name="next" value="{{ request.path }}" />
-        <p class="text-slate-400 text-xs">If you wish to delete your account, you can <button onclick="confirmDelete(event)" type="submit" class="text-red-500 hover:text-red-600 underline">proceed here</button>. You will be asked for confirmation.</p>
+        <p class="text-slate-400 text-xs">If you wish to delete your account, you can <button id="deleteButton" onclick="confirmDelete(event)" type="submit" class="text-red-500 hover:text-red-600 underline">proceed here</button>. You will be asked for confirmation.</p>
         {% comment %} <button onclick="confirmDelete(event)" type="submit" />회원 탈퇴</button> {% endcomment %}
     </form>
 
@@ -63,12 +63,36 @@ Catsmos
 {% endblock content %}
 {% block script %}
 <script>
-    function confirmDelete(event) {
-      event.preventDefault()
+  const deleteButton = document.querySelector("#deleteButton");
+  deleteButton.addEventListener("click", confirmDelete);
   
-      if (confirm("정말로 탈퇴하시겠습니까?")) {
-        document.querySelector("#delete").submit()
+  function confirmDelete(event) {
+    event.preventDefault();
+  
+    Swal.fire({
+      title: '삭제하시겠습니까?',
+      text: "삭제하면 되돌릴 수 없습니다!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: '네',
+      cancelButtonText: '아니요'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        document.querySelector("#delete").submit();
+        Swal.fire({
+          title: '삭제했습니다!',
+          text: 'success',
+          timer: 4000,
+          showConfirmButton: true,
+        });
       }
-    }
+      
+    });
+  }
+  
+  // Add event listener to the button
+
   </script>
 {% endblock script %}
