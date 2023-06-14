@@ -1139,7 +1139,7 @@ def post_tag(request, planet_name, tag_name):
         'planet': planet,
         'user': accountbyplanet,
     }
-    return render(request, 'planets/planet_tag_posts.html', context)
+    return render(request, 'planets/planet_posts_filter.html', context)
 
 
 # 메모
@@ -1202,3 +1202,50 @@ def planet_star(request, planet_name):
     }
     return JsonResponse(response_data)
 
+# 행성 내 post 검색
+def post_search(request, planet_name):
+    planet = Planet.objects.get(name=planet_name)
+    keyword = request.GET.get('keyword', False)
+    search_results = Post.objects.filter(Q(planet=planet, content__icontains=keyword) | Q(planet=planet, tags__name__icontains=keyword)).order_by('-pk')
+    user = Accountbyplanet.objects.get(planet=planet, user=request.user)
+
+    for post in search_results:
+        post.heart_count = Emote.objects.filter(post=post, emotion='heart').count()
+        post.thumbsup_count = Emote.objects.filter(post=post, emotion='thumbsup').count()
+        post.thumbsdown_count = Emote.objects.filter(post=post, emotion='thumbsdown').count()
+
+        post.vote_topics = VoteTopic.objects.filter(post=post)
+        post.vote_counts = []
+        for vote_topic in post.vote_topics:
+            vote_count = Vote.objects.filter(votetopic=vote_topic).count()
+            post.vote_counts.append({
+                'vote_topic': vote_topic,
+                'vote_count': vote_count
+            })
+        post.voted = Vote.objects.filter(votetopic__in=post.vote_topics, voter=user).exists()
+        post.total_vote_count = Vote.objects.filter(votetopic__in=post.vote_topics).aggregate(
+            total=Sum(
+                Case(
+                    When(voter__isnull=False, then=1),
+                    default=0,
+                    output_field=IntegerField()
+                )
+            )
+        )['total']
+
+    postform = PostForm()
+    try:
+        memo = Memobyplanet.objects.get(accountbyplanet=user)
+    except:
+        memo = None
+    memoform = MemobyplanetForm()
+
+    context = {
+        'posts': search_results,
+        'planet': planet,
+        'user': user,
+        'postform': postform,
+        'memo': memo,
+        'memoform': memoform,
+    }
+    return render(request, 'planets/planet_posts_filter.html', context)
