@@ -310,7 +310,7 @@
                       {{ voteform.content }}
                     </div> {% endcomment %}
                   </div>
-                  <button type="submit" class="chatting-create-btn bg-[#bcbdbf] mx-auto mt-10" style="text-align: center;">
+                  <button data-modal-hide="defaultModal" type="submit" class="chatting-create-btn bg-[#bcbdbf] mx-auto mt-10" style="text-align: center;">
                     <p>게시글 작성</p>
                   </button>
                 </form>
@@ -334,7 +334,7 @@
       
       <!-- Modal toggle -->
       <div class='ms-5'>
-        <button data-modal-target="defaultModal" data-modal-toggle="defaultModal" class="block text-white bg-[#282c37] hover:bg-[#ffd951] rounded-md text-base w-[92%] py-4 my-5 text-center" type="button">
+        <button id="post-btn" data-modal-target="defaultModal" data-modal-toggle="defaultModal" class="block text-white bg-[#282c37] hover:bg-[#ffd951] rounded-md text-base w-[92%] py-4 my-5 text-center" type="button">
           게시글 작성하기
         </button>
       </div>
