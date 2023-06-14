@@ -1,6 +1,7 @@
 // csrf
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
+
 var planetName = document
   .getElementById('post-form')
   .getAttribute('data-planet-name');
@@ -78,6 +79,13 @@ $(document).ready(function () {
 //       'inset-0',
 //       'z-40'
 //     );
+
+// eventlistener
+document.addEventListener('DOMContentLoaded', function () {
+  // submit event
+  document.querySelector('body').addEventListener('submit', function (e) {
+    var target = e.target;
+
 
 //     // Append the modal backdrop element to the body
 //     document.body.appendChild(modalBackdrop);
