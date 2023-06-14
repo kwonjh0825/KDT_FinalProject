@@ -337,7 +337,6 @@ document.addEventListener('DOMContentLoaded', function () {
               response.data.tags.forEach(function (tag) {
                 var newTag = document.createElement('span');
                 newTag.classList.add('text-[#bcbdbf]');
-                newTag.id = 'tag';
                 newTag.textContent = '#' + tag;
                 tagContainer.appendChild(newTag);
               });
