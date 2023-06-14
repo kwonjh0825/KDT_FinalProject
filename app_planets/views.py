@@ -1105,9 +1105,33 @@ def tags_list(request, planet_name):
 def post_tag(request, planet_name, tag_name):
     planet = Planet.objects.get(name=planet_name)
     tag = Tag.objects.get(name=tag_name)
-    posts = Post.objects.filter(planet=planet, tags=tag).order_by('-pk')
-    postform = PostForm()
     accountbyplanet = Accountbyplanet.objects.get(planet=planet, user=request.user)
+    posts = Post.objects.filter(planet=planet, tags=tag).order_by('-pk').annotate(
+        heart_count=Count('emote', filter=Q(emote__emotion='heart')),
+        thumbsup_count=Count('emote', filter=Q(emote__emotion='thumbsup')),
+        thumbsdown_count=Count('emote', filter=Q(emote__emotion='thumbsdown'))
+    )
+    for post in posts:
+        post.vote_topics = VoteTopic.objects.filter(post=post)
+        post.vote_counts = []
+        for vote_topic in post.vote_topics:
+            vote_count = Vote.objects.filter(votetopic=vote_topic).count()
+            post.vote_counts.append({
+                'vote_topic': vote_topic,
+                'vote_count': vote_count
+            })
+        post.voted = Vote.objects.filter(votetopic__in=post.vote_topics, voter=accountbyplanet).exists()
+        post.total_vote_count = Vote.objects.filter(votetopic__in=post.vote_topics).aggregate(
+            total=Sum(
+                Case(
+                    When(voter__isnull=False, then=1),
+                    default=0,
+                    output_field=IntegerField()
+                )
+            )
+        )['total']
+
+    postform = PostForm()
     try:
         memo = Memobyplanet.objects.get(accountbyplanet=accountbyplanet)
     except:
