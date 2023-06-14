@@ -44,6 +44,9 @@ if (
   document
     .getElementById('dropdown-menu')
     .querySelector('li#dropdown-delete').style.display = 'block';
+    document
+    .getElementById('dropdown-menu')
+    .querySelector('li#dropdown-update').style.display = 'block';
 }
 
 // comments, recomments rendering 비동기 처리
@@ -184,7 +187,7 @@ function createcommentContainer(
   }
   newCommentContainer.querySelector('#comment_form').id = 'recomment_form';
   document.getElementById('comment-list').append(newCommentContainer);
-  newCommentContainer.querySelector('#post-votetopics').remove();
+  // newCommentContainer.querySelector('#post-votetopics').remove();
 
 
   // 대댓글 있을 경우
@@ -224,6 +227,7 @@ function createRecommentContainer(
     .getElementById('dropdown-menu')
     .cloneNode(true);
 
+  newRecommentContainer.style.display = 'flex';
   newRecommentContainer.querySelector('#post-votetopics').remove();
   var newDiv = document.createElement('div');
   newDiv.innerHTML = `<svg width="30px" height="30px" id="Capa_1" style="enable-background:new 0 0 74.5 60;" version="1.1" viewBox="0 0 74.5 60" width="74.5px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M10,45h40.5v15l24-22l-24-22v15H14V0H0v35C0,40.523,4.477,45,10,45z" fill="#ffffff"/></g></svg>`;
@@ -231,6 +235,7 @@ function createRecommentContainer(
   var newDiv2 = document.createElement('div');
 
   newDiv2.style.width = '50px';
+  // newDiv2.style.height = '50px';
   newRecommentContainer.insertBefore(
     newDiv2,
     newRecommentContainer.children[0]
@@ -290,7 +295,7 @@ function createRecommentContainer(
       .closest('li')
       .remove();
   }
-  newRecommentContainer.querySelector('#post-votetopics').remove();
+  // newRecommentContainer.querySelector('#post-votetopics').remove();
   var svgDiv = newRecommentContainer
     .querySelector('#comment_form')
     .closest('p')

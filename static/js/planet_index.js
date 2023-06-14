@@ -89,8 +89,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 //     // Append the modal backdrop element to the body
 //     document.body.appendChild(modalBackdrop);
-//   }
-// });
+  })
+});
 
 // submit event
 document.querySelector('body').addEventListener('submit', function (e) {
