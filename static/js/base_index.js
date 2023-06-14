@@ -8,10 +8,10 @@ var weatherIcon = {
   '03': 'fas fa-cloud',
   '04': 'fas fa-cloud-meatball',
   '09': 'fas fa-cloud-sun-rain',
-  10: 'fas fa-cloud-showers-heavy',
-  11: 'fas fa-poo-storm',
-  13: 'far fa-snowflake',
-  50: 'fas fa-smog',
+  '10': 'fas fa-cloud-showers-heavy',
+  '11': 'fas fa-poo-storm',
+  '13': 'far fa-snowflake',
+  '50': 'fas fa-smog',
 };
 
 function getWeatherData(lat, lon) {
