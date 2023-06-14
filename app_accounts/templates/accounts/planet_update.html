@@ -39,7 +39,7 @@ Catsmos
 </div>
 <div class=" container mx-auto flex justify-center">
     <div class="w-full max-w-md pt-10">
-      <p class="text-4xl mb-2 pb-4 font-bold">Update</p>
+      <p class="text-4xl mb-2 pb-4 font-bold">프로필 수정</p>
       <div class="my-1">
           <form id="profile-form" action="{% url 'planets:planet_profile_update' planet.name user_by_planet.nickname  %}" method="POST" enctype="multipart/form-data">
               {% csrf_token %}
@@ -48,7 +48,7 @@ Catsmos
             <table class="">
               <tr class="border-b-2 border-gray-500">
                 <th scope="col" class="px-6 py-3">
-                  Nickname <span class="text-red-700">*</span>
+                  Nickname
                 </th>
                 <th scope="col" class="px-6 py-3 text-start">
                   <!-- ID -->
@@ -116,7 +116,7 @@ Catsmos
             </table>
             {% comment %} {{ planet_user_update_form.as_p }} {% endcomment %}
             <div class="grid mt-8">
-              <button id="create-profile-btn" class="bg-yellow-400 hover:bg-yellow-500 text-xl text-white font-bold py-1 px-4 rounded shadow" type="submit">Update</button>
+              <button id="create-profile-btn" class="bg-yellow-400 hover:bg-yellow-500 text-lg text-white font-bold py-1 px-4 rounded shadow" type="submit">제출하기</button>
             </div>
           </div>
         </form>

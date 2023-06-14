@@ -313,7 +313,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // create-memo-form 생성
             var createForm = document.createElement('form');
             createForm.id = "create-memo-form";
-            createForm.setAttribute("data-planet-name", "Musicismylife");
+            createForm.setAttribute("data-planet-name", planetName);
 
             // memo 입력 필드 생성
             var memoInput = document.createElement('input');

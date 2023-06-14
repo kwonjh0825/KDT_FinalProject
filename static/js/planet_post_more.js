@@ -202,6 +202,7 @@ document.addEventListener('DOMContentLoaded', function () {
       var postContainer = deleteButton.closest('#container');
       var planetName = deleteForm.dataset.planetName;
       var postPk = deleteForm.dataset.postPk;
+      var type = deleteForm.dataset.type;
 
       var url = '/planets/' + planetName + '/post/' + postPk + '/delete/';
 
@@ -214,7 +215,11 @@ document.addEventListener('DOMContentLoaded', function () {
       })
         .then(function (response) {
           if (response.data.success) {
-            postContainer.remove();
+            if (type === 'detail') {
+              window.location.href = '/planets/' + planetName;
+            } else {
+              postContainer.remove();
+            }
           } else {
             console.error('Post deletion failed.');
           }

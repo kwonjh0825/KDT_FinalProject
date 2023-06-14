@@ -144,13 +144,12 @@ Catsmos
         </div>
         <!-- checkbox -->
         <div class="flex items-center my-4 ml-2">
-          <input id="signup-checkbox" type="checkbox" class="w-4 h-4 text-yellow-600 bg-gray-100 border-gray-300 rounded focus:ring-yellow-400 dark:focus:ring-yellow-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-400" required>
-          <label for="signup-checkbox" class="ml-2 text-sm font-medium dark:text-gray-300">I have read and agree to the privacy policy</label>
+          {% comment %} <input id="signup-checkbox" type="checkbox" class="w-4 h-4 text-yellow-600 bg-gray-100 border-gray-300 rounded focus:ring-yellow-400 dark:focus:ring-yellow-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-400" required>
+          <label for="signup-checkbox" class="ml-2 text-sm font-medium dark:text-gray-300"></label> {% endcomment %}
         </div>
         <!-- 버튼 -->
         <div class="grid mt-3">
-          <button type="submit" class="bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded shadow">Submit</button>
-          {% comment %} <button type="submit" class="bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-400 text-white font-bold py-2 px-4 rounded shadow">Submit</button> {% endcomment %}
+          <button id="submitBtn" type="submit" class="bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded shadow">제출하기</button>
         </div>
       </div>
     </form>
@@ -304,19 +303,24 @@ Catsmos
       repassword = '';
     }
   });
-</script>
-<script>
-  const submitButton = document.getElementById('submitButton');
 
-  submitButton.addEventListener('click', function() {
-    // 로딩 중이므로 마우스 포인터를 로딩 이미지로 변경
-    document.body.classList.add('loading-cursor');
-  
-    // 제출 동작 수행
-  
-    // 로딩이 완료되었으므로 마우스 포인터를 기본으로 변경
-    document.body.classList.remove('loading-cursor');
+  document.getElementById('submitBtn').addEventListener('click', function() {
+    if (username === '' || email === '' || lastname === '' || firstname === '' || password === '' || repassword === '') {
+      Swal.fire({
+        icon: 'error',
+        title: '죄송합니다',
+        text: '양식을 지켜서 다시 작성해주세요',
+      });
+    } else {
+      Swal.fire({
+        title: 'Loading...',
+        text: '잠시 기다려주세요',
+        allowOutsideClick: false,
+        didOpen: function () {
+          Swal.showLoading();
+        }
+      });
+    }
   });
-  
 </script>
 {% endblock script %}

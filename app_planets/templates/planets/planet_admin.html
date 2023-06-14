@@ -33,7 +33,7 @@
 </div>
 <div class="container mx-auto flex justify-center">
   <div class="w-full max-w-lg pt-10">
-    <p class="text-4xl mb-3 pb-4 font-bold">Update</p>
+    <p class="text-4xl mb-3 pb-4 font-bold">행성 설정</p>
     <hr class="border-t-2 border-yellow-300">
     <form action="{% url 'planets:planet_admin' planet.name %}" method="POST" enctype="multipart/form-data">
       {% csrf_token %}
@@ -102,7 +102,7 @@
 
 
       <div class="grid mt-8">
-        <button class="btn bg-[#ffd951] text-white font-bold py-2 px-4 rounded" type="submit">완료</button>
+        <button class="btn bg-[#ffd951] text-white font-bold py-2 px-4 rounded" type="submit">제출하기</button>
       </div> 
     </form>
   </div>
