@@ -10,7 +10,7 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth import get_user_model
 from django.http import JsonResponse
 from django.contrib import messages
-from django.db.models import Count
+from django.db.models import Count, Q, Sum, Case, When, IntegerField
 from .models import Planet, TermsOfService, Post, Comment, Recomment, Emote, Report, Vote, VoteTopic
 from .forms import PlanetForm, PostForm, CommentForm, RecommentForm, VoteTopicForm
 from app_accounts.models import Accountbyplanet, User, Memobyplanet
@@ -18,7 +18,6 @@ from app_accounts.forms import AccountbyplanetForm, MemobyplanetForm
 from datetime import timedelta
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist # 예외처리
-from django.db.models import Q
 from taggit.models import Tag
 
 
