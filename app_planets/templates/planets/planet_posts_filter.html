@@ -52,6 +52,7 @@
           </div>
 
           <!--투표 여부-->
+          {% if post.vote_topics %}
           <div class='mb-5 rounded-md border p-1' id="post-votetopics" style="text-align:center;">
             {% if post.total_vote_count %}
               {% for vote_topic in post.vote_counts %}
@@ -74,6 +75,7 @@
               {% endfor %}
             {% endif %}
           </div>
+          {% endif %}
         </div>
 
           
