@@ -87,7 +87,34 @@ body {
   left: 100%;
 }
 
+.my-svg:hover {
+  fill: #ffc800; /* Change color to yellow */
+  transform: scale(1.5); /* Scale it up */
+}
+
 .hover-grow:hover {
   transform: scale(1.05);
-  transition: transform 0.2s ease-in-out;
+  transition: transform 0.1s ease-in-out;
+}
+
+.hover-grow-fast:hover {
+  transform: scale(1.05);
+}
+
+/* .hover-bg:hover {
+  background-color: #ffd951;
+} */
+
+#wrap {
+  /* calc() : 괄호 안의 식을 계산한 결과를 속성값으로 사용하게 해주는 함수 */
+  min-height: calc(100vh - 8rem); /* footer 높이를 빼준다. */
+}
+
+footer {
+  height: 8rem; /* footer 높이 */
+}
+
+.overflow-auto {
+  max-height: 100vh;
+  overflow: auto;
 }

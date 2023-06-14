@@ -335,6 +335,65 @@
       </div>
     </div>
   </div>
+
+  <!-- footer -->
+  <footer class="sm:hidden h-full mt-28 border-t-2 border-[#393f4f]">
+    <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
+      <div class="md:flex md:justify-between">
+        <div class="mb-6 md:mb-0">
+          <a href="#" class="flex items-center mb-10">
+            <img src="/static/img/catsmos_logo.png" alt="logo" class="w-40 mr-3">
+          </a>
+        </div>
+        {% comment %} <h2 class="mb-4 text-sm font-semibold text-white uppercase">Creators of Coatsmos</h2> {% endcomment %}
+
+        <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
+          <div>
+            <h2 class="mb-4 text-sm text-white uppercase">◽ Front-end</h2>
+            <ul class="text-gray-300 font-medium">
+              <li class="mb-4">
+                <a href="https://github.com/ParkJiHwan22" class="hover:underline ms-2">박지환</a>
+              </li>
+              <li>
+                <a href="https://github.com/Pysonny" class="hover:underline ms-2">최계수</a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h2 class="mb-4 text-sm font-semibold text-white uppercase">◽ Back-end</h2>
+            <ul class="text-gray-300 font-medium">
+              <li class="mb-4">
+                <a href="https://github.com/sotthang" class="hover:underline ms-2">소현섭</a>
+              </li>
+              <li class="mb-4">
+                <a href="https://github.com/kwonjh0825" class="hover:underline ms-2">권준혁</a>
+              </li>
+              <li>
+                <a href="https://github.com/arrmadillo" class="hover:underline ms-2">이수한</a>
+              </li>
+            </ul>
+          </div>
+          {% comment %} <div>
+            <h2 class="mb-6 text-sm font-semibold text-white uppercase">Legal</h2>
+            <ul class="text-gray-600 dark:text-gray-400 font-medium">
+              <li class="mb-4">
+                <a href="#" class="hover:underline">Privacy Policy</a>
+              </li>
+              <li>
+                <a href="#" class="hover:underline">Terms &amp; Conditions</a>
+              </li>
+            </ul>
+          </div> {% endcomment %}
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between sm:hidden my-8 py-2 border-t-2 border-[#393f4f]">
+        <span class="text-sm text-gray-300 text-center">© 2023 Catsmos™. All Rights Reserved.
+        </span>
+      </div>
+    </div>
+  </footer>
+
 {% endblock content %}
 
 {% block script %}
@@ -532,15 +591,6 @@ document.getElementById("btn2").addEventListener("click", function() {
 
 document.getElementById("btn3").addEventListener("click", function() {
   var accordionBody = document.getElementById("accordion-flush-body-3");
-  if (accordionBody.style.display === "none" || accordionBody.style.display === "") {
-    accordionBody.style.display = "block";
-  } else {
-    accordionBody.style.display = "none";
-  }
-});
-
-document.getElementById("btn4").addEventListener("click", function() {
-  var accordionBody = document.getElementById("accordion-flush-body-4");
   if (accordionBody.style.display === "none" || accordionBody.style.display === "") {
     accordionBody.style.display = "block";
   } else {

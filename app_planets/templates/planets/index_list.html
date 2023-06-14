@@ -16,7 +16,7 @@
       <p class="text-xl pt-5 mb-5 border-t-2 border-[#393f4f]">자주 이용하는 행성</p> <!-- Planet lists -->
       {% if user_by_planets_star %}
         {% for user_by_planets_star in user_by_planets_star %}
-          <a type="button" href="{% url 'planets:index' planet_name=user_by_planets_star.planet.name %}" class="pl-5 py-2 my-3 rounded-lg bg-[#282c37] hover:bg-[161a24] w-[100%] flex mb-5 gap-4 relative">
+          <a type="button" href="{% url 'planets:index' planet_name=user_by_planets_star.planet.name %}" class="pl-5 py-2 my-3 rounded-lg bg-[#282c37] hover-grow hover-bg w-[100%] flex mb-5 gap-4 relative">
             {% if user_by_planets_star.profile_image %}
               <img src="{{ user_by_planets_star.profile_image.url }}" alt="post_image" class="inline-block rounded-md" width="50" height="50">
             {% else %}
@@ -40,7 +40,7 @@
       <p class="text-xl pt-5 mb-5 border-t-2 border-[#393f4f]">내가 가입한 행성</p> <!-- Planet lists -->
       {% if user_by_planets_not_star %}
         {% for user_by_planets_not_star in user_by_planets_not_star %}
-          <a type="button" href="{% url 'planets:index' planet_name=user_by_planets_not_star.planet.name %}" class="pl-5 py-2 my-3 rounded-lg bg-[#282c37] hover:bg-[161a24] w-[100%] flex mb-5 gap-4 relative">
+          <a type="button" href="{% url 'planets:index' planet_name=user_by_planets_not_star.planet.name %}" class="pl-5 py-2 my-3 rounded-lg bg-[#282c37] hover-grow hover-bg w-[100%] flex mb-5 gap-4 relative">
             {% if user_by_planets_not_star.profile_image %}
               <img src="{{ user_by_planets_not_star.profile_image.url }}" alt="post_image" class="inline-block rounded-md" width="50" height="50">
             {% else %}

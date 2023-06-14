@@ -45,7 +45,7 @@
     {% for account in accounts %}
       <div>
         {% if account.admin_level == 3 %}
-          <a href="{% url 'planets:planet_profile' planet_name=planet.name nickname=account.nickname %}" class="flex flex-row pl-5 py-2 my-3 rounded-lg bg-[#282c37] gap-4 relative">
+          <a href="{% url 'planets:planet_profile' planet_name=planet.name nickname=account.nickname %}" class="flex flex-row pl-5 py-2 my-3 rounded-lg bg-[#282c37] gap-4 relative hover-grow hover-bg">
             {% if account.profile_image %}
               <img src="{{ account.profile_image.url }}" alt="post_image" class="inline-block rounded-md" width="50" height="50">
             {% else %}
@@ -66,8 +66,7 @@
     path('planets/<str:planet_name>/admin/member/', views.admin_member, name='admin_member'), {% endcomment %}
     <div class="flex flex-row text-xl pt-5 mb-5 border-t-2 border-[#393f4f]">
       {% if user.admin_level == 3 %}
-        <a href="{% url 'planets:admin_report' planet.name %}" class="button-big button-color-join bg-[#ffc800] p-2 me-10 text-base text-center rounded-md">게시글 신고 관리</a>
-        <a href="{% url 'planets:admin_member' planet.name %}" class="button-big button-color-join bg-[#ffc800] p-2 text-base text-center rounded-md">행성 내 회원 관리</a>
+        <a href="{% url 'planets:planet_admin' planet.name %}" class="button-big button-color-join bg-[#ffc800] p-2 me-10 text-base text-center rounded-md">행성 관리</a>
       {% endif %} 
     </div>
   </div>

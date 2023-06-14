@@ -22,7 +22,7 @@
   </style>
 </head>
 
-<body>
+<body class="bg-red">
 {% if messages %}
   {% for message in messages %}
     {% comment %} <script>
@@ -168,16 +168,11 @@
     <div class="sticky top-0 max-w-[280px] mb-auto text-[#d9e1e8] hidden sm:block">
       <div class="flex flex-row">
         <div class="w-full">
-          <div class=" h-10 justify-center items-center text-center m-3 p-2">
-          </div>
           <div class="flex flex-row">
             <img src="{% if user.profile_image%}{{ user.profile_image.url }}{% else %}{% static 'img/no_profile_img.png' %}{% endif %}" alt="no_image" class="w-1/6 h-1/6 m-5">
             <div class="flex flex-col">
               <p class="mt-5 text-sm"><a href="{% url 'planets:planet_profile' planet.name user.nickname %}">{{ user.nickname }}</a></p>
               <p class="mt-1 text-xs text-[#bcbdbf]"><a href="{% url 'planets:planet_profile_update' planet.name user.nickname %}">Edit profile</a></p>
-            </div>
-            <div class="mt-8 ms-auto me-4">
-              <svg viewBox="0 0 32 32" width="20" height="20" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" fill="none" r="2" stroke="#bcbdbf" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" class="stroke-000000"></circle><circle cx="16" cy="26" fill="none" r="2" stroke="#bcbdbf" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" class="stroke-000000"></circle><circle cx="16" cy="6" fill="none" r="2" stroke="#bcbdbf" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" class="stroke-000000"></circle></svg>
             </div>
           </div>
           <div class="flex flex-col justify-center items-center">
@@ -229,14 +224,14 @@
           </div>
         </div>
       </div>
-      <div class="fixed bottom-0 p-5 ps-20 hidden lg:block">
+      <div class="fixed bottom-[2%] p-5 mt-20 me-auto hidden sm:block">
         <div class='ms-auto'>
           <p class="text-sm text-[#bcbdbf]">Creators of Catsmos:</p>
-          <p class="mt-1 text-xs text-[#bcbdbf]">
+          <p class="mt-1 text-2xs lg:text-xs text-[#bcbdbf]">
             FE: <a href="https://github.com/ParkJiHwan22">박지환</a>
             <a href="https://github.com/Pysonny">최계수</a>
           </p>
-          <p class="text-xs text-[#bcbdbf]">
+          <p class="text-2xs lg:text-xs text-[#bcbdbf]">
             BE: <a href="https://github.com/sotthang">소현섭</a>
             <a href="https://github.com/kwonjh0825">권준혁</a>
             <a href="https://github.com/arrmadillo">이수한</a>
@@ -247,7 +242,7 @@
 
     <!-- content -->
 
-    <div class="min-h-[4000px] max-w-[540px] bg-[#191b22] w-full text-white bg-color">
+    <div class="min-h-[1000px] sm:min-h-[1500px] xl:min-h-[2000px] 2xl:min-h-[4000px] sm:max-w-[700px] lg:max-w-[540px] bg-[#191b22] w-full text-white bg-color">
       <div class="mt-3">
         <form action="{% url 'planets:post_search' planet.name %}" class="rounded-md mx-auto bg-[#282c37] h-10 justify-center items-center text-white m-3 p-2">
           <div class="flex">
@@ -267,7 +262,7 @@
         </div>
       </div>
 
-      <div class="mb-auto" style="overflow-y: auto;">
+      <div class="mb-auto " style="overflow-y: auto;">
         <!-- Main modal -->
         <div id="defaultModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
           <div class="relative w-full max-w-2xl max-h-full">
@@ -332,6 +327,65 @@
         {% block content %}
         {% endblock content %}
       </div>
+      
+      <!-- footer -->
+      <footer class="sm:hidden h-full mt-28 border-t-2 border-[#393f4f]">
+        <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
+          <div class="md:flex md:justify-between">
+            <div class="mb-6 md:mb-0">
+              <a href="#" class="flex items-center mb-10">
+                <img src="/static/img/catsmos_logo.png" alt="logo" class="w-40 mr-3">
+              </a>
+            </div>
+            {% comment %} <h2 class="mb-4 text-sm font-semibold text-white uppercase">Creators of Coatsmos</h2> {% endcomment %}
+
+            <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
+              <div>
+                <h2 class="mb-4 text-sm text-white uppercase">◽ Front-end</h2>
+                <ul class="text-gray-600 font-medium">
+                  <li class="mb-4">
+                    <a href="https://github.com/ParkJiHwan22" class="hover:underline ms-2">박지환</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Pysonny" class="hover:underline ms-2">최계수</a>
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h2 class="mb-4 text-sm font-semibold text-white uppercase">◽ Back-end</h2>
+                <ul class="text-gray-600 dark:text-gray-400 font-medium">
+                  <li class="mb-4">
+                    <a href="https://github.com/sotthang" class="hover:underline ms-2">소현섭</a>
+                  </li>
+                  <li class="mb-4">
+                    <a href="https://github.com/kwonjh0825" class="hover:underline ms-2">권준혁</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/arrmadillo" class="hover:underline ms-2">이수한</a>
+                  </li>
+                </ul>
+              </div>
+              {% comment %} <div>
+                <h2 class="mb-6 text-sm font-semibold text-white uppercase">Legal</h2>
+                <ul class="text-gray-600 dark:text-gray-400 font-medium">
+                  <li class="mb-4">
+                    <a href="#" class="hover:underline">Privacy Policy</a>
+                  </li>
+                  <li>
+                    <a href="#" class="hover:underline">Terms &amp; Conditions</a>
+                  </li>
+                </ul>
+              </div> {% endcomment %}
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between sm:hidden my-8 py-2 border-t-2 border-[#393f4f]">
+            <span class="text-sm text-gray-500 text-center">© 2023 Catsmos™. All Rights Reserved.
+            </span>
+          </div>
+        </div>
+      </footer>
+
     </div>
 
     <!-- 우측 side 바, md:block -->
@@ -535,6 +589,28 @@
     inputWrapper.appendChild(deleteButton);
   
     voteTopics.appendChild(inputWrapper);
+
+  
+
+
+    $(document).ready(function(){
+      $('#post-form').on('submit', function(e){
+        e.preventDefault();
+        
+        // Your Ajax call or form submit code here
+
+        // After form submit, reset the form
+        this.reset();
+
+        // Hide the modal
+        $("#defaultModal").hide();
+
+        // In case you're using a plugin for the modal and it has a specific method to close it, use that. For example:
+        // $('#defaultModal').modal('hide');
+      });
+    });
+
+  
   });</script>
   
 {% comment %} <script src="{% static 'js/vote.js' %}"></script> {% endcomment %}
