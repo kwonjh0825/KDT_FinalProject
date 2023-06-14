@@ -76,4 +76,6 @@ urlpatterns = [
     path('planets/<str:planet_name>/memo/', views.planet_memo, name='planet_memo'),
     # 행성 즐겨찾기
     path('planets/<str:planet_name>/star/', views.planet_star, name='planet_star'),
+    # 행성 내 post 검색
+    path('planets/<str:planet_name>/search/', views.post_search, name='post_search'),
 ]
