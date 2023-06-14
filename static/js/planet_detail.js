@@ -184,6 +184,8 @@ function createcommentContainer(
   }
   newCommentContainer.querySelector('#comment_form').id = 'recomment_form';
   document.getElementById('comment-list').append(newCommentContainer);
+  newCommentContainer.querySelector('#post-votetopics').remove();
+
 
   // 대댓글 있을 경우
   if (recomments) {
@@ -287,6 +289,7 @@ function createRecommentContainer(
       .closest('li')
       .remove();
   }
+  newRecommentContainer.querySelector('#post-votetopics').remove();
   var svgDiv = newRecommentContainer
     .querySelector('#comment_form')
     .closest('p')
