@@ -172,7 +172,7 @@
       <div id="dropdown-menu" style="display:none;">
         <ul>
           <li id="dropdown-delete" style="display:none;">
-            <form id="delete-post-form" class="block  hover:bg-gray-100 hover:text-[#d14424]" data-planet-name="{{ planet.name }}" data-post-pk="{{ post.pk }}">
+            <form id="delete-post-form" class="block  hover:bg-gray-100 hover:text-[#d14424]" data-type="detail" data-planet-name="{{ planet.name }}" data-post-pk="{{ post.pk }}">
               {% csrf_token %}
               <button type="submit" class='px-4 py-2' id="delete-post-button" style="display:inline; width: 100%;">게시글 삭제</button>
             </form>
