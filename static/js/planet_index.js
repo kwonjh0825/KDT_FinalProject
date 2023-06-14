@@ -1,35 +1,6 @@
 // csrf
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-// 글쓰기 버튼
-// var postButton = document.getElementById('post-btn');
-// postButton.addEventListener('click', function () {
-//   var modalBackdrop = document.querySelector('div[modal-backdrop]');
-//   console.log(modalBackdrop);
-//   if (!modalBackdrop) {
-//     modalBackdrop = document.createElement('div');
-//     modalBackdrop.setAttribute('modal-backdrop', '');
-//     modalBackdrop.classList.add(
-//       'bg-gray-900',
-//       'bg-opacity-50',
-//       'dark:bg-opacity-80',
-//       'fixed',
-//       'inset-0',
-//       'z-40'
-//     );
-
-// eventlistener
-document.addEventListener('DOMContentLoaded', function () {
-  // submit event
-  document.querySelector('body').addEventListener('submit', function (e) {
-    var target = e.target;
-
-
-//     // Append the modal backdrop element to the body
-//     document.body.appendChild(modalBackdrop);
-  })
-});
-
 // submit event
 document.querySelector('body').addEventListener('submit', function (e) {
   console.log('gd');
