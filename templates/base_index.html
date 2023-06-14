@@ -172,7 +172,7 @@
           <div class="flex flex-row">
             <img src="{% if user.profile_image%}{{ user.profile_image.url }}{% else %}{% static 'img/no_profile_img.png' %}{% endif %}" alt="no_image" class="w-1/6 h-1/6 m-5">
             <div class="flex flex-col">
-              <p class="mt-5 text-sm"><a href="profile/{{ user.nickname }}/">{{ user.nickname }}</a></p>
+              <p class="mt-5 text-sm"><a href="{% url 'planets:planet_profile' planet.name user.nickname %}">{{ user.nickname }}</a></p>
               <p class="mt-1 text-xs text-[#bcbdbf]"><a href="{% url 'planets:planet_profile_update' planet.name user.nickname %}">Edit profile</a></p>
             </div>
             <div class="mt-8 ms-auto me-4">
