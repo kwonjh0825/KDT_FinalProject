@@ -32,7 +32,7 @@ Catsmos
     <div id="alert-border-2" class="flex p-4 mb-4 border-t-4 text-red-400 bg-gray-800 border-red-800" role="alert">
       <svg class="flex-shrink-0 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
       <div class="ml-3 text-sm font-medium">
-        Invalid ID or password. <br> Check your ID or password and try again.
+        ID 혹은 비밀번호가 다릅니다. <br> 확인하고 다시 로그인 해주세요.
       </div>
       <button type="button" class="ml-auto -mx-1.5 -my-1.5 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 inline-flex h-8 w-8 bg-gray-800 text-red-400 hover:bg-gray-700"  data-dismiss-target="#alert-border-2" aria-label="Close">
         <span class="sr-only">Dismiss</span>
@@ -85,7 +85,7 @@ Catsmos
         {% comment %} <input type="password" id="password" name="password" placeholder="********" class="form-input mt-1 block w-full rounded-md bg-[#101013] "> {% endcomment %}
         
         <div class="grid mt-7">
-          <button type="submit" class="bg-yellow-400 hover:bg-yellow-500 text-xl text-white font-bold py-1 px-4 rounded shadow">Login</button>
+          <button type="submit" class="bg-yellow-400 hover:bg-yellow-500 text-xl text-white font-bold py-1 px-4 rounded shadow">로그인</button>
         </div>
         
         {% comment %} <input type="submit" value="LOG IN" class="text-lg my-4 py-1 w-full bg-yellow-400 rounded-md font-bold"> {% endcomment %}
@@ -94,9 +94,9 @@ Catsmos
 
     <!-- 도움 -->
     <div class="me-5 my-3 text-[#889cbb] flex justify-end gap-x-4" style="font-size:12px">
-      <a href="{% url 'accounts:contract' %}">Sign up</a>
-      <a href="{% url 'accounts:find_id' %}">Forgot your ID?</a>
-      <a href="{% url 'accounts:password_reset' %}">Forgot your password?</a>
+      <a href="{% url 'accounts:contract' %}">회원가입</a>
+      <a href="{% url 'accounts:find_id' %}">아이디 찾기</a>
+      <a href="{% url 'accounts:password_reset' %}">비밀번호 찾기</a>
       {% comment %} <a href="">Didn't receive a confirmation link?</a> {% endcomment %}
     </div>
   </div>
