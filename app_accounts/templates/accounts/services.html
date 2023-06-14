@@ -1,0 +1,55 @@
+{% extends 'base_accounts.html' %}
+{% load static %}
+{% block title %}
+Services
+{% endblock title %}
+
+{% block content %}
+    
+<div class="container mx-auto px-4">
+  <div class="py-12">
+    <h1 class="text-4xl font-bold mb-4">Catsmos만의</h1>
+    <h1 class="text-4xl font-bold mb-4">특별한 기능을 소개합니다!</h1>
+    <p class="text-lg mb-8">Dive into a world where communication takes a whole new turn. Explore, express and interact like never before.</p>
+    <hr class="mb-8">
+  </div>
+  <div class="grid gap-8">
+
+    <div class="md:col-span-1">
+      <div class="card mb-8 overflow-hidden shadow-lg">
+        <img class="w-full h-48 object-cover" src="{% static 'img/no_planet_img.png' %}" alt="Closed SNS">
+        <div class="px-6 py-4">
+          <h5 class="font-bold text-xl mb-2">폐쇄형 SNS</h5>
+          <p class="text-gray-400 text-base">Our closed SNS ensures a safe and secure environment to connect, ensuring your privacy is our utmost priority. You can control who you connect with and share your world with.</p>
+        </div>
+      </div>
+    </div>
+  
+    <div class="md:col-span-1">
+      <div class="card mb-8 overflow-hidden shadow-lg">
+        <img class="w-full h-48 object-cover" src="{% static 'img/no_planet_img.png' %}" alt="Planet Profiles">
+        <div class="px-6 py-4">
+          <h5 class="font-bold text-xl mb-2">행성마다 따로 설정 가능한 Profiles</h5>
+          <p class="text-gray-400 text-base">With our unique planet profile feature, you can set different profiles for different planets, expressing your diverse facets in different circles.</p>
+        </div>
+      </div>
+    </div>
+  
+    <div class="md:col-span-1">
+      <div class="card mb-8 overflow-hidden shadow-lg">
+        <img class="w-full h-48 object-cover" src="{% static 'img/no_planet_img.png' %}" alt="Voting System">
+        <div class="px-6 py-4">
+          <h5 class="font-bold text-xl mb-2">투표, 해시태그와 같은 풍푸한 기능</h5>
+          <p class="text-gray-400 text-base">Our platform offers a democratic space where you can vote for various features, hashtags and more within your planet. Be a part of the decision-making process and let your voice be heard.</p>
+        </div>
+      </div>
+    </div>
+  
+  </div>
+</div>   
+{% endblock content %}
+
+{% block script %}
+<script>
+</script>
+{% endblock script %}

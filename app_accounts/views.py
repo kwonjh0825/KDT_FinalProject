@@ -39,6 +39,9 @@ def contract(request):
 def membership(request):
     return render(request, 'accounts/membership.html')
 
+def services(request):
+    return render(request, 'accounts/services.html')
+
 # def login(request):
 #     if request.user.is_authenticated:
 #         return redirect('planets:main')
