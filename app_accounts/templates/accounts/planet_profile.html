@@ -168,6 +168,7 @@ Catsmos
             <div class="p-6">
                 <div class="text-base leading-relaxed following-list">
                     {% if user_by_planet.followings.all %}
+                    <div id="following-container">
                         {% for following in user_by_planet.followings.all %}
                             <a href="{% url 'planets:planet_profile' planet_name=following.planet.name nickname=following.nickname %}" class="my-2 flex p-2 text-ml border-0 rounded-md bg-[#181A20]" id="following-{{following.pk}}">
                                 <!-- 프로필 이미지 -->
@@ -178,12 +179,11 @@ Catsmos
                                 {% endif %}
                                 <p class="text-slate-200 text-ml flex items-center ml-4">{{ following.nickname }}</p>
                             </a>
-                        
-                        {% empty %}
-                            <p class="text-slate-400 text-center text-ml">팔로잉 한 사람이 없습니다.</p>
-
                         {% endfor %}
-                    {% endif %}
+                    </div>
+                {% else %}
+                    <p id="following-text" class="text-slate-400 text-center text-ml">팔로잉 한 사람이 없습니다.</p>
+                {% endif %}
                 </div>
             </div>
         </div>
@@ -207,6 +207,7 @@ Catsmos
             <div class="p-6">
                 <div class="text-base leading-relaxed follower-list">
                     {% if user_by_planet.followers.all %}
+                    <div id="follower-container">
                         {% for follower in user_by_planet.followers.all %}
                             <a href="{% url 'planets:planet_profile' planet_name=follower.planet.name nickname=follower.nickname %}" class="my-2 flex p-2 text-ml border-0 rounded-md bg-[#181A20]" id="follower-{{follower.pk}}">
                                 <!-- 프로필 이미지 -->
@@ -217,10 +218,11 @@ Catsmos
                                 {% endif %}
                                 <p class="text-slate-200 text-ml flex items-center ml-4">{{ follower.nickname }}</p>
                             </a>
-                        {% empty %}
-                            <p class="text-slate-400 text-ml text-center">팔로워가 없습니다.</p>
                         {% endfor %}
-                    {% endif %}
+                    </div>
+                {% else %}
+                    <p id="follower-text" class="text-slate-400 text-ml text-center">팔로워가 없습니다.</p>
+                {% endif %}
                 </div>
             </div>
         </div>
@@ -239,6 +241,26 @@ Catsmos
 </script>
 <script src="{% static 'js/planet_index.js' %}"></script>
 <script src="{% static 'js/planet_post_more.js' %}"></script>
+<script>
+    // HTML 요소를 선택합니다.
+    var followerContainer = document.getElementById("follower-container");
+    var followerText = document.getElementById("follower-text");
+
+    // 팔로워가 있는 경우 텍스트를 숨깁니다.
+    if (followerContainer && followerContainer.children.length > 0) {
+        followerText.classList.add("hidden");
+    }
+</script>
+<script>
+    // HTML 요소를 선택합니다.
+    var followingContainer = document.getElementById("following-container");
+    var followingText = document.getElementById("following-text");
+
+    // 팔로잉이 있는 경우 텍스트를 숨깁니다.
+    if (followingContainer && followingContainer.children.length > 0) {
+        followingText.classList.add("hidden");
+    }
+</script>
 
 {% endblock script %}
 

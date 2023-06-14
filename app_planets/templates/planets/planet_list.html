@@ -21,19 +21,19 @@
       </div>
     </div>
 
-    <div class="hidden md:flex flex-col">
+    {% comment %} <div class="hidden md:flex flex-col">
       <div class="flex flex-col justify-center items-center pt-32 p-20">
         <p class="text-4xl text-[#ffffff]">"Create your own world"</p>
         <p class="text-4xl text-[#ffffff]">"within the confines of Space."</p>
         <p class="text-2xl text-[#ffffff] mt-20">Our service is built with a focus on selective sharing,</p>
         <p class="text-2xl text-[#ffffff]">privacy protection, aligned interests, a closed network,<br> and enhanced security.</p>
       </div>
-    </div>
+    </div> {% endcomment %}
 
     <div class="mb-auto" style="overflow-y: auto;">
       <!-- Main modal -->
       <div id="defaultModal2" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-        <div class="relative w-full max-w-2xl max-h-full">
+        <div class="relative w-full max-w-md max-h-full">
           <!-- Modal content -->
           <div class="relative bg-[#282c37] rounded-lg shadow">
             <!-- Modal header -->
@@ -58,7 +58,7 @@
                   <p id="errorText" class="hidden">Invitation code is invalid.</p>
 
                   <button type="submit" class="button-invite bg-[#bcbdbf] mx-auto mt-10" style="text-align: center;">
-                    <p>입력하기</p>
+                  입력하기
                   </button>
                 </div>
               </form>
@@ -70,66 +70,65 @@
 
 
     <!-- 좌측 사이드바 -->
-    <div class="flex justify-center flex-row mt-10 me-10">
-      <div class="hidden md:block md:w-1/4 pe-10 me-10 pt-20 ps-5">
-
+    <div class="flex justify-center flex-row mt-10 me-5">
+      <div class="hidden md:block md:w-1/4 pe-5 me-5 pt-10 ps-5 whitespace-nowrap">
         <p class="text-2xl border-b-2 border-[#393f4f] pt-3 mb-3">행성 생성하기</p>
         <p class="text-sm pb-3 mb-5">행성을 직접 만들어보세요.</p>
-        <div class="p-3 rounded-md hover:bg-[#ffd951]" id="planet-list-button">
-          <a class="text-x" href="{% url 'planets:planet_create' %}">
-            <p class="text-xl">행성 만들기</p>
+        <div class="w-3/4 mx-auto p-2 rounded-md bg-gradient-to-r from-slate-500 via-slate-600 to-slate-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-slate-800 text-center" id="planet-list-button">
+          <a class="" href="{% url 'planets:planet_create' %}">
+            <p class="text-lg ">행성 만들기</p>
           </a>
         </div>
 
-        <p class="text-2xl border-b-2 border-[#393f4f] mt-20 pt-3 mb-3">행성 종류</p>
+        <p class="text-2xl border-b-2 border-[#393f4f] mt-10 pt-3 mb-3">행성 종류</p>
         <p class="text-sm pb-3 mb-5">관심있는 행성들을 만나보세요.</p>
-        <div class="p-3 rounded-md hover:bg-[#ffd951]">
-          <a class="text-x" href="{% url 'planets:my_planet_filter'%}">
-            <p class="text-xl">내가 가입한 행성</p>
+        <div class="p-3 hover:text-yellow-400 hover:border-b hover:border-yellow-400">
+          <a class="" href="{% url 'planets:my_planet_filter'%}">
+            <p class="">내가 가입한 행성</p>
           </a>
         </div>
-        <div class="p-3 rounded-md hover:bg-[#ffd951]">
-          <a class="text-x" href="{% url 'planets:planet_list' %}">
-            <p class="text-xl">모든 행성</p>
+        <div class="p-3 hover:text-yellow-400 hover:border-b hover:border-yellow-400">
+          <a class="" href="{% url 'planets:planet_list' %}">
+            <p class="">모든 행성</p>
           </a>
         </div>
-        <div class="p-3 rounded-md hover:bg-[#ffd951]" id="tech-button">
-          <a class="text-xl" href="{% url 'planets:filter' 'Tech'%}">
-            <p class="text-xl">Tech</p>
+        <div class="p-3 hover:text-yellow-400 hover:border-b hover:border-yellow-400" id="tech-button">
+          <a class="" href="{% url 'planets:filter' 'Tech'%}">
+            <p class="">Tech</p>
           </a>
         </div>
-        <div class="p-3 rounded-md hover:bg-[#ffd951]" id="game-button">
-          <a class="text-xl" href="{% url 'planets:filter' 'Game'%}">
-            <p class="text-xl">Game</p>
+        <div class="p-3 hover:text-yellow-400 hover:border-b hover:border-yellow-400" id="game-button">
+          <a class="" href="{% url 'planets:filter' 'Game'%}">
+            <p class="">Game</p>
           </a>
         </div>
-        <div class="p-3 rounded-md hover:bg-[#ffd951]" id="music-button">
-          <a class="text-xl" href="{% url 'planets:filter' 'Music'%}">
-            <p class="text-xl">Music</p>
+        <div class="p-3 hover:text-yellow-400 hover:border-b hover:border-yellow-400" id="music-button">
+          <a class="" href="{% url 'planets:filter' 'Music'%}">
+            <p class="">Music</p>
           </a>
         </div>
-        <div class="p-3 rounded-md hover:bg-[#ffd951]" id="sports-button">
-          <a class="text-xl" href="{% url 'planets:filter' 'Sports'%}">
-            <p class="text-xl">Sports</p>
+        <div class="p-3 hover:text-yellow-400 hover:border-b hover:border-yellow-400" id="sports-button">
+          <a class="" href="{% url 'planets:filter' 'Sports'%}">
+            <p class="">Sports</p>
           </a>
         </div>
-        <div class="p-3 rounded-md hover:bg-[#ffd951]" id="food-button">
-          <a class="text-xl" href="{% url 'planets:filter' 'Food'%}">
-            <p class="text-xl">Food</p>
+        <div class="p-3 hover:text-yellow-400 hover:border-b hover:border-yellow-400" id="food-button">
+          <a class="" href="{% url 'planets:filter' 'Food'%}">
+            <p class="">Food</p>
           </a>
         </div>
-        <div class="p-3 rounded-md hover:bg-[#ffd951]" id="hobby-button">
-          <a class="text-xl" href="{% url 'planets:filter' 'Hobby'%}">
-            <p class="text-xl">Hobby</p>
+        <div class="p-3 hover:text-yellow-400 hover:border-b hover:border-yellow-400" id="hobby-button">
+          <a class="" href="{% url 'planets:filter' 'Hobby'%}">
+            <p class="">Hobby</p>
           </a>
         </div>
 
-        <p class="text-2xl mt-20 border-b-2 border-[#393f4f] pt-3 mb-3">초대 코드 입력</p>
-        <p class="text-sm mb-5">전송받은 초대코드를 입력하고 행성에 참여하세요.</p>
-        <div class="p-3 rounded-md">
+        <p class="text-2xl mt-10 border-b-2 border-[#393f4f] pt-3 mb-3">초대 코드 입력</p>
+        <p class="text-sm mb-5 lg:mb-0">전송받은 초대코드를<br class="lg:hidden"> 입력하고 행성에 참여하세요.</p>
+        <div class="rounded-md">
           <div class="p-3">
-            <button id="modalButton" data-modal-target="defaultModal2" data-modal-toggle="defaultModal2" class="block text-white bg-[#282c37] hover:bg-[#ffd951] rounded-md text-base w-[92%] py-4 my-5 text-center" type="button">
-              <p class="text-xl">초대 코드 입력하기</p>
+            <button id="modalButton" data-modal-target="defaultModal2" data-modal-toggle="defaultModal2" class="block text-white bg-gradient-to-r from-slate-500 via-slate-600 to-slate-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-slate-800 rounded-md text-base px-3 py-4 my-5 text-center" type="button">
+              <p class="text-sm">초대 코드 입력하기</p>
             </button>
           </div>
         </div>
@@ -142,7 +141,7 @@
         <div class="md:hidden flex flex-col justify-between border-b-2 border-[#393f4f]">
           
           <!-- md크기 이하, 좌측 사이드바였던 것 -->   
-          <div class="md:hidden mb-10">
+          <div class="md:hidden mb-5">
             <div id="sec1" class="mb-3">
               <div id="accordion-flush" data-accordion="collapse" data-active-classes="text-[#f0f8ff]" data-inactive-classes="text-[#f0f8ff]">
                 <div id="accordion-flush-heading-1">
@@ -160,7 +159,7 @@
               <div id="accordion-flush-body-1" class="hidden" aria-labelledby="accordion-flush-heading-1">
                 <div class="border-b-1 border-[#393f4f]">
                   <p class="text-sm pt-2 pb-3 mb-5">행성을 직접 만들어보세요.</p>
-                  <div class="p-3 rounded-md hover:bg-[#ffd951]" id="planet-list-button">
+                  <div class="w-1/2 mx-auto p-3 rounded-md bg-gradient-to-r from-slate-500 via-slate-600 to-slate-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-slate-800 text-center" id="planet-list-button">
                     <a class="text-x" href="{% url 'planets:planet_create' %}">
                       <p class="text-xl">행성 만들기</p>
                     </a>
@@ -186,42 +185,42 @@
               <div id="accordion-flush-body-2" class="hidden" aria-labelledby="accordion-flush-heading-1">
                 <div class="border-b-1 border-[#393f4f]">
                   <p class="text-sm pt-2 pb-3 mb-5">관심있는 행성들을 만나보세요.</p>
-                  <div class="p-3 rounded-md hover:bg-[#ffd951]">
+                  <div class="p-3 hover:text-yellow-400 hover:border-b hover:border-yellow-400">
                     <a class="text-x" href="{% url 'planets:my_planet_filter'%}">
                       <p class="text-xl">내가 가입한 행성</p>
                     </a>
                   </div>
-                  <div class="p-3 rounded-md hover:bg-[#ffd951]" id="planet-list-button">
+                  <div class="p-3 hover:text-yellow-400 hover:border-b hover:border-yellow-400" id="planet-list-button">
                     <a class="text-x" href="{% url 'planets:planet_list' %}">
                       <p class="text-xl">모든 행성</p>
                     </a>
                   </div>
-                  <div class="p-3 rounded-md hover:bg-[#ffd951]" id="tech-button">
+                  <div class="p-3 hover:text-yellow-400 hover:border-b hover:border-yellow-400" id="tech-button">
                     <a class="text-xl" href="{% url 'planets:filter' 'Tech'%}">
                       <p class="text-xl">Tech</p>
                     </a>
                   </div>
-                  <div class="p-3 rounded-md hover:bg-[#ffd951]" id="game-button">
+                  <div class="p-3 hover:text-yellow-400 hover:border-b hover:border-yellow-400" id="game-button">
                     <a class="text-xl" href="{% url 'planets:filter' 'Game'%}">
                       <p class="text-xl">Game</p>
                     </a>
                   </div>
-                  <div class="p-3 rounded-md hover:bg-[#ffd951]" id="music-button">
+                  <div class="p-3 hover:text-yellow-400 hover:border-b hover:border-yellow-400" id="music-button">
                     <a class="text-xl" href="{% url 'planets:filter' 'Music'%}">
                       <p class="text-xl">Music</p>
                     </a>
                   </div>
-                  <div class="p-3 rounded-md hover:bg-[#ffd951]" id="sports-button">
+                  <div class="p-3 hover:text-yellow-400 hover:border-b hover:border-yellow-400" id="sports-button">
                     <a class="text-xl" href="{% url 'planets:filter' 'sports'%}">
                       <p class="text-xl">Sports</p>
                     </a>
                   </div>
-                  <div class="p-3 rounded-md hover:bg-[#ffd951]" id="food-button">
+                  <div class="p-3 hover:text-yellow-400 hover:border-b hover:border-yellow-400" id="food-button">
                     <a class="text-xl" href="{% url 'planets:filter' 'Food'%}">
                       <p class="text-xl">Food</p>
                     </a>
                   </div>
-                  <div class="p-3 rounded-md hover:bg-[#ffd951]" id="hobby-button">
+                  <div class="p-3 hover:text-yellow-400 hover:border-b hover:border-yellow-400" id="hobby-button">
                     <a class="text-xl" href="{% url 'planets:filter' 'Hobby'%}">
                       <p class="text-xl">Hobby</p>
                     </a>
@@ -247,9 +246,9 @@
               <div id="accordion-flush-body-3" class="hidden" aria-labelledby="accordion-flush-heading-3">
                 <div class="border-b-1 border-[#393f4f]">
                   <p class="text-sm pt-2 pb-3 mb-5">전송받은 초대코드를 입력하고 행성에 참여하세요.</p>
-                  <div class="p-3">
-                    <button data-modal-target="defaultModal2" data-modal-toggle="defaultModal2" class="block text-white bg-[#282c37] hover:bg-[#ffd951] rounded-md text-base w-[92%] py-4 my-5 text-center" type="button">
-                      <p class="text-base">초대 코드 입력하기</p>
+                  <div class="px-3">
+                    <button data-modal-target="defaultModal2" data-modal-toggle="defaultModal2" class="block bg-gradient-to-r from-slate-500 via-slate-600 to-slate-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-slate-800 rounded-md mx-auto w-1/2 py-4 my-5 text-center" type="button">
+                      <p class="text-xl">초대 코드 입력하기</p>
                     </button>
                   </div>
                 </div>
