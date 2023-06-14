@@ -534,7 +534,9 @@ def post_detail(request, planet_name, post_pk):
         'votetopics_count': zip(vote_topics, vote_count),
         'total_vote_count': sum(vote_count),
         'voted': True if voted_topics else False,
+        'vote_topics':vote_topics,
     }
+    
     return render(request, 'planets/planet_detail.html', context)
 
 
@@ -1103,9 +1105,33 @@ def tags_list(request, planet_name):
 def post_tag(request, planet_name, tag_name):
     planet = Planet.objects.get(name=planet_name)
     tag = Tag.objects.get(name=tag_name)
-    posts = Post.objects.filter(planet=planet, tags=tag).order_by('-pk')
-    postform = PostForm()
     accountbyplanet = Accountbyplanet.objects.get(planet=planet, user=request.user)
+    posts = Post.objects.filter(planet=planet, tags=tag).order_by('-pk').annotate(
+        heart_count=Count('emote', filter=Q(emote__emotion='heart')),
+        thumbsup_count=Count('emote', filter=Q(emote__emotion='thumbsup')),
+        thumbsdown_count=Count('emote', filter=Q(emote__emotion='thumbsdown'))
+    )
+    for post in posts:
+        post.vote_topics = VoteTopic.objects.filter(post=post)
+        post.vote_counts = []
+        for vote_topic in post.vote_topics:
+            vote_count = Vote.objects.filter(votetopic=vote_topic).count()
+            post.vote_counts.append({
+                'vote_topic': vote_topic,
+                'vote_count': vote_count
+            })
+        post.voted = Vote.objects.filter(votetopic__in=post.vote_topics, voter=accountbyplanet).exists()
+        post.total_vote_count = Vote.objects.filter(votetopic__in=post.vote_topics).aggregate(
+            total=Sum(
+                Case(
+                    When(voter__isnull=False, then=1),
+                    default=0,
+                    output_field=IntegerField()
+                )
+            )
+        )['total']
+
+    postform = PostForm()
     try:
         memo = Memobyplanet.objects.get(accountbyplanet=accountbyplanet)
     except:
@@ -1135,11 +1161,15 @@ def planet_memo(request, planet_name):
     
     if memo:  # 기존 메모 수정 처리
         try:
-            if memoform.is_valid():
+            if memoform.is_valid() and request.POST:
                 memoform = MemobyplanetForm(request.POST, instance=memo)
                 if memoform.has_changed():  # 폼 데이터가 변경되었는지 확인
+                    memoform = MemobyplanetForm(request.POST, instance=memo)
                     memo = memoform.save(commit=False)
                     memo.save()
+                else:
+                    memo.delete()
+                    memo = None
             else:
                 memoform = MemobyplanetForm(instance=memo)
         except Memobyplanet.DoesNotExist:
@@ -1155,7 +1185,7 @@ def planet_memo(request, planet_name):
     
     response_data = {
         'success': True,
-        'memo': memo.memo,
+        'memo': memo.memo if memo else memo,
         'memoform': memoform.as_p() if memoform.as_p() else None,
     }
     

@@ -55,7 +55,7 @@
           </a>
           <div class="mb-5" id="post-tags">
           </div>
-          <div class="mb-5" id="post-image">
+          <div class="mb-5" id="post-image" style="width: 30%;">
           </div>
           
           {% comment %} {% for votetopic in votetopics %} {% endcomment %}
@@ -110,23 +110,23 @@
       <div id="dropdown-menu" style="display:none;">
         <ul>
           <li id="dropdown-delete" style="display:none;">
-            <form id="delete-post-form" class="block px-4 py-2 hover:bg-gray-100 hover:text-[#d14424]" data-planet-name="{{ planet.name }}">
+            <form id="delete-post-form" class="block  hover:bg-gray-100 hover:text-[#d14424]" data-planet-name="{{ planet.name }}">
               {% csrf_token %}
-              <button type="submit" id="delete-post-button">게시글 삭제</button>
+              <button type="submit" class='px-4 py-2' id="delete-post-button" style="display:inline; width: 100%;">게시글 삭제</button>
             </form>
           </li>
           <li>
-            <a id="post-report" href="{% url 'planets:report' planet.name 'post' 0 %}" class="block px-4 py-2 hover:bg-gray-100">게시글 신고</a>
+            <a id="post-report" href="{% url 'planets:report' planet.name 'post' 0 %}" class="block px-4 py-2 hover:bg-gray-100 text-center">게시글 신고</a>
           </li>
           <li id="dropdown-update" style="display:none;">
-            <form id="update-post-form" class="block px-4 py-2 hover:bg-gray-100" data-planet-name="{{ planet.name }}">
+            <form id="update-post-form" class="block hover:bg-gray-100" data-planet-name="{{ planet.name }}">
               {% csrf_token %}
-              <button type="submit" id="update-post-button">게시글 수정</button>
+              <button type="submit" class='px-4 py-2' id="update-post-button" style="display:inline; width: 100%;">게시글 수정</button>
             </form>
           </li>
         </ul>
         <div class="py-2">
-          <a href="#" id="share-post-button" class="block px-4 py-2 text-sm text-gray-700">게시글 공유하기</a>
+          <a href="#" id="share-post-button" class="block px-4 py-2 text-sm text-gray-700 text-center">게시글 공유하기</a>
         </div>
       </div>
     </div>

@@ -91,7 +91,7 @@
                 <span class="text-[#bcbdbf]"><a href="{% url 'planets:post_tag' planet.name tag %}">#{{ tag }}</a></span>
             {% endfor %}
           </div>
-          <div id="post-image">
+          <div class="mb-5" id="post-image" style="width: 30%;">
             {% if post.image %}
               <img src="{{ post.image.url }}" alt="{{ post.image }}" class="rounded-lg">
             {% endif %}
@@ -172,18 +172,18 @@
       <div id="dropdown-menu" style="display:none;">
         <ul>
           <li id="dropdown-delete" style="display:none;">
-            <form id="delete-post-form" class="block px-4 py-2 hover:bg-gray-100 hover:text-[#d14424]" data-planet-name="{{ planet.name }}" data-post-pk="{{ post.pk }}">
+            <form id="delete-post-form" class="block  hover:bg-gray-100 hover:text-[#d14424]" data-planet-name="{{ planet.name }}" data-post-pk="{{ post.pk }}">
               {% csrf_token %}
-              <button type="submit" id="delete-post-button">게시글 삭제</button>
+              <button type="submit" class='px-4 py-2' id="delete-post-button" style="display:inline; width: 100%;">게시글 삭제</button>
             </form>
           </li>
           <li>
-            <a href="{% url 'planets:report' planet.name 'post' post.pk %}" class="block px-4 py-2 hover:bg-gray-100" id="report-post-url">게시글 신고</a>
+            <a href="{% url 'planets:report' planet.name 'post' post.pk %}" class="block px-4 py-2 hover:bg-gray-100 text-center" id="report-post-url">게시글 신고</a>
           </li>
           <li id="dropdown-update" style="display:none;">
-            <form id="update-post-form" class="block px-4 py-2 hover:bg-gray-100" data-planet-name="{{ planet.name }}" data-post-pk="{{ post.pk }}">
+            <form id="update-post-form" class="block  hover:bg-gray-100" data-planet-name="{{ planet.name }}" data-post-pk="{{ post.pk }}">
               {% csrf_token %}
-              <button type="submit" id="update-post-button">게시글 수정</button>
+              <button type="submit" class='px-4 py-2' id="update-post-button" style="display:inline; width: 100%;">게시글 수정</button>
             </form>
           </li>
         </ul>
