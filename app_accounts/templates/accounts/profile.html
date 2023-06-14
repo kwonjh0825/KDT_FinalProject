@@ -17,27 +17,12 @@ Catsmos
         Back
     </a>
   </div>
-<div class="container mx-auto flex justify-center">
-    <div class="w-full max-w-xl mt-10 text-center grid gap-y-4">
-        {% comment %} <p class="text-4xl mb-3 pb-4 font-bold">Catsmos profile</p>
-        <hr class="border-t-2 border-yellow-300 mb-6"> {% endcomment %}
-        <!-- 개인정보 -->
-        {% comment %} <p class="text-4xl">ID : {{ user.username }}</p>
-        <p class="text-4xl">E-mail : {{ user.email }}</p>
-        <p class=""></p>
-        <p class="text-sm text-right  ">Joined : {{ user.created_at|date:'m d, Y' }}</p> {% endcomment %}
-
-
-            
-        <!-- 개수 -->
-    </div>
-</div>
 
 {% comment %} <hr class="border-t-2 border-yellow-300 my-6 w-3/4 mx-auto"> {% endcomment %}
 
 <div class="container mx-auto max-w-[1400px] my-8">
     <div class="my-4 ml-5">
-        <p class="text-3xl mb-5 ml-5">Favorite Lists ⭐️</p>
+        <p class="text-3xl mb-5 ml-5">즐겨찾기 ⭐️</p>
         <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-10">
             {% for user_by_planet_star in user_by_planets_star %}
             {% comment %} <div class="col">
@@ -73,11 +58,14 @@ Catsmos
                     </div>
                     <p class="absolute right-2 bottom-2 text-slate-400 text-xs">{{ user_by_planet_star.planet.created_at|date:'m d, Y' }}</p>
                 </div>
-                <div class="text-xs flex gap-5 justify-end text-gray-400 ">
+                <div class="text-xs flex gap-5 justify-end text-gray-300 ">
                     <a class="hover:text-gray-200" type="button" href="{% url 'planets:index' planet_name=user_by_planet_star.planet.name %}">행성으로가기</a>
                     <a class="hover:text-gray-200" type="button" href="{% url 'planets:planet_profile' planet_name=user_by_planet_star.planet.name nickname=user_by_planet_star.nickname %}">프로필로가기</a>
                 </div>
             </div>
+            
+            {% empty %}
+                <p class="text-center text-gray-300">즐겨찾기 한 행성이 없습니다</p>
             {% endfor %}
         </div>
     </div>
@@ -86,7 +74,7 @@ Catsmos
 
 <div class="container mx-auto max-w-[1400px] my-8">
     <div class="my-4 ml-5">
-        <p class="text-3xl mb-5 ml-5">Planet Lists</p>
+        <p class="text-3xl mb-5 ml-5">행성 리스트</p>
         <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-10">
             {% for user_by_planet_not_star in user_by_planets_not_star %}
             <div class="block mx-auto max-w-1/2 min-w-1/4 col p-5 border rounded-lg shadow bg-gray-800 border-gray-700 hover:bg-gray-700">
@@ -109,15 +97,17 @@ Catsmos
                     <img src="{% static 'img/profile.png' %}" alt="no_image" class="inline-block rounded-md" width="50" height="50">
                     {% endif %}
                     <div>
-                        <p class="text-slate-400">Nickname : <br> <span class="text-white text-xl"> {{ user_by_planet_not_star.nickname }}</span></p>
+                        <p class="text-slate-400">닉네임 : <br> <span class="text-white text-xl"> {{ user_by_planet_not_star.nickname }}</span></p>
                     </div>
                     <p class="absolute right-2 bottom-2 text-slate-400 text-xs">{{ user_by_planet_not_star.planet.created_at|date:'m d, Y' }}</p>
                 </div>
-                <div class="text-xs flex gap-5 justify-end text-gray-400 ">
+                <div class="text-xs flex gap-5 justify-end text-gray-300 ">
                     <a class="hover:text-gray-200" type="button" href="{% url 'planets:index' planet_name=user_by_planet_not_star.planet.name %}">행성으로가기</a>
                     <a class="hover:text-gray-200" type="button" href="{% url 'planets:planet_profile' planet_name=user_by_planet_not_star.planet.name nickname=user_by_planet_not_star.nickname %}">프로필로가기</a>
                 </div>
             </div>
+            {% empty %}
+                <p class="text-center text-gray-300">가입한 행성이 없습니다</p>
             {% endfor %}
         </div>
     </div>
