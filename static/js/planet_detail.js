@@ -104,7 +104,7 @@ function createcommentContainer(
     .cloneNode(true);
   var commentSection = newCommentContainer.querySelector('#section');
 
-  // newCommentContainer.querySelector('#post-votetopics').remove();
+  newCommentContainer.querySelector('#post-votetopics').remove();
 
   commentSection.style.display = 'flex';
   var newDiv = document.createElement('div');
@@ -222,6 +222,7 @@ function createRecommentContainer(
     .getElementById('dropdown-menu')
     .cloneNode(true);
 
+  newRecommentContainer.querySelector('#post-votetopics').remove();
   var newDiv = document.createElement('div');
   newDiv.innerHTML = `<svg width="30px" height="30px" id="Capa_1" style="enable-background:new 0 0 74.5 60;" version="1.1" viewBox="0 0 74.5 60" width="74.5px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M10,45h40.5v15l24-22l-24-22v15H14V0H0v35C0,40.523,4.477,45,10,45z" fill="#ffffff"/></g></svg>`;
   newRecommentContainer.insertBefore(newDiv, newRecommentContainer.children[0]);
