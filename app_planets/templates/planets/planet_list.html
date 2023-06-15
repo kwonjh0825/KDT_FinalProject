@@ -243,9 +243,18 @@
                 <div class="border-b-1 border-[#393f4f]">
                   <p class="text-sm pt-2 pb-3 mb-5">전송받은 초대코드를 입력하고 행성에 참여하세요.</p>
                   <div class="px-3">
-                    <button data-modal-target="defaultModal2" data-modal-toggle="defaultModal2" class="block bg-gradient-to-r from-slate-500 via-slate-600 to-slate-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-slate-800 rounded-md mx-auto w-1/2 py-4 my-5 text-center" type="button">
-                      <p class="text-xl">초대 코드 입력하기</p>
+                    {% if request.user.is_authenticated %}
+                    <button id="modalButton" data-modal-target="defaultModal2" data-modal-toggle="defaultModal2" class="block text-white bg-gradient-to-r from-slate-500 via-slate-600 to-slate-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-slate-800 rounded-md text-base px- py-4 my-5 text-center" type="button">
+                      <p class="text-sm px-3">초대 코드 입력하기</p>
                     </button>
+                    {% else %}
+                    <button id="modalButton" data-modal-target="defaultModal2" data-modal-toggle="defaultModal2" class="block text-white bg-gradient-to-r from-slate-500 via-slate-600 to-slate-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-slate-800 rounded-md text-base px- py-4 my-5 text-center hidden" type="button">
+                      <p class="text-sm px-3">초대 코드 입력하기</p>
+                    </button>
+                    <a href="{% url 'accounts:login' %}" class="block text-white bg-gradient-to-r from-slate-500 via-slate-600 to-slate-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-slate-800 rounded-md text-base px- py-4 my-5 text-center" type="button">
+                      <p class="text-sm px-3">초대 코드 입력하기</p>
+                    </a>
+                    {% endif %}
                   </div>
                 </div>
               </div>
