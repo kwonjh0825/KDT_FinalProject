@@ -61,7 +61,7 @@
       </div>
     {% endfor %}
     <div class="flex flex-row text-xl pt-5 mb-5 border-t-2 border-[#393f4f]">
-      {% if user.admin_level == 3 %}
+      {% if user.admin_level == 2 or user.admin_level == 3 %}
         <a href="{% url 'planets:planet_admin' planet.name %}" class="button-big button-color-join bg-[#ffc800] p-2 ml-auto text-base text-center rounded-md">행성 관리</a>
       {% endif %} 
     </div>

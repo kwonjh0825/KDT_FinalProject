@@ -9,6 +9,7 @@ urlpatterns = [
     path('planets/create/', views.planet_create, name='planet_create'),
     path('planets/search/', views.search, name='search'),
     path('planets/<str:planet_name>/join/', views.planet_join, name='planet_join'),
+    path('planets/<str:planet_name>/withdraw/', views.planet_withdraw, name='planet_withdraw'),
     # 마이 플래닛 필터 기능
     path('planets/my_planet_filter/', views.my_planet_filter, name='my_planet_filter'),
 
