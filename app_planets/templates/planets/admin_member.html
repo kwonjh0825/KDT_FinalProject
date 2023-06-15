@@ -33,11 +33,11 @@
         <p class="text-slate-400">{{ account.nickname }}</p>
         <input type="text" name="account_pk" value="{{ account.pk }}" hidden>
         <label>
-          <input type="radio" name="admin_level" value="2" {% if account.admin_level == 2 %}checked{% endif %} class="w-4 h-4 text-yellow-400 bg-gray-100 border-gray-300 focus:ring-yellow-500 dark:focus:ring-[#181A20] focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+          <input type="radio" name="admin_level_{{ account.pk }}" value="2" {% if account.admin_level == 2 %}checked{% endif %} class="w-4 h-4 text-yellow-400 bg-gray-100 border-gray-300 focus:ring-yellow-500 dark:focus:ring-[#181A20] focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
           스태프
         </label>
         <label>
-          <input type="radio" name="admin_level" value="1" {% if account.admin_level == 1 %}checked{% endif %} class="w-4 h-4 text-yellow-400 bg-gray-100 border-gray-300 focus:ring-yellow-500 dark:focus:ring-[#181A20] focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+          <input type="radio" name="admin_level_{{ account.pk }}" value="1" {% if account.admin_level == 1 %}checked{% endif %} class="w-4 h-4 text-yellow-400 bg-gray-100 border-gray-300 focus:ring-yellow-500 dark:focus:ring-[#181A20] focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
           사용자
         </label>
         {% else %}
