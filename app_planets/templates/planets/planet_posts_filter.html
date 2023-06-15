@@ -25,7 +25,7 @@
                 <div id="post-img"><img src="{% if post.accountbyplanet.profile_image %}{{ post.accountbyplanet.profile_image.url }}{% else %}{% static 'img/no_profile_img.png' %}{% endif %}" alt="img" style="width:48px; height:48px;"></div>
                 <div class="ms-2">
                   <a id="post-nickname" ref="{% url 'planets:planet_profile' post.accountbyplanet.planet.name post.accountbyplanet.nickname %}">{{ post.accountbyplanet.nickname }}</a>
-                  <p class="text-sm text-[#bcbdbf]">@{{ post.accountbyplanet.nickname }}</p>
+                  <p class="text-sm text-[#bcbdbf]">@{{ planet.name }}</p>
                 </div>
               </div>
               <div class="me-3">

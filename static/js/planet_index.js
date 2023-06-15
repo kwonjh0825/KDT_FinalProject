@@ -3,7 +3,6 @@ const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
 // submit event
 document.querySelector('body').addEventListener('submit', function (e) {
-  console.log('gd');
   var target = e.target;
 
   // 게시글 생성

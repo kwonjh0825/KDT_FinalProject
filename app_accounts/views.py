@@ -13,13 +13,9 @@ from django.contrib import messages
 from django.conf import settings
 from django.urls import reverse_lazy
 from django.contrib.auth.forms import PasswordChangeForm
-
-
 from django.core import signing #암호화
 from django.utils.crypto import get_random_string # 토큰
 from django.shortcuts import get_object_or_404
-
-
 # 이메일
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.tokens import default_token_generator
@@ -33,33 +29,18 @@ from django.urls import reverse
 # 비밀번호 리셋
 from django.contrib.auth.views import PasswordResetConfirmView
 
+
 def contract(request):
     return render(request, 'accounts/contract.html')
+
 
 def membership(request):
     return render(request, 'accounts/membership.html')
 
+
 def services(request):
     return render(request, 'accounts/services.html')
 
-# def login(request):
-#     if request.user.is_authenticated:
-#         return redirect('planets:main')
-    
-#     elif request.method == 'POST':
-#         form = CustomAuthentication(request, request.POST)
-#         if form.is_valid():
-#             auth_login(request, form.get_user())
-#             return redirect('planets:main')
-#         else:
-#     else:
-#         form = CustomAuthentication()
-
-
-#     context = {
-#         'form': form,
-#     }
-#     return render(request, 'accounts/login.html', context)
 
 def login(request):
     if request.user.is_authenticated:
@@ -82,6 +63,7 @@ def login(request):
         'login_failed': login_failed  # login_failed 변수를 context에 추가
     }
     return render(request, 'accounts/login.html', context)
+
 
 @login_required
 def change_password(request):
@@ -131,6 +113,7 @@ def send_verification_email(request, user):
     except BadHeaderError:
         return HttpResponse('Invalid header.')
 
+
 # 메일 인증 페이지(메일에 담긴 링크)
 def activation_view(request, uidb64, token):
     try:
@@ -152,11 +135,10 @@ def activation_view(request, uidb64, token):
         # 토큰이 유효하지 않은 경우 처리
         return redirect('accounts:activation_failed')
 
+
 # 토큰이 유효하지 않을경우. (ex: 이미 인증했는데 또 메일 링크를 누를경우)
 def activation_failed_view(request):
     return render(request, 'accounts/activation_failed.html')
-
-
 
 
 # 계정활성화 메일 보냈다는 view
@@ -194,6 +176,7 @@ def generate_temp_token(user):
     # 예시로 랜덤한 문자열을 사용하고, 이를 임시 토큰으로 반환합니다.
     return get_random_string(length=20)
 
+
 # 회원가입
 def signup(request):
     # 이미 로그인한 경우
@@ -223,6 +206,7 @@ def signup(request):
     }
     return render(request, 'accounts/signup.html', context)
 
+
 # 최상위 프로필
 def profile(request, username):
     User = get_user_model()
@@ -238,6 +222,7 @@ def profile(request, username):
         'user_by_planets_not_star':user_by_planets_not_star,
     }
     return render(request, 'accounts/profile.html', context)
+
 
 # 최상위 프로필 업데이트
 @login_required
@@ -257,7 +242,6 @@ def profile_update(request):
     return render(request, 'accounts/update.html', context)
 
 
-
 # 행성별 프로필
 def planet_profile(request, planet_name, nickname):
     planet = get_object_or_404(Planet, name=planet_name)
@@ -271,6 +255,7 @@ def planet_profile(request, planet_name, nickname):
         'request_user': request_user,
     }
     return render(request, 'accounts/planet_profile.html', context)
+
 
 # 행성별 프로필 업데이트
 @login_required
@@ -294,6 +279,7 @@ def planet_profile_update(request, planet_name, nickname):
         'planet_user_update_form': planet_user_update_form,
     }
     return render(request, 'accounts/planet_update.html', context)
+
 
 # 아이디 찾기 
 class find_id(View):
@@ -321,6 +307,7 @@ class find_id(View):
             }
             return render(request, 'accounts/find_id.html', context)
 
+
 # 계정 삭제
 @login_required
 def delete(request):
@@ -329,11 +316,13 @@ def delete(request):
     auth_logout(request)
     return redirect('planets:main')
 
+
 # 로그아웃
 @login_required
 def logout(request):
     auth_logout(request)
     return redirect('planets:main')
+
 
 # 비밀번호 초기화 이메일 전송
 def password_reset_request(request):

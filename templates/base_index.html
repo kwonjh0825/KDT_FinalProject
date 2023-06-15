@@ -573,7 +573,6 @@
       firstTopicInput.value = '';
     } else {
       voteTopicsContainer.style.display = 'none';
-      console.log('ㅎㅇㅎㅇ');
     } {% endcomment %}
     if (computedStyle.display === 'none') {
       voteTopicsContainer.style.display = 'block';
@@ -591,7 +590,6 @@
   const plusButton = document.getElementById('plus-button');
   
   plusButton.addEventListener('click', function () {
-    console.log('플러스!');
     event.preventDefault(); // 폼 제출 방지
     const newTopicInput = document.createElement('input');
     newTopicInput.type = 'text';
@@ -649,6 +647,7 @@
 <script src="https://kit.fontawesome.com/96b2992191.js" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 <script src="{% static 'js/base_index.js' %}"></script>
+<script src="{% static 'js/planet_index.js' %}"></script>
 {% block script %}
 {% endblock script %}
 </html>

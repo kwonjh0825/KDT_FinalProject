@@ -28,25 +28,13 @@ EMOTIONS = [
     {'label': '싫어요', 'value': 3},
 ]
 
+
 # 사이트 첫 페이지
 def main(request):
     return render(request, 'planets/main.html')
 
 
 # 행성 리스트 페이지
-# def planet_list(request):
-#     user = request.user
-#     planets = Planet.objects.filter(is_public='Public')
-#     user_planets = Accountbyplanet.objects.filter(user=user, planet__in=planets)
-#     joined_planets = [user_planet.planet for user_planet in user_planets]
-    
-#     context = {
-#         'planets':planets,
-#         'joined_planets':joined_planets,
-#     }
-#     return render(request, 'planets/planet_list.html', context)
-    
-
 def planet_list(request):
     planets = Planet.objects.filter(is_public='Public')
     user = request.user
@@ -59,8 +47,6 @@ def planet_list(request):
     
     for planet in planets:
         planet.current_capacity = Accountbyplanet.objects.filter(planet=planet).count()
-
-    
     context = {
         'planets': planets,
         'joined_planet_list': joined_planet_list,
@@ -86,6 +72,7 @@ def filter(request, category):
     return render(request, 'planets/planet_list.html', context)
 
 
+# 내가 가입한 행성
 def my_planet_filter(request):
     user = request.user
     user_planets = Accountbyplanet.objects.filter(user=user, planet__is_public='Public')
@@ -158,6 +145,7 @@ def search(request):
     return render(request, 'planets/planet_list.html', context)
 
 
+# 행성 이용약관
 @login_required
 def planet_contract(request,planet_name):
     planet = Planet.objects.get(name=planet_name)
@@ -168,10 +156,6 @@ def planet_contract(request,planet_name):
     if Accountbyplanet.objects.filter(planet=planet).count() >= planet.maximum_capacity:
         messages.warning(request, '서버 최대 인원을 초과하여 가입을 진행할 수 없습니다. ')
         return redirect('planets:main')
-    
-    # #private 행성
-    # if planet.invite_code != request.GET.get('invite_code'):
-    #     return redirect('planets:main')
 
     termsofservice = TermsOfService.objects.filter(Planet_id=planet.pk)
 
@@ -203,9 +187,9 @@ def planet_join(request, planet_name):
             elif planet.need_confirm == False:
                 accountbyplanet.is_confirmed = True
             
+            # 신청 완료
             elif planet.need_confirm == True:
                 messages.success(request, '신청이 완료되었습니다')
-
 
             accountbyplanet.save()
             return redirect('planets:index', planet_name)
@@ -229,6 +213,7 @@ def index(request, planet_name):
     
     postform = PostForm()
     votetopicform = VoteTopicForm()
+
     try:
         memo = Memobyplanet.objects.get(accountbyplanet=Accountbyplanet.objects.get(planet=planet, user=request.user))
     except:
@@ -255,14 +240,8 @@ def index_list(request, planet_name):
     user = request.user
     user_by_planets_star = Accountbyplanet.objects.filter(user=user, star=1)
     user_by_planets_not_star = Accountbyplanet.objects.filter(user=user, star=0)
-    
-    # 1. Get all planets the user has joined
     user_planets = Accountbyplanet.objects.filter(user=user)
-    
-    # 2. Extract unique categories from these planets
     user_categories = user_planets.values_list('planet__category', flat=True).distinct()
-
-    # 3. Find all the planets that have their category in the list of user's categories but aren't joined by the user
     planet_recommends = Planet.objects.filter(category__in=user_categories, is_public='Public').exclude(accountbyplanet__in=user_planets).order_by('?')[:5]
     planet_not_recommends = Planet.objects.exclude(category__in=user_categories).exclude(accountbyplanet__in=user_planets).exclude(is_public='Private').order_by('?')[:5]
     num_not_recommended = max(0, 5 - len(planet_recommends))
@@ -302,8 +281,8 @@ def planet_introduction(request, planet_name):
         memo = Memobyplanet.objects.get(accountbyplanet=Accountbyplanet.objects.get(planet=planet, user=request.user))
     except:
         memo = None
+
     memoform = MemobyplanetForm()
-    
     planet.current_capacity = Accountbyplanet.objects.filter(planet=planet).count()
     postform = PostForm()
     
@@ -383,7 +362,6 @@ def planet_posts(request, planet_name):
             'post_emote_thumbsdown': Emote.objects.filter(post=post, emotion='thumbsdown').count(),
             'vote_count':[Vote.objects.filter(votetopic=vote_topic).count() for vote_topic in vote_topics],
             'voted': True if voted_topics else False,
-
         })
 
     if posts.has_next():
@@ -399,7 +377,6 @@ def post_create(request, planet_name, post_pk=None):
     planet = Planet.objects.get(name=planet_name)
     form = PostForm(request.POST, request.FILES)
     votetopicform = VoteTopicForm(request.POST)
-
     accountbyplanet = Accountbyplanet.objects.get(planet=planet, user=request.user)
 
     if post_pk:  # 기존 게시글 수정 처리
@@ -433,7 +410,6 @@ def post_create(request, planet_name, post_pk=None):
                 votetopic.title = title
                 votetopic.post = post
                 votetopic.save()
-
         else:
             errors = form.errors.as_json()
             return JsonResponse({'success': False, 'errors': errors})
@@ -453,11 +429,9 @@ def post_create(request, planet_name, post_pk=None):
         'profile_image_url': post.accountbyplanet.profile_image.url if post.accountbyplanet.profile_image else None,
         'user': post.accountbyplanet.user.username,
         'form_html': form.as_p() if form.as_p() else None,
-
         'votetopics': list(post.votetopic_set.values('title')),
         'vote_count':[Vote.objects.filter(votetopic=vote_topic).count() for vote_topic in vote_topics],
         'voted': True if voted_topics else False,
-
     }
     try:
         response_data['votetopic'] = titles
@@ -492,7 +466,6 @@ def post_detail(request, planet_name, post_pk):
     
     # emote
     accountbyplanet = Accountbyplanet.objects.get(planet=planet, user=request.user)
-
     post_emotion_heart = Emote.objects.filter(post=post, emotion='heart')
     post_emotion_thumbsup = Emote.objects.filter(post=post, emotion='thumbsup')
     post_emotion_thumbsdown = Emote.objects.filter(post=post, emotion='thumbsdown')
@@ -502,21 +475,14 @@ def post_detail(request, planet_name, post_pk):
             Vote.objects.filter(voter=accountbyplanet, votetopic__in=vote_topics).values_list('votetopic_id', flat=True)
         )
     vote_count = [Vote.objects.filter(votetopic=vote_topic).count() for vote_topic in vote_topics]
-
     postform = PostForm()
     votetopicform = VoteTopicForm()
-
-    
-        
-
 
     try:
         memo = Memobyplanet.objects.get(accountbyplanet=accountbyplanet)
     except:
         memo = None
     memoform = MemobyplanetForm()
-    
-    # comment_emotes = Emote.objects.exclude(comment__isnull=True)
 
     context = {
         'votetopicform': votetopicform,
@@ -532,8 +498,6 @@ def post_detail(request, planet_name, post_pk):
         'post_emotion_thumbsup': post_emotion_thumbsup,
         'post_emotion_thumbsdown': post_emotion_thumbsdown,
         'user': Accountbyplanet.objects.get(user=request.user.pk, planet=planet),
-        # 'votetopics': list(post.votetopic_set.values('title')),
-        # 'vote_count':[Vote.objects.filter(votetopic=vote_topic).count() for vote_topic in vote_topics],
         'votetopics_count': zip(vote_topics, vote_count),
         'total_vote_count': sum(vote_count),
         'voted': True if voted_topics else False,
@@ -553,13 +517,9 @@ def detail_comments(request, planet_name, post_pk):
         comment_emote_heart = Emote.objects.filter(comment=comment, emotion='heart').count()
         comment_emote_thumbsup = Emote.objects.filter(comment=comment, emotion='thumbsup').count()
         comment_emote_thumbsdown = Emote.objects.filter(comment=comment, emotion='thumbsdown').count()
-        
         recomments = Recomment.objects.filter(comment=comment.pk)
         recomments_data = []
         for recomment in recomments:
-            # recomment_emote_heart = Emote.objects.filter(recomment=recomment, emotion='heart').count()
-            # recomment_emote_thumbsup = Emote.objects.filter(recomment=recomment, emotion='thumbsup').count()
-            # recomment_emote_thumbsdown = Emote.objects.filter(recomment=recomment, emotion='thumbsdown').count()
             recomments_data.append(
                 {
                     'pk': recomment.pk,
@@ -567,9 +527,6 @@ def detail_comments(request, planet_name, post_pk):
                     'created_time': recomment.created_time,
                     'nickname': recomment.accountbyplanet.nickname,
                     'profile_image_url': recomment.accountbyplanet.profile_image.url if recomment.accountbyplanet.profile_image else None,
-                    # 'recommment_emote_heart': recomment_emote_heart,
-                    # 'recommment_emote_thumbsup': recomment_emote_thumbsup,
-                    # 'recommment_emote_thumbsdown': recomment_emote_thumbsdown,
                 }
             )
         comments_list.append({
@@ -644,7 +601,6 @@ def comment_delete(request, planet_name, comment_pk):
             comment.save()
             return JsonResponse({'success': 'Change', 'comment_content': comment.content})
         else:
-
             comment.delete()
             return JsonResponse({'success': True})
     else:
@@ -738,7 +694,6 @@ def planet_admin(request, planet_name):
             'is_manager': is_manager,
         }
         return render(request, 'planets/planet_admin.html', context)
-
     else:
         messages.warning(request, '관리자만 접근 가능합니다. ')
         return redirect('planets:main')
@@ -758,7 +713,6 @@ def planet_tos_admin(request, planet_name):
             # 기존 약관 DB 삭제
             old_term = TermsOfService.objects.filter(Planet=planet)
             old_term.delete()
-
             # 이용 약관 저장
             for i in range(1, termsofservice_count + 1):
                 term_content = request.POST.get(f'term_content_{i}', '')
@@ -809,7 +763,6 @@ def planet_join_confirm(request, planet_name, user_pk):
         account = Accountbyplanet.objects.get(planet=planet, user=user)
         account.is_confirmed = True
         account.save()
-
         return JsonResponse({'success': True})
     else:
         messages.warning(request, '관리자만 접근 가능합니다.')
@@ -824,10 +777,8 @@ def planet_join_reject(request, planet_name, user_pk):
     is_staff = True if Accountbyplanet.objects.get(planet=planet, user=request.user).admin_level > 1 else False
     if is_staff:
         user = User.objects.get(pk=user_pk)
-        
         account = Accountbyplanet.objects.get(planet=planet, user=user)
         account.delete()
-
         return JsonResponse({'success': True})    
     else:
         messages.warning(request, '관리자만 접근 가능합니다.')
@@ -843,7 +794,6 @@ def report(request, planet_name, report_category, pk):
     # method GET
     if request.method == 'POST':
         content = request.POST.get('report_content')
-
         if report_category == 'post':
             post = Post.objects.get(pk=pk)
             if not Report.objects.filter(post=post, user=user):
@@ -851,7 +801,6 @@ def report(request, planet_name, report_category, pk):
                 messages.info(request, '신고가 완료되었습니다.') 
             else:
                 messages.warning(request, '이미 신고한 게시글입니다.')
-        
         elif report_category == 'comment':
             comment = Comment.objects.get(pk=pk)
             if not Report.objects.filter(comment=comment, user=user):
@@ -859,7 +808,6 @@ def report(request, planet_name, report_category, pk):
                 messages.info(request, '신고가 완료되었습니다.') 
             else:
                 messages.warning(request, '이미 신고한 댓글입니다.')
-        
         else:
             recomment = Recomment.objects.get(pk=pk)
             if not Report.objects.filter(recomment=recomment, user=user):
@@ -880,7 +828,6 @@ def report(request, planet_name, report_category, pk):
                 context = {
                     'reported': post,
                 }
-
         elif report_category == 'comment':
             comment = Comment.objects.get(pk=pk)
             if accountbyplanet == comment.accountbyplanet:
@@ -890,7 +837,6 @@ def report(request, planet_name, report_category, pk):
                 context = {
                     'reported': comment,
                 }
-
         else:
             recomment = Recomment.objects.get(pk=pk)
             if accountbyplanet == recomment.accountbyplanet:
@@ -909,15 +855,14 @@ def report(request, planet_name, report_category, pk):
         return render(request, 'planets/report.html', context)
     
 
+# 신고 관리 페이지
 def admin_report(request, planet_name):
     planet = Planet.objects.get(name=planet_name)
     is_manager = True if Accountbyplanet.objects.get(planet=planet, user=request.user).admin_level == 3 else False
     if is_manager:
-             
         post_reports = Report.objects.exclude(post__isnull=True)
         comment_reports = Report.objects.exclude(comment__isnull=True)
         recomment_reports = Report.objects.exclude(recomment__isnull=True)
-        
         post_reports_count = Report.objects.exclude(post__isnull=True).values('post').annotate(Count('pk'))
         comment_reports_count = Report.objects.exclude(comment__isnull=True).values('comment').annotate(Count('pk'))
         recomment_reports_count = Report.objects.exclude(recomment__isnull=True).values('recomment').annotate(Count('pk'))
@@ -932,10 +877,10 @@ def admin_report(request, planet_name):
             'recomment_reports_count': recomment_reports_count,
         }
         return render(request, 'planets/admin_report.html', context)
-
     else:
         messages.warning(request, '매니저만 접근 가능합니다.')
         return redirect('planets:main')
+
 
 # 행성 회원 관리
 def admin_member(request, planet_name):
@@ -949,9 +894,7 @@ def admin_member(request, planet_name):
                 temp = Accountbyplanet.objects.get(planet=planet, pk=pk)
                 temp.admin_level = level
                 temp.save()
-            
             return redirect('planets:planet_admin', planet_name)
-
         else:
             accounts = Accountbyplanet.objects.filter(planet=planet)
         
@@ -961,12 +904,12 @@ def admin_member(request, planet_name):
             'planet_name': planet_name,
         }
         return render(request, 'planets/admin_member.html', context)
-    
     else:
         messages.warning(request, '매니저만 접근 가능합니다.')
         return redirect('planets:main')
 
 
+# 초대 코드 생성
 @login_required
 def invite_create(request):
     invite_code = request.body.decode('utf-8')
@@ -979,19 +922,21 @@ def invite_create(request):
     try:
         planet = Planet.objects.get(invite_code=invite_code)
         return JsonResponse({'result':True, 'invite_code':invite_code})
-        
     except ObjectDoesNotExist:
         return JsonResponse({'result':False, 'invite_code':'실패'})
     
 
+# 초대 확인
 @login_required
 def invite_check(request, invite_code):
     planet = Planet.objects.get(invite_code=invite_code)
     return render(request, 'planets/invite_check.html', {'planet': planet, 'invite_code':invite_code})
 
+
+# 팔로우
+@login_required
 def following(request, planet_name, user_pk):
     planet = Planet.objects.get(name=planet_name)
-
     to_user = Accountbyplanet.objects.get(planet=planet, pk=user_pk)
     from_user = Accountbyplanet.objects.get(planet=planet, user=request.user)
     # 자기 자신을 팔로우 할 수 없음
@@ -1038,14 +983,12 @@ def vote(request, post_pk, vote_title):
         return JsonResponse(context)
         
 
-
 # 비동기 post emote
 @login_required
 def post_emote(request, planet_name, post_pk, emotion):
     planet = Planet.objects.get(name=planet_name)
     post = Post.objects.get(pk=post_pk)
     user = Accountbyplanet.objects.get(planet=planet, user=request.user)
-
     emote = Emote.objects.filter(post=post, accountbyplanet=user, emotion=emotion)
 
     if emote.exists():
@@ -1065,7 +1008,6 @@ def comment_emote(request, planet_name, post_pk, comment_pk, emotion):
     planet = Planet.objects.get(name=planet_name)
     comment = Comment.objects.get(pk=comment_pk)
     user = Accountbyplanet.objects.get(planet=planet, user=request.user)
-
     emote = Emote.objects.filter(comment=comment, accountbyplanet=user, emotion=emotion)
     if emote.exists():
         emote.delete()
@@ -1214,6 +1156,7 @@ def planet_star(request, planet_name):
     }
     return JsonResponse(response_data)
 
+
 # 행성 내 post 검색
 def post_search(request, planet_name):
     planet = Planet.objects.get(name=planet_name)
@@ -1225,7 +1168,6 @@ def post_search(request, planet_name):
         post.heart_count = Emote.objects.filter(post=post, emotion='heart').count()
         post.thumbsup_count = Emote.objects.filter(post=post, emotion='thumbsup').count()
         post.thumbsdown_count = Emote.objects.filter(post=post, emotion='thumbsdown').count()
-
         post.vote_topics = VoteTopic.objects.filter(post=post)
         post.vote_counts = []
         for vote_topic in post.vote_topics:
