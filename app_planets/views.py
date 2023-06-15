@@ -130,12 +130,15 @@ def planet_create(request):
 
 # 행성 검색
 def search(request):
-    query = request.GET.get('q')
+    query = request.POST.get('q')
     planets = Planet.objects.filter(Q(name__icontains=query) | Q(description__icontains=query), is_public='Public')
     user = request.user
-    user_planets = Accountbyplanet.objects.filter(user=user, planet__in=planets)
-    joined_planets = [user_planet.planet for user_planet in user_planets]
-    joined_planet_list = [joined_planet.name for joined_planet in joined_planets]
+    if user.is_authenticated:
+        user_planets = Accountbyplanet.objects.filter(user=user, planet__in=planets)
+        joined_planets = [user_planet.planet for user_planet in user_planets]
+        joined_planet_list = [joined_planet.name for joined_planet in joined_planets]
+    else:
+        joined_planet_list = None
 
     for planet in planets:
         planet.current_capacity = Accountbyplanet.objects.filter(planet=planet).count()
