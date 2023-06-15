@@ -10,7 +10,6 @@
   <link rel="stylesheet" href="{% static 'css/base_nav.css' %}">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-  {% comment %} <link rel="shortcut icon" type="image/x-icon" src="{% static 'img/favicon.png' %}" > {% endcomment %}
   <link rel="icon" href="{% static 'img/favicon.png' %}">
   <link rel="shortcut icon" href="{% static 'img/favicon.png' %}">
   <link rel="apple-touch-icon" href="{% static 'img/favicon.png' %}">
@@ -28,13 +27,9 @@
   </style>
 </head>
 
-
 <body class="">
 {% if messages %}
   {% for message in messages %}
-    {% comment %} <script>
-      alert('{{message}}')
-    </script> {% endcomment %}
     <script>
       // 신고가 완료되었습니다. 메시지를 sweetalert2로 대체
       {% for message in messages %}
@@ -83,7 +78,6 @@
         <a id="avatarButton" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start" class="rounded-full cursor-pointer flex items-center hover:text-yellow-400" alt="User dropdown">{{ user.username }}<span class="material-symbols-outlined">
           arrow_drop_down
           </span></a>
-        {% comment %} href="{% url 'accounts:profile' user %}" {% endcomment %}
         {% else %}
         <a href="{% url 'accounts:login' %}" class="text-sm text-white me-5">login</a>
         <a href="{% url 'accounts:contract' %}" class="text-sm text-white ">Signup</a>
@@ -174,7 +168,6 @@
   </div>
 <div style="height:100px;"></div>
 </body>
-<script type="text/javascript" src="/static/js/base_nav.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 

@@ -11,7 +11,6 @@
   <link rel="stylesheet" href="{% static 'css/base_index.css' %}">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-  {% comment %} <link rel="shortcut icon" type="image/x-icon" src="{% static 'img/favicon.png' %}" > {% endcomment %}
   <link rel="icon" href="{% static 'img/favicon.png' %}">
   <link rel="shortcut icon" href="{% static 'img/favicon.png' %}">
   <link rel="apple-touch-icon" href="{% static 'img/favicon.png' %}">  {% block head %}{% endblock head %}
@@ -25,9 +24,6 @@
 <body class="bg-red">
 {% if messages %}
   {% for message in messages %}
-    {% comment %} <script>
-      alert('{{message}}')
-    </script> {% endcomment %}
     <script>
       // 신고가 완료되었습니다. 메시지를 sweetalert2로 대체
       {% for message in messages %}
@@ -161,9 +157,6 @@
                 <div class="absolute bottom-3 left-2">
                   <div class="current_temp" style="font-size:30px;"></div>
                 </div>
-                {% comment %} <div class="humidity"></div>
-                <div class="wind"></div>
-                <div class="cloud"></div> {% endcomment %}
               </div>
 
               
@@ -181,7 +174,6 @@
                         edit_note
                         </span></button>
                     </form>
-                    {% comment %} <textarea id="comment" rows="4" class="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Write a comment..." required></textarea> {% endcomment %}
                   </div>
                   {% else %}
                     <form id="create-memo-form" data-planet-name="{{ planet.name }}">
@@ -193,10 +185,6 @@
                   {% endif %}
                 </div>
               </div>
-
-              {% comment %} <div class="bg-[#282c37] h-36 w-36 justify-center items-center text-center m-5 p-3">
-                <p>widget3</p>
-              </div> {% endcomment %}
             </div>
           </div>
         </div>
@@ -217,7 +205,6 @@
             </div>
           </div>
           <div class="flex flex-col justify-center items-center">
-            {% comment %} 날씨 {% endcomment %}
           <div class="relative text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 h-36 w-36 m-5 p-3 rounded-lg ">
             <div class="weather_icon text-right"></div>
             <div class="weather_description absolute top-10 right-3"></div>
@@ -228,9 +215,6 @@
             <div class="absolute bottom-3 left-2">
               <div class="current_temp" style="font-size:36px;"></div>
             </div>
-            {% comment %} <div class="humidity"></div>
-            <div class="wind"></div>
-            <div class="cloud"></div> {% endcomment %}
           </div>
 
           <!-- 웹환경 위젯 -->
@@ -247,7 +231,6 @@
                     edit_note
                     </span></button>
                 </form>
-                {% comment %} <textarea id="comment" rows="4" class="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Write a comment..." required></textarea> {% endcomment %}
               </div>
               {% else %}
                 <form id="create-memo-form" data-planet-name="{{ planet.name }}">
@@ -259,9 +242,6 @@
               {% endif %}
             </div>
           </div>
-            {% comment %} <div class="bg-[#282c37] h-36 w-36 justify-center items-center text-center m-5 p-3">
-              <p>widget3</p>
-            </div> {% endcomment %}
           </div>
         </div>
       </div>
@@ -373,7 +353,6 @@
                 <img src="/static/img/catsmos_logo.png" alt="logo" class="w-40 mr-3">
               </a>
             </div>
-            {% comment %} <h2 class="mb-4 text-sm font-semibold text-white uppercase">Creators of Coatsmos</h2> {% endcomment %}
 
             <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
               <div>
@@ -401,17 +380,6 @@
                   </li>
                 </ul>
               </div>
-              {% comment %} <div>
-                <h2 class="mb-6 text-sm font-semibold text-white uppercase">Legal</h2>
-                <ul class="text-gray-600 dark:text-gray-400 font-medium">
-                  <li class="mb-4">
-                    <a href="#" class="hover:underline">Privacy Policy</a>
-                  </li>
-                  <li>
-                    <a href="#" class="hover:underline">Terms &amp; Conditions</a>
-                  </li>
-                </ul>
-              </div> {% endcomment %}
             </div>
           </div>
 
@@ -543,7 +511,6 @@
   </div>
   <div onclick="scrollTopFixed()" data-tooltip-target="tooltip-top" class="fixed right-5 bottom-3 group hover:bg-blue-500 focus:ring-4 focus:ring-blue-500 bg-blue-300 rounded-lg" style="z-index: 999;">
     <button id="post-btn" type="button" class="flex items-center justify-center ml-auto text-white  w-12 h-12  focus:outline-none ">
-        {% comment %} <svg aria-hidden="true" class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path></svg> {% endcomment %}
         <span class="material-symbols-outlined text-4xl font-bold">
           arrow_upward
           </span>
@@ -553,7 +520,6 @@
       <div class="tooltip-arrow" data-popper-arrow></div>
     </div>
   </div>
-  {% comment %} <i class=" fa-sharp fa-solid fa-arrow-up fa-2xl" style="position:fixed; bottom:35px; right:35px; z-index: 999;" onclick="scrollTopFixed()"></i> {% endcomment %}
 </body>
   
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
