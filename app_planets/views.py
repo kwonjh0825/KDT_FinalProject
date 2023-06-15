@@ -851,6 +851,7 @@ def report(request, planet_name, report_category, pk):
         context['planet'] = planet
         context['pk'] = pk
         context['user'] = Accountbyplanet.objects.get(planet=planet, user=request.user)
+        context['user_id'] = request.user
 
         return render(request, 'planets/report.html', context)
     
