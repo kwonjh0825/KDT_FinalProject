@@ -335,7 +335,6 @@
                     
                     <button id="plus-button">+</button>
                     <div id="vote-topics">
-                      
                       <div class="vote-topic-input">
                         {{ votetopicform.title }}
                       </div>
@@ -351,10 +350,6 @@
                       <label for="id_tags" class="block text-base text-slate-300 mb-2">태그</label>
                       {{ postform.tags }}
                     </div>
-                    {% comment %} <div>
-                      <label for="last_name" class="block text-base text-slate-300 mb-2">주제</label>
-                      {{ voteform.content }}
-                    </div> {% endcomment %}
                   </div>
                   <button data-modal-hide="defaultModal" type="submit" class="chatting-create-btn bg-[#bcbdbf] mx-auto mt-10" style="text-align: center;">
                     <p>게시글 작성</p>
@@ -444,17 +439,6 @@
         </button>
       </div>
 
-
-      <!-- 게시글 작성하기 collapse 버튼-->
-      {% comment %} <div class="button-chatting bg-[#282c37]">
-        <div id="accordion-collapse" data-accordion="collapse" data-active-classes="bg-transparent">
-          <h2 id="accordion-collapse-heading-6">
-            <button type="button" class="flex items-center justify-between w-full p-5 font-medium text-left text-white bg-transparent" data-accordion-target="#accordion-collapse-body-6" aria-expanded="false" aria-controls="accordion-collapse-body-6">
-              <p class="text-white">게시글 작성하기</p>
-            </button>
-          </h2>
-        </div>
-      </div> {% endcomment %}
       <div id="accordion-collapse" data-accordion="collapse" data-active-classes="bg-transparent" class="ms-3 border-b-1 border-[#393f4f]">
         <h2 id="accordion-collapse-heading-2">
           <button type="button" class="flex items-center justify-between w-full p-5 font-medium text-left text-white" data-accordion-target="#accordion-collapse-body-2" aria-expanded="false" aria-controls="accordion-collapse-body-2">
@@ -509,7 +493,6 @@
         </div>
       <div>
 
-      
       <div class="flex flex-col">
         <div class="container mx-auto max-w-4xl my-8">
           <div class="my-4 mx-auto w-[80%] border-t-2 border-[#393f4f]">
@@ -572,103 +555,11 @@
   </div>
   {% comment %} <i class=" fa-sharp fa-solid fa-arrow-up fa-2xl" style="position:fixed; bottom:35px; right:35px; z-index: 999;" onclick="scrollTopFixed()"></i> {% endcomment %}
 </body>
-{% comment %} <script type="text/javascript" src="/static/js/base_index.js"></script> {% endcomment %}
-<script>
-  // vote.js 내용(적용이 안되서 임시로 여기로 적용)
-  const voteToggle = document.getElementById('vote-toggle');
-  const voteTopicsContainer = document.getElementById('vote-topics-container');
-  const voteTopics = document.getElementById('vote-topics');
   
-  voteToggle.addEventListener('click', function () {
-    const computedStyle = window.getComputedStyle(voteTopicsContainer);
-  
-    {% comment %} if (computedStyle.display === 'none') {
-      voteTopicsContainer.style.display = 'block';
-      // 첫 번째 주제를 제외한 주제들을 모두 삭제합니다.
-      const topicInputs = voteTopics.querySelectorAll('.vote-topic-input');
-      for (let i = topicInputs.length - 1; i > 0; i--) {
-        topicInputs[i].remove();
-      }
-      // 첫 번째 주제의 내용을 비웁니다.
-      const firstTopicInput = topicInputs[0].querySelector('input');
-      firstTopicInput.value = '';
-    } else {
-      voteTopicsContainer.style.display = 'none';
-    } {% endcomment %}
-    if (computedStyle.display === 'none') {
-      voteTopicsContainer.style.display = 'block';
-    } else {
-      voteTopicsContainer.style.display = 'none';
-      // 작성한 주제를 초기화합니다.
-      const topicInputs = voteTopics.querySelectorAll('.vote-topic-input');
-      for (let i = 0; i < topicInputs.length; i++) {
-        topicInputs[i].querySelector('input').value = '';
-      }
-    }
-  });
-  
-  
-  const plusButton = document.getElementById('plus-button');
-  
-  plusButton.addEventListener('click', function () {
-    event.preventDefault(); // 폼 제출 방지
-    const newTopicInput = document.createElement('input');
-    newTopicInput.type = 'text';
-    newTopicInput.name = 'title';
-    newTopicInput.classList.add(
-      'block',
-      'mt-2',
-      'w-full',
-      'bg-[#101013]',
-      'text-white',
-      'rounded-lg',
-      'py-2',
-      'px-3'
-    );
-  
-    const deleteButton = document.createElement('button');
-    deleteButton.textContent = '-';
-    deleteButton.setAttribute('class', 'delete-button');
-    deleteButton.addEventListener('click', function () {
-      voteTopics.removeChild(newTopicInput.parentNode);
-    });
-  
-    const inputWrapper = document.createElement('div');
-    inputWrapper.setAttribute('class', 'vote-topic-input');
-    inputWrapper.appendChild(newTopicInput);
-    inputWrapper.appendChild(deleteButton);
-  
-    voteTopics.appendChild(inputWrapper);
-
-  
-
-
-    $(document).ready(function(){
-      $('#post-form').on('submit', function(e){
-        e.preventDefault();
-        
-        // Your Ajax call or form submit code here
-
-        // After form submit, reset the form
-        this.reset();
-
-        // Hide the modal
-        $("#defaultModal").hide();
-
-        // In case you're using a plugin for the modal and it has a specific method to close it, use that. For example:
-        // $('#defaultModal').modal('hide');
-      });
-    });
-
-  
-  });</script>
-  
-{% comment %} <script src="{% static 'js/vote.js' %}"></script> {% endcomment %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
 <script src="https://kit.fontawesome.com/96b2992191.js" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 <script src="{% static 'js/base_index.js' %}"></script>
-<script src="{% static 'js/planet_index.js' %}"></script>
 {% block script %}
 {% endblock script %}
 </html>

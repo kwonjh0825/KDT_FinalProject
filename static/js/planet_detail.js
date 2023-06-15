@@ -28,9 +28,6 @@ function castVote(postPk, voteTitle) {
   });
 }
 
-// csrf
-const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
 var planetName = document
   .getElementById('comment-create-form')
   .getAttribute('data-planet-name');

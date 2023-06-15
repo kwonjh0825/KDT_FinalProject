@@ -1,3 +1,6 @@
+// csrf
+const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
 function scrollTopFixed() {
   window.scrollTo(0, 0);
 }
@@ -42,9 +45,6 @@ function getWeatherData(lat, lon) {
       );
       $('.weather_description').prepend($weather_description);
       $('.current_temp').prepend($Temp);
-      // $('.humidity').prepend($humidity);
-      // $('.wind').prepend($wind);
-      // $('.cloud').append($cloud);
       $('.temp_min').append($temp_min);
       $('.temp_max').append($temp_max);
     },
@@ -108,9 +108,57 @@ document.addEventListener('DOMContentLoaded', function() {
   
   document.querySelector('body').addEventListener('submit', function(e) {
     var target = e.target;
+  
+    // 게시글 생성
+    if (target.matches('#post-form')) {
+      e.preventDefault();
+  
+      var form = e.target;
+      var planetName = form.dataset.planetName;
+      var formData = new FormData(form);
+      formData.append('csrfmiddlewaretoken', csrftoken);
+  
+      axios({
+        method: 'post',
+        url: '/planets/' + planetName + '/create/',
+        data: formData,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+        .then(function (response) {
+          if (response.data.success) {
+            var post_pk = response.data.post_pk;
+            var postList = document.getElementById('post-list');
+            var newPostContainer = createpostContainer(
+              response.data.profile_image_url,
+              response.data.nickname,
+              response.data.created_time,
+              response.data.content,
+              response.data.tags,
+              post_pk,
+              response.data.image_url,
+              response.data.user,
+              response.data.votetopics,
+              // emote heart, thumbsup, thumbsdown은 새 게시물에서 0으로 시작
+              0,
+              0,
+              0,
+              response.data.vote_count,
+              response.data.voted
+            );
+  
+            postList.insertBefore(newPostContainer, postList.children[1]);
+            form.reset();
+          }
+        })
+        .catch(function (error) {
+          console.error('AJAX request failed:', error);
+        });
+    }
 
     // 메모 생성
-    if (target.matches('#create-memo-form')) {
+    else if (target.matches('#create-memo-form')) {
       e.preventDefault();
 
       var createForm = target;
@@ -283,4 +331,48 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
+const voteToggle = document.getElementById('vote-toggle');
+const voteTopicsContainer = document.getElementById('vote-topics-container');
+const voteTopics = document.getElementById('vote-topics');
 
+voteToggle.addEventListener('click', function () {
+  const computedStyle = window.getComputedStyle(voteTopicsContainer);
+
+  if (computedStyle.display === 'none') {
+    voteTopicsContainer.style.display = 'block';
+  } else {
+    voteTopicsContainer.style.display = 'none';
+    // 작성한 주제를 초기화합니다.
+    const topicInputs = voteTopics.querySelectorAll('.vote-topic-input');
+    for (let i = 0; i < topicInputs.length; i++) {
+      topicInputs[i].querySelector('input').value = '';
+    }
+  }
+});
+
+const plusButton = document.getElementById('plus-button');
+
+plusButton.addEventListener('click', function (event) {
+  event.preventDefault(); // 폼 제출 방지
+  const newTopicInput = document.createElement('input');
+  newTopicInput.type = 'text';
+  newTopicInput.name = 'title';
+  newTopicInput.classList.add(
+    'bg-[#101013]',
+    'text-white',
+    'mt-1',
+    'block',
+    'w-full',
+    'rounded-lg',
+  );
+  newTopicInput.maxLength = '255';
+  newTopicInput.id = 'id_title';
+  const deleteButton = document.createElement('button');
+  deleteButton.textContent = '-';
+  deleteButton.setAttribute('class', 'delete-button');
+  deleteButton.addEventListener('click', function () {
+    voteTopics.removeChild(newTopicInput.parentNode);
+  });
+
+  voteTopics.querySelector('.vote-topic-input').appendChild(newTopicInput);
+});

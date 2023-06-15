@@ -378,7 +378,7 @@ def post_create(request, planet_name, post_pk=None):
     form = PostForm(request.POST, request.FILES)
     votetopicform = VoteTopicForm(request.POST)
     accountbyplanet = Accountbyplanet.objects.get(planet=planet, user=request.user)
-
+    
     if post_pk:  # 기존 게시글 수정 처리
         try:
             post = Post.objects.get(pk=post_pk, planet=planet)
@@ -413,7 +413,7 @@ def post_create(request, planet_name, post_pk=None):
         else:
             errors = form.errors.as_json()
             return JsonResponse({'success': False, 'errors': errors})
-
+    
     vote_topics = VoteTopic.objects.filter(post=post)
     voted_topics = list(
             Vote.objects.filter(voter=accountbyplanet, votetopic__in=vote_topics).values_list('votetopic_id', flat=True)
