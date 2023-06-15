@@ -23,7 +23,6 @@ function createpostContainer(
   newPostContainer.querySelector('#post-nickname').textContent = nickname;
 
   // // 투표 주제 렌더링
-  console.log(votetopics);
   if (votetopics.length > 0) {
     votetopics.forEach(function (votetopic, index) {
       if (votetopic.title.trim() !== '') {

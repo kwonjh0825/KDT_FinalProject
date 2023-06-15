@@ -1,12 +1,19 @@
-{% extends 'base_accounts.html' %}
+{% extends 'base_nav.html' %}
 {% load static %}
 {% block title %}
 Services
 {% endblock title %}
 
 {% block content %}
-    
-<div class="container mx-auto px-4">
+<div class="flex">
+  <a href="javascript:history.back()" class="flex items-center pl-5  text-[#ffd951] " style="height: 50px;">
+      <span class="material-symbols-outlined">
+          chevron_left
+      </span>
+      Back
+  </a>
+</div>
+<div class="container mx-auto px-4 max-w-[540px]">
   <div class="py-12">
     <h1 class="text-4xl font-bold mb-4">Catsmos만의</h1>
     <h1 class="text-4xl font-bold mb-4">특별한 기능을 소개합니다!</h1>
@@ -39,7 +46,7 @@ Services
       <div class="card mb-8 overflow-hidden shadow-lg">
         <img class="w-full h-48 object-cover" src="{% static 'img/no_planet_img.png' %}" alt="Voting System">
         <div class="px-6 py-4">
-          <h5 class="font-bold text-xl mb-2">투표, 해시태그와 같은 풍푸한 기능</h5>
+          <h5 class="font-bold text-xl mb-2">투표, 해시태그와 같은 풍부한 기능</h5>
           <p class="text-gray-400 text-base">Our platform offers a democratic space where you can vote for various features, hashtags and more within your planet. Be a part of the decision-making process and let your voice be heard.</p>
         </div>
       </div>

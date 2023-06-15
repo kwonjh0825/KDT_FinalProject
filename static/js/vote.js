@@ -50,27 +50,21 @@ const voteTopics = document.getElementById('vote-topics');
 
 voteToggle.addEventListener('click', function () {
   const computedStyle = window.getComputedStyle(voteTopicsContainer);
-  console.log(computedStyle);
   if (computedStyle.display === 'none') {
-    console.log('hi');
     voteTopicsContainer.style.display = 'block';
   } else {
-    console.log('bye');
     // 이미지를 클릭하여 폼을 숨기는 경우, 첫 번째 주제를 제외한 나머지 주제를 삭제합니다.
     const topicInputs = voteTopics.querySelectorAll('.vote-topic-input');
     for (let i = topicInputs.length - 1; i > 0; i--) {
       topicInputs[i].remove();
     }
-
     voteTopicsContainer.style.display = 'none';
-    console.log('ㅎㅇㅎㅇ');
   }
 });
 
 const plusButton = document.getElementById('plus-button');
 
 plusButton.addEventListener('click', function () {
-  console.log('플러스!');
   event.preventDefault(); // 폼 제출 방지
   const newTopicInput = document.createElement('input');
   newTopicInput.type = 'text';
