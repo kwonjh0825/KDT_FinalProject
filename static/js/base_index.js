@@ -11,10 +11,10 @@ var weatherIcon = {
   '03': 'fas fa-cloud',
   '04': 'fas fa-cloud-meatball',
   '09': 'fas fa-cloud-sun-rain',
-  10: 'fas fa-cloud-showers-heavy',
-  11: 'fas fa-poo-storm',
-  13: 'far fa-snowflake',
-  50: 'fas fa-smog',
+  '10': 'fas fa-cloud-showers-heavy',
+  '11': 'fas fa-poo-storm',
+  '13': 'far fa-snowflake',
+  '50': 'fas fa-smog',
 };
 
 function getWeatherData(lat, lon) {
@@ -61,7 +61,7 @@ function success(position) {
 
 navigator.geolocation.getCurrentPosition(success);
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('body').addEventListener('click', function (e) {
     var target = e.target;
 
@@ -116,6 +116,9 @@ document.addEventListener('DOMContentLoaded', function () {
       var planetName = form.dataset.planetName;
       var formData = new FormData(form);
       formData.append('csrfmiddlewaretoken', csrftoken);
+      var redirectUrl = '/planets/' + planetName + '/';
+      var encodedPlanetName = encodeURIComponent(planetName);
+      var urlPattern = new RegExp('^/planets/' + encodedPlanetName + '/$');
 
       axios({
         method: 'post',
@@ -126,7 +129,10 @@ document.addEventListener('DOMContentLoaded', function () {
         },
       })
         .then(function (response) {
-          if (response.data.success) {
+          if (
+            response.data.success &&
+            urlPattern.test(window.location.pathname)
+          ) {
             var post_pk = response.data.post_pk;
             var postList = document.getElementById('post-list');
             var newPostContainer = createpostContainer(
@@ -149,6 +155,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
             postList.insertBefore(newPostContainer, postList.children[1]);
             form.reset();
+          } else if (
+            response.data.success &&
+            !urlPattern.test(window.location.pathname)
+          ) {
+            window.location.href = redirectUrl;
           }
         })
         .catch(function (error) {
