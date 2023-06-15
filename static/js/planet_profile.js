@@ -1,4 +1,4 @@
-// const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
 
 // 팔로잉
 if (document.querySelector('.follow-form')) {

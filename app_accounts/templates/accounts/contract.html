@@ -36,9 +36,6 @@ Catsmos
 	</ol>
 </div>
 
-	
-	
-{% comment %} <p class="text-4xl mb-3 pb-4 font-bold">Terms and Conditions</p> {% endcomment %}
 <hr class="border-t-2 border-yellow-300">
 <div class="relative overflow-x-auto rounded-md">
 	<table class="w-full text-md text-left text-gray-300 ">
@@ -98,16 +95,6 @@ Catsmos
 	<button onclick="redirectToSignupPage();" disabled="disabled" class="btn bg-gray-500 text-white font-bold py-2 px-4 rounded">다음으로</button>
 </div>
 
-
-	<!-- 이거 carousel 사용해서 바꿔볼 수 있을 듯 -->
-	<!-- 나중에 해보는걸로 -->
-	<!-- 참고 :  https://flowbite.com/docs/components/carousel/ -->
-
-
-
-{% comment %} <button type="button" id="btn1">1번 체크/언체크</button>
-<button type="button" id="btn2">2번 체크/언체크</button>
-<button type="button" id="btn3">3번 체크/언체크</button> {% endcomment %}
 {% endblock content %}
 
 {% block script %}
@@ -130,8 +117,6 @@ Catsmos
 			}
 		});
 
-		
-		
 		// 모든 체크박스를 클릭하면 버튼 활성화시키기
 		$('.order2_chks').click(function(){
 			var tmpp = $(this).prop('checked'); 
@@ -150,34 +135,7 @@ Catsmos
 				$(".btnArea button").css({"backgroundColor":"#6b7280","cursor":"auto","color":"#fff"}).prop("disabled",true);
 
 			}
-
-			});
-		  
-		  
 		});
-	{% comment %} $('#btn1').click(function(){
-        var checked = $('#ck1').is(':checked');
-		$('#ck1').prop('checked',!checked);
 	});
-	
-	$('#btn2').click(function(){
-        var checked = $('#ck2').is(':checked');
-		$('#ck2').prop('checked',!checked);
-	});
-	
-	$('#btn3').click(function(){
-        var checked = $('#ck3').is(':checked');
-		$('#ck3').prop('checked',!checked);
-	});
-	
-	$('#allCk').click(function(){
-        var checked = $('#allCk').is(':checked');
-		alert("체크박스 체크했음!");
-		if(checked)
-        $('input:checkbox').prop('checked',true);
-        else
-        $('input:checkbox').prop('checked', false);
-        
-	}); {% endcomment %}
 </script>
 {% endblock script %}

@@ -36,7 +36,6 @@
         </div>
       {% endif %}
 
-
       <p class="text-xl pt-5 mb-5 border-t-2 border-[#393f4f]">내가 가입한 행성</p> <!-- Planet lists -->
       {% if user_by_planets_not_star %}
         {% for user_by_planets_not_star in user_by_planets_not_star %}
@@ -111,6 +110,5 @@
 <script>
   var requestuser = "{{ request.user }}";
   var requestuser_nickname= "{{ user.nickname }}";
-  
 </script>
 {% endblock script %}

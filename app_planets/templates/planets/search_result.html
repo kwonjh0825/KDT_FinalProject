@@ -11,15 +11,6 @@
 
 {% block content %}
   <div class="max-w-[2000px] mx-auto mt-12">
-    {% comment %} <div class="flex flex-col">
-      <div class="flex flex-col justify-center items-center pt-32 p-20">
-        <p class="text-4xl text-[#ffffff]">"Create your own world"</p>
-        <p class="text-4xl text-[#ffffff]">"within the confines of Space."</p>
-        <p class="text-2xl text-[#ffffff] mt-20">Our service is built with a focus on selective sharing,</p>
-        <p class="text-2xl text-[#ffffff]">privacy protection, aligned interests, a closed network,<br> and enhanced security.</p>
-      </div>
-    </div> {% endcomment %}
-
     <!-- 좌측 사이드바 -->
     <div class="flex justify-center flex-row mt-10 me-10">
       <div class="hidden md:block md:w-1/4 pe-10 me-10 pt-20 ps-5">
@@ -68,7 +59,6 @@
           </a>
         </div>
       </div>
-
 
       <!-- 메인 내용 -->
       <div class="w-full mb:w-3/4 ms-10 mb-20">
@@ -247,29 +237,5 @@
       console.error(error);
     });
   });
-  
-  
-
-  {% comment %} inviteModal.addEventListener('click', function(event) {
-    if (event.target === inviteModal) {
-      inviteModal.classList.add('hidden');
-      errorText.classList.add('hidden');
-    }
-  });
-
-  inviteForm.addEventListener('submit', function(event) {
-      // 기본 동작 방지
-    event.preventDefault();
-    
-    // 폼 데이터 가져오기
-    const userInput = inviteForm.querySelector('input[name="user_input"]').value;
-
-    // 폼 데이터 처리
-    // 예: 서버로 전송하여 처리하거나, 다른 동작 수행 등
-
-    // 폼 제출
-    inviteForm.submit();
-  }); {% endcomment %}
-
 </script>
 {% endblock script %}

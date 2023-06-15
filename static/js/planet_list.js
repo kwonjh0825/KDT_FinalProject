@@ -1,3 +1,4 @@
+const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
 const modalButton = document.getElementById('modalButton');
 const inviteModal = document.getElementById('inviteModal');
 const inviteForm = document.getElementById('inviteForm');
@@ -21,17 +22,17 @@ inviteForm.addEventListener('submit', function(event) {
   event.preventDefault();
   
   // 폼 데이터 가져오기
-  const userInput = inviteForm.querySelector('input[name="user_input"]').value;
+  const userInput = inviteForm.querySelector('input[name="invitation_code"]').value;
 
   // 폼 데이터 처리
   // 예: 서버로 전송하여 처리하거나, 다른 동작 수행 등
 
   // AJAX 요청 보내기
-  fetch('{% url "planets:invite_create" %}', {
+  fetch('/planets/invite_create/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'X-CSRFToken': '{{ csrf_token }}',
+      'X-CSRFToken': csrftoken,
     },
     body: JSON.stringify({
       user_input: userInput
