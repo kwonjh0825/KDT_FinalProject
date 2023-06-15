@@ -374,7 +374,11 @@ document.addEventListener('DOMContentLoaded', function () {
               response.data.created_time,
               response.data.content,
               response.data.comment_pk,
-              response.data.user
+              response.data.user, 
+              0,
+              0,
+              0,
+              0
             );
             commentList.append(newCommentContainer);
             form.reset();
