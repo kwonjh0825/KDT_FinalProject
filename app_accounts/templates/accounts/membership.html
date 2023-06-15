@@ -1,12 +1,22 @@
-{% extends 'base_accounts.html' %}
+{% extends 'base_nav.html' %}
 {% load static %}
 {% block title %}
 Membership
 {% endblock title %}
 
 {% block content %}
-    
-  <div class="flex justify-center">
+<div class="flex">
+    <a href="javascript:history.back()" class="flex items-center pl-5  text-[#ffd951] " style="height: 50px;">
+        <span class="material-symbols-outlined">
+            chevron_left
+        </span>
+        Back
+    </a>
+  </div>
+  
+  <img type="button" class="mx-auto pb-5 md:w-[400px] w-[300px]" src="{% static 'img/main_logo.png' %}" alt="">
+  
+  <div class="flex justify-center max-w-xl  mx-auto">
       <div class="planet-list-box w-full m-3 rounded-lg shadow-lg">
         <div class="grid grid-cols-2 gap-5">
             <div class="  col rounded-lg ">

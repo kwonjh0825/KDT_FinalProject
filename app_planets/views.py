@@ -228,6 +228,8 @@ def index(request, planet_name):
         'memoform': memoform,
         'first_post': Post.objects.filter(planet=planet).first(),
         'user': Accountbyplanet.objects.get(planet=planet, user=request.user),
+        'user_id': request.user,
+
     }
     return render(request, 'planets/index.html', context)
 
@@ -266,7 +268,7 @@ def index_list(request, planet_name):
         'user_categories' : user_categories,
         'planet_recommends': planet_recommends,
         'planet_not_recommends': planet_not_recommends,
-
+        'user_id': request.user,
     }
     return render(request, 'planets/index_list.html', context)
 
@@ -304,6 +306,7 @@ def planet_introduction(request, planet_name):
         'memoform': memoform,
         'user': Accountbyplanet.objects.get(planet=planet, user=request.user),
         'postform':postform,
+        'user_id': request.user,
     }
 
     return render(request, 'planets/planet_introduction.html', context)
@@ -499,6 +502,7 @@ def post_detail(request, planet_name, post_pk):
         'total_vote_count': sum(vote_count),
         'voted': True if voted_topics else False,
         'vote_topics':vote_topics,
+        'user_id': request.user,
     }
     
     return render(request, 'planets/planet_detail.html', context)
@@ -1038,6 +1042,7 @@ def tags_list(request, planet_name):
         'total_posts': total_posts,
         'planet': planet,
         'user': accountbyplanet,
+        'user_id': request.user,
     }
     return render(request, 'planets/planet_tags.html', context)
 
@@ -1086,6 +1091,7 @@ def post_tag(request, planet_name, tag_name):
         'memoform': memoform,
         'planet': planet,
         'user': accountbyplanet,
+        'user_id': request.user,
     }
     return render(request, 'planets/planet_posts_filter.html', context)
 

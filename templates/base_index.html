@@ -53,35 +53,18 @@
     </script>
   {% endfor %}
 {% endif %}
+
   <!-- nav 바, md:hidden -->
   <nav class="sticky top-0 w-full z-[1] lg:hidden">
     <div class="flex justify-between border-b-2 border-[#393f4f] bg-[#191b22] text-[#ffd951] font-bold p-5 w-full">
       <a class="mt-3" href="{% url 'planets:main' %}">
         <img type="button" style="height:30px;" src="{% static 'img/catsmos_logo.png' %}" alt="">
       </a>      
-      <div class="flex flex-row">
-        <div class="ms-3 p-1">
-          <button data-collapse-toggle="navbar-hamburger" type="button" class="inline-flex items-center p-2 ml-3 text-sm" aria-controls="navbar-hamburger" aria-expanded="false">
-            <svg viewBox="0 0 32 32" width="30" height="30" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 32 32"><path d="M4 10h24a2 2 0 0 0 0-4H4a2 2 0 0 0 0 4zm24 4H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4zm0 8H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4z" fill="#ffd951" class="fill-000000"></path></svg>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div class="bg-[#191b22] max-w-screen-xl flex flex-row items-center justify-between mx-auto ">
-      <div class="hidden border-b-1 border-[#393f4f] w-full" id="navbar-hamburger">
-        <div>
-          <a href="#" class="block py-2 pl-3 pr-4 text-white rounded hover:bg-[#ffd951]">Home</a>
-        </div>
-        <div>
-          <a href="#" class="block py-2 pl-3 pr-4 text-white rounded hover:bg-[#ffd951]">Services</a>
-        </div>
-        <div>
-          <a href="#" class="block py-2 pl-3 pr-4 text-white rounded hover:bg-[#ffd951]">Pricing</a>
-        </div>
-        <div>
-          <a href="#" class="block py-2 pl-3 pr-4 text-white rounded hover:bg-[#ffd951]">Contact</a>
-        </div>
+      <!-- Modal toggle -->
+      <div class="ms-3 p-1">
+        <button data-collapse-toggle="navbar-hamburger" type="button" class="inline-flex items-center p-2 ml-3 text-sm" aria-controls="navbar-hamburger" aria-expanded="false">
+          <svg viewBox="0 0 32 32" width="30" height="30" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 32 32"><path d="M4 10h24a2 2 0 0 0 0-4H4a2 2 0 0 0 0 4zm24 4H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4zm0 8H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4z" fill="#ffd951" class="fill-000000"></path></svg>
+        </button>
       </div>
     </div>
   </nav>
@@ -95,6 +78,64 @@
     </div>
   </div>
 
+  <!-- 문제 -->
+  <div class="bg-[#282c37] flex-row items-center justify-between mx-auto ">
+    <div class="hidden border-b-1 border-[#393f4f] w-full" id="navbar-hamburger">
+      <div id="accordion-collapse" data-accordion="collapse" data-active-classes="bg-transparent" class="ms-3 border-b-1 border-[#393f4f]">
+        <h2 id="accordion-collapse-heading-5">
+          <button type="button" class="flex items-center justify-between w-full p-3 font-medium text-left text-white" data-accordion-target="#accordion-collapse-body-5" aria-expanded="false" aria-controls="accordion-collapse-body-5">
+            <span class="text-white">페이지로 이동</span>
+            <svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+          </button>
+        </h2>
+        <div id="accordion-collapse-body-5" class="hidden" aria-labelledby="accordion-collapse-heading-5">
+          <div class="p-3 text-sm">
+            <p class="mb-3 hover-grow-fast">
+              <a href="{% url 'planets:main' %}" class="mb-5 text-white">Home</a>
+            </p>
+            <p class="mb-3 hover-grow-fast">
+              <a href="{% url 'planets:planet_list' %}" class="text-white">행성 리스트</a>
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <button type="button" class="flex items-center justify-between w-full p-3 font-medium text-left text-white">
+            <a href="{% url 'accounts:services' %}" class="text-white">service 소개</a>
+          </button>
+        </div>
+
+        <div>
+          <button type="button" class="flex items-center justify-between w-full p-3 font-medium text-left text-white">
+            <a href="{% url 'accounts:membership' %}" class="text-white">멤버십 가입</a>
+          </button>
+        </div>
+
+        <h2 id="accordion-collapse-heading-6">
+          <button type="button" class="flex items-center justify-between w-full p-3 font-medium text-left text-white" data-accordion-target="#accordion-collapse-body-6" aria-expanded="false" aria-controls="accordion-collapse-body-6">
+            <span class="text-white">계정 관리</span>
+            <svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+          </button>
+        </h2>
+        <div id="accordion-collapse-body-6" class="hidden" aria-labelledby="accordion-collapse-heading-6">
+          <div class="p-3 text-sm">
+            <p class="mb-3 hover-grow-fast">
+              <a href="{% url 'accounts:profile' user_id  %}" class="mb-5 text-white">계정 프로필</a>
+            </p>
+            <p class="mb-3 hover-grow-fast">
+              <a href="{% url 'accounts:profile_update' %}" class="text-white">회원정보 수정</a>
+            </p>
+            <p>
+              <form action="{% url 'accounts:logout' %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="hover-grow-fast">로그아웃</button>
+              </form>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   
   <!-- nav 바 아래, sm:hidden -->
   <div class="w-full text-[#d9e1e8] bg-[#191b22] sm:hidden">
@@ -337,7 +378,7 @@
             <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
               <div>
                 <h2 class="mb-4 text-sm text-white uppercase">◽ Front-end</h2>
-                <ul class="text-gray-600 font-medium">
+                <ul class="text-gray-400 font-medium">
                   <li class="mb-4">
                     <a href="https://github.com/ParkJiHwan22" class="hover:underline ms-2">박지환</a>
                   </li>
@@ -348,7 +389,7 @@
               </div>
               <div>
                 <h2 class="mb-4 text-sm font-semibold text-white uppercase">◽ Back-end</h2>
-                <ul class="text-gray-600 dark:text-gray-400 font-medium">
+                <ul class="text-gray-400 dark:text-gray-400 font-medium">
                   <li class="mb-4">
                     <a href="https://github.com/sotthang" class="hover:underline ms-2">소현섭</a>
                   </li>
@@ -418,7 +459,7 @@
 
         <div>
           <button type="button" class="flex items-center hover-grow-fast justify-between w-full p-5 font-medium text-left text-white">
-            <a href="{% url 'accounts:services' %}" class="text-white">service 소개</a>
+            <a href="{% url 'accounts:services' %}" class="text-white">서비스 소개</a>
           </button>
         </div>
 
@@ -437,7 +478,7 @@
         <div id="accordion-collapse-body-3" class="hidden" aria-labelledby="accordion-collapse-heading-3">
           <div class="p-5">
             <p class="mb-5 hover-grow-fast">
-              <a href="{% url 'accounts:profile' user %}" class="mb-5 text-white">계정 프로필</a>
+              <a href="{% url 'accounts:profile' user_id  %}" class="mb-5 text-white">계정 프로필</a>
             </p>
 
             <p class="mb-5 hover-grow-fast">
@@ -491,8 +532,28 @@
     </nav>
     
   </div>
-
-  <i class="fa-sharp fa-solid fa-arrow-up fa-2xl" style="position:fixed; bottom:35px; right:35px; z-index: 999;" onclick="scrollTopFixed()"></i>
+  <div data-tooltip-target="tooltip-create" class="fixed right-20 bottom-3 group hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-500 bg-yellow-300 rounded-lg">
+    <button id="post-btn" data-modal-target="create" data-modal-toggle="create" type="button" class="flex items-center justify-center ml-auto text-white  w-12 h-12  focus:outline-none ">
+        <svg aria-hidden="true" class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path></svg>
+    </button>
+    <div id="tooltip-create" role="tooltip" class="whitespace-nowrap absolute z-10 invisible inline-block px-2.5 py-1.5 text-sm font-medium text-white transition-opacity duration-300 bg-yellow-500 rounded-lg shadow-sm opacity-0 tooltip ">
+      게시글 작성
+      <div class="tooltip-arrow" data-popper-arrow></div>
+    </div>
+  </div>
+  <div data-tooltip-target="tooltip-top" class="fixed right-5 bottom-3 group hover:bg-blue-500 focus:ring-4 focus:ring-blue-500 bg-blue-300 rounded-lg">
+    <button id="post-btn" data-modal-target="top" data-modal-toggle="top" type="button" class="flex items-center justify-center ml-auto text-white  w-12 h-12  focus:outline-none ">
+        {% comment %} <svg aria-hidden="true" class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path></svg> {% endcomment %}
+        <span class="material-symbols-outlined text-4xl font-bold">
+          arrow_upward
+          </span>
+    </button>
+    <div id="tooltip-top" role="tooltip" class="whitespace-nowrap absolute z-10 invisible inline-block px-2.5 py-1.5 text-sm font-medium text-white transition-opacity duration-300 bg-blue-500 rounded-lg shadow-sm opacity-0 tooltip ">
+      상단으로 가기
+      <div class="tooltip-arrow" data-popper-arrow></div>
+    </div>
+  </div>
+  {% comment %} <i class=" fa-sharp fa-solid fa-arrow-up fa-2xl" style="position:fixed; bottom:35px; right:35px; z-index: 999;" onclick="scrollTopFixed()"></i> {% endcomment %}
 </body>
   
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
