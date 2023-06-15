@@ -28,7 +28,7 @@
 {% endblock style %}
 
 {% block content %}
-<p class="text-4xl mb-3 pb-2">회원가입</p>
+<p class="text-4xl mb-3 pb-2">행성 가입</p>
 <p class="text-end text-xs text-gray-400"><span class="text-red-700">*</span> : required</p>
 <hr class="border-t-2 border-yellow-300">
 <form id="profile-form" action="{% url 'planets:planet_join' planet.name %}" method="POST" enctype="multipart/form-data">
@@ -85,7 +85,7 @@
     </tr>
   </table>
   <div class="grid mt-8">
-    <button id="create-profile-btn" class="btn bg-[#ffd951] text-white font-bold py-2 px-4 rounded" type="submit">Create</button>
+    <button id="create-profile-btn" class="btn bg-[#ffd951] text-white font-bold py-2 px-4 rounded" type="submit">가입하기</button>
   </div>
 </div>
 </form>
