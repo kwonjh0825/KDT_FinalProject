@@ -87,13 +87,9 @@ document.addEventListener('DOMContentLoaded', function() {
             if (response.data.star) {
               target.classList.remove('fa-regular');
               target.classList.add('fa-solid');
-              document.querySelector('#star-content').textContent =
-                '행성 즐겨찾기에서 제거';
             } else {
               target.classList.remove('fa-solid');
               target.classList.add('fa-regular');
-              document.querySelector('#star-content').textContent =
-                '행성 즐겨찾기에 추가';
             }
           } else {
             console.error('Star failed.');
