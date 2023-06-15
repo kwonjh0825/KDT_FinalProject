@@ -256,8 +256,13 @@ def index_list(request, planet_name):
     # 행성에 계정이 없는 경우 또는 가입 승인 대기 중인 경우
     if not request.user.is_authenticated or not Accountbyplanet.objects.filter(planet=planet, user=request.user).exists() or Accountbyplanet.objects.get(planet=planet, user=request.user).is_confirmed == False: 
         return redirect('planets:main')
-
+    
+    postform = PostForm()
+    votetopicform = VoteTopicForm()
+        
     context = {
+        'votetopicform': votetopicform,
+        'postform': postform,
         'planet': planet,
         'memo': memo,
         'memoform': memoform,
