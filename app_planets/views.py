@@ -1201,5 +1201,6 @@ def post_search(request, planet_name):
         'postform': postform,
         'memo': memo,
         'memoform': memoform,
+        'user_id': request.user,
     }
     return render(request, 'planets/planet_posts_filter.html', context)
