@@ -60,10 +60,6 @@
         {% endif %}
       </div>
     {% endfor %}
-    {% comment %} # 게시글 신고 관리
-    path('planets/<str:planet_name>/admin/report/', views.admin_report, name='admin_report'),
-    # 행성 내 회원 관리
-    path('planets/<str:planet_name>/admin/member/', views.admin_member, name='admin_member'), {% endcomment %}
     <div class="flex flex-row text-xl pt-5 mb-5 border-t-2 border-[#393f4f]">
       {% if user.admin_level == 3 %}
         <a href="{% url 'planets:planet_admin' planet.name %}" class="button-big button-color-join bg-[#ffc800] p-2 ml-auto text-base text-center rounded-md">행성 관리</a>
@@ -71,7 +67,6 @@
     </div>
   </div>
 </div>
-
 {% endblock content %}
 
 {% block script %}

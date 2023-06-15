@@ -42,7 +42,6 @@
       </td>
     </tr>
     {% endfor %}
-
   </tbody>
 </table>
 </div>
@@ -55,11 +54,6 @@
 <div class="btnArea grid">
   <button onclick="redirectToSignupPage();" disabled="disabled" class="btn bg-gray-500 text-white font-bold py-2 px-4 rounded">다음으로</button>
 </div>
-
-
-
-
-
 {% endblock content %}
 
 {% block script %}
@@ -119,22 +113,11 @@
 			if(tt == ss){
 				$("#order2_chk").prop("checked",true);
         $(".btnArea button").css({"backgroundColor":"#ffd951","cursor":"pointer","color":"#fff"}).prop("disabled",false);
-
 			}else{
 				$("#order2_chk").prop("checked",false);
         $(".btnArea button").css({"backgroundColor":"#6b7280","cursor":"auto","color":"#fff"}).prop("disabled",true);
-
 			}
-			
 			});
-		  
-		  
 		});
-
 </script>
 {% endblock script %}
-
-
-
-
-<!-- 동의합니다 수정 필요함!-->

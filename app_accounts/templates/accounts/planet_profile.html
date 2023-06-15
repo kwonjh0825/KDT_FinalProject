@@ -14,7 +14,6 @@ Catsmos
     width: 98%;
     height: 100%;
     object-fit: cover;
-    {% comment %} object-position: 20% 10%; {% endcomment %}
     vertical-align: middle;
   
   }
@@ -27,7 +26,6 @@ Catsmos
     word-wrap: break-word;
     width: 500px;
 }
-  
 
 {% endblock style %}
 {% block content %}
@@ -39,15 +37,12 @@ Catsmos
         Back
     </a>
   </div>
-<div class="container mx-auto max-w-[900px] ">
-{% comment %} 
-    <div class=" relative" style="height:180px; background-color: #181A20;"> {% endcomment %}
+<div class="container mx-auto max-w-[900px]">
         {% if user_by_planet.background_image %}
         <img class=" relative w-full" style="height:200px;" src="{{ user_by_planet.background_image.url }}" alt="#">
         {% else %}
         <img class="relative w-full" style="height:200px;" src="{% static 'img/no_background_img.jpeg' %}" alt="no_image">
         {% endif %}
-    {% comment %} </div> {% endcomment %}
     <!-- 프로필 사진 -->
     <div class="absolute -mt-12 ml-5">
         {% if user_by_planet.profile_image %}
@@ -58,11 +53,6 @@ Catsmos
     </div>
     <!-- 내용 -->
     <div class="my-3 mr-5 flex gap-3" style="float: right;">
-        {% comment %} <button data-modal-target="defaultModal" data-modal-toggle="defaultModal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700" type="button">
-            <span class="material-symbols-outlined">
-                groups
-                </span>
-        </button>  {% endcomment %}
         <!-- 팔로우 버튼 --> 
         {% if request.user.is_authenticated %}
             {% if request_user != user_by_planet %}
@@ -77,8 +67,6 @@ Catsmos
                 <a type="button" class="rounded-md bg-gray-500 hover:bg-gray-400 px-4 py-2" href="{% url 'planets:planet_profile_update' user_by_planet.planet.name user_by_planet.nickname %}">프로필 수정</a>
                 {% endif %}
         {% endif %}
-        {% comment %} {% if request.user.is_authenticated %} {% endcomment %}
-        {% comment %} <a type="button" class="rounded-md bg-gray-500 hover:bg-gray-400 px-4 py-2" href="{% url 'planets:planet_profile_update' user_by_planet.planet.name user_by_planet.nickname %}">프로필 수정</a> {% endcomment %}
     </div>
     <!-- 개인정보 -->
     <div class=" ml-20 pl-12 pt-3 mb-5 flex items-end gap-4">
@@ -86,15 +74,7 @@ Catsmos
         <p class="text-xs text-center">{{ user_by_planet.post_set.all|length }} <br> <span class="text-slate-500">게시물</span> </p>
         <p class="text-xs text-center"><span class="following-count">{{ user_by_planet.followings.all|length }}</span> <br> <button data-modal-target="defaultModal1" data-modal-toggle="defaultModal1" type="button" class="text-slate-500">팔로잉</button> </p>
         <p class="text-xs text-center"><span class="follower-count">{{ user_by_planet.followers.all|length }}</span> <br> <button data-modal-target="defaultModal2" data-modal-toggle="defaultModal2" type="button" class="text-slate-500">팔로워</button> </p>
-
-        {% comment %} <p class="text-slate-500">{{ user.email }}</p> {% endcomment %}
-        {% comment %} <!-- 회원가입한 날짜 -->
-        <div class="text-xs flex items-end">
-            <p class="text-slate-700">JOINED : </p>
-            <p class="text-slate-400 text-xs">{{ user_by_planet.planet.created_at|date:'m d, Y' }}</p>
-        </div> {% endcomment %}
     </div>
-
 
     <div class=" pt-6">
     </div>
@@ -131,9 +111,7 @@ Catsmos
             </div>
             <p class="absolute right-4 top-3 text-slate-400 text-xs">{{ post.created_at|date:'m d' }}</p>
             <a href="{% url 'planets:post_detail' planet_name=post.planet.name post_pk=post.pk %}" class="absolute right-4 bottom-3 text-slate-400 text-xs">행성에서 보기</a>
-            
-
-
+   
             <script>
                 window.addEventListener('DOMContentLoaded', (event) => {
                     var showImageBtn{{ forloop.counter }} = document.getElementById("showImageBtn{{ forloop.counter }}");
@@ -153,12 +131,8 @@ Catsmos
                     }
                 });
             </script>
-            
         </div>
-    
     {% endfor %}
-
-    
 
 </div>
   <!-- Main modal -->
@@ -232,11 +206,9 @@ Catsmos
         </div>
     </div>
 </div>
-
 {% endblock content %}
 
 {% block script %}
-
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="{% static 'js/planet_profile.js' %}"></script>
 <script>
@@ -244,32 +216,4 @@ Catsmos
   var requestuser_nickname= "{{ user.nickname }}";
 </script>
 <script src="{% static 'js/planet_post_more.js' %}"></script>
-
 {% endblock script %}
-
-<!-- 게시글 삭제 -->
-{% comment %} 
-{% if request.user == post.accountbyplanet.user %}
-<form class="delete-post-form" data-planet-name="{{ planet.name }}" data-post-pk="{{ post.pk }}">
-    {% csrf_token %}
-    <input type="submit" class="delete-post-button" value="게시글 삭제">
-</form>
-<button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="defaultModal">
-    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-    <span class="sr-only">Close modal</span>
-</button>
-{% endif %} 
-{% endcomment %}
-
-<!-- 개수 -->
-{% comment %} <div class="my-4 ml-2">
-    <p>{{ user_by_planet.post_set.all|length }} <span class="text-slate-500">Posts</span> </p>
-    <p>{{ user_by_planet.followings.all|length }} <span class="text-slate-500">Followings</span> </p>
-    <p>{{ user_by_planet.followers.all|length }} <span class="text-slate-500">Followers</span> </p>
-</div>  {% endcomment %}
-
-    <!--  1. posts - planet.user 가 작성한 postslists 나열
-        2. 팔로잉 중인 유저들 나열
-        3. user 를 팔로우 하는 another users 나열
-
-    -->

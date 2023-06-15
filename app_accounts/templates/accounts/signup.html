@@ -10,62 +10,6 @@ Catsmos
 {% endblock style %}
 
 {% block content %}
-{% comment %} <div class="container mx-auto flex justify-center h-screen">
-  <div class="w-full">
-    <p class="text-4xl mb-3 pb-4 font-bold">Sign up</p>
-    <hr class="border-t-2 border-yellow-300">
-    <form action="{% url 'accounts:signup' %}" method="POST" enctype="multipart/form-data">
-      {% csrf_token %}
-      <div class="grid">
-        <!-- id -->
-        <label for="username" class="ml-1 mt-2 block text-lg font-medium text-slate-300">ID</label>
-        <input type="text" id="username" name="username" value="{{ user.username }}" class="form-input mt-1 rounded-md bg-[#101013] " required>
-        <small id="usernameMessage" class="pt-2 text-xs text-gray-400">5자 이상이어야 합니다</small>
-
-        <!-- email -->
-        <label for="email" class="ml-1 mt-2 block text-lg font-medium text-slate-300">E-mail</label>
-        <input type="text" id="email" name="email" value="{{ user.email }}" class="form-input mt-1 rounded-md bg-[#101013] " required>
-        <small id="emailMessage" class="pt-2 text-xs text-gray-400">이메일 양식으로 작성해야 합니다</small>
-
-        <div class="flex gap-5">
-          <div class="w-full">
-            <!-- last_name -->
-            <label for="last_name" class="ml-1 mt-2 block text-lg font-medium text-slate-300">Last_name</label>
-            <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}" class="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 border-gray-400 appearance-none dark:text-white dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required>
-          </div>
-          <div class="w-full">
-            <!-- first_name -->
-            <label for="first_name" class="ml-1 mt-2 block text-lg font-medium text-slate-300">First_name</label>
-            <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}" class="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 border-gray-400 appearance-none dark:text-white dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required>
-          </div>
-        </div>
-        <div class="flex gap-5">
-          <div class="w-full">
-            <!-- password1 -->
-            <label for="password1" class="ml-1 mt-2 block text-lg font-medium text-slate-300">Password</label>
-            <input type="password" id="password1" name="password1" value="{{ user.password1 }}" class="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 border-gray-400 appearance-none dark:text-white dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required>
-            <small id="password1Message" class="text-xs text-gray-400">8자 이상,16자 이하여야 합니다</small>
-          </div>
-          <div class="w-full">
-            <!-- password2 -->
-            <label for="password2" class="ml-1 mt-2 block text-lg font-medium text-slate-300">Confirm password</label>
-            <input type="password" id="password2" name="password2" value="{{ user.password2 }}" class="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 border-gray-400 appearance-none dark:text-white dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required>
-            <small id="password2Message" class="text-xs text-gray-400"></small>
-          </div>
-        </div>
-        <!-- checkbox -->
-        <div class="flex items-center my-4 ml-2">
-          <input id="signup-checkbox" type="checkbox" class="w-4 h-4 text-yellow-600 bg-gray-100 border-gray-300 rounded focus:ring-yellow-500 dark:focus:ring-yellow-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-400" required>
-          <label for="signup-checkbox" class="ml-2 text-sm font-medium dark:text-gray-300">I have read and agree to the privacy policy</label>
-        </div>
-        <!-- 버튼 -->
-        <div class="grid mt-3">
-          <button type="submit" class="bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded shadow">Submit</button>
-        </div>
-      </div>
-    </form>
-  </div>
-</div> {% endcomment %}
 <div class="ml-2 pb-14">
 	<ol class="flex w-full">
 		<li class="relative flex w-[1200px] items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-yellow-400 after:border-4 after:inline-block ">
@@ -97,9 +41,7 @@ Catsmos
 
 <div class="container mx-auto flex justify-center h-screen">
   <div class="w-full">
-    {% comment %} <p class="text-4xl mb-3 pb-4 font-bold">Sign up</p> {% endcomment %}
     <hr class="border-t-2 border-yellow-400">
-    {% comment %} <div class="bg-gradient-to-r from-yellow-200 via-yellow-300 to-yellow-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-400 font-medium rounded-lg text-sm px-5 h-0.5 "></div> {% endcomment %}
     <form action="{% url 'accounts:signup' %}" method="POST" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="grid mt-5">
@@ -144,8 +86,6 @@ Catsmos
         </div>
         <!-- checkbox -->
         <div class="flex items-center my-4 ml-2">
-          {% comment %} <input id="signup-checkbox" type="checkbox" class="w-4 h-4 text-yellow-600 bg-gray-100 border-gray-300 rounded focus:ring-yellow-400 dark:focus:ring-yellow-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-400" required>
-          <label for="signup-checkbox" class="ml-2 text-sm font-medium dark:text-gray-300"></label> {% endcomment %}
         </div>
         <!-- 버튼 -->
         <div class="grid mt-3">

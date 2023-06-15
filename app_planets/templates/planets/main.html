@@ -11,12 +11,10 @@ Catsmos
 
 {% block content %}
 
-{% comment %} <div class="flex flex-col justify-center max-w-768 items-center pt-40 p-20 bg-cover bg-center" style="background-image: url('static/img/catsmos.png'); z-index: 10;">  {% endcomment %}
 <div class="flex flex-col justify-center max-w-768 items-center pt-20 p-10 bg-cover bg-center" style=" z-index: 10;"> 
   <img type="button" class=" md:w-[500px] w-[300px]" src="{% static 'img/main_logo.png' %}" alt="">
   <p class="text-base text-gray-200 mt-16 md:text-2xl">캣츠모스에 오신걸 환영합니다!</p>
   <p class="text-base mt-3 text-gray-200 md:text-2xl">나만의 행성을 만들거나 행성에 <br class="md:hidden"> 가입해 사람들과 소통해보세요!</p>
-
 </div>
 <div class="flex justify-center items-center">
   {% if request.user.is_authenticated %}

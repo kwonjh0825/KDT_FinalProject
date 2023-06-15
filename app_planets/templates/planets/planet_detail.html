@@ -15,23 +15,14 @@
 {% endblock head %}
 
 {% block content %}
-
 <div id="accordion-collapse-body-6" style="display:none" aria-labelledby="accordion-collapse-heading-6">
   <p class="border-b-2 border-[#393f4f] text-2xl text-white p-5">게시글 작성하기</p>
   <div class="p-5 border-b-2 border-[#393f4f]">
-    {% comment %} <form id="post-form" data-planet-name="{{ planet.name }}">
-      {% csrf_token %}
-      {{ postform | crispy }}
-      <button type="submit" class="chatting-create-btn bg-[#bcbdbf] mx-auto" style="text-align: center;">
-        게시글 작성
-      </button>
-    </form> {% endcomment %}
     <form id="post-form" data-planet-name="{{ planet.name }}">
       {% csrf_token %}
 
       <div class="w-full mb-5">
         <label for="id_content" class="block text-base text-slate-300 mb-2">내용</label>
-
       </div>
       <img src="{% static 'img/vote.png' %}" class="h-16 w-16 my-3" alt="투표" id="vote-toggle">
       
@@ -44,7 +35,6 @@
           </div>
         </div>
       </div>
-
       <div class="flex flex-row">
         <div>
           <label for="id_image" class="block text-base text-slate-300 mb-2"></label>
@@ -115,15 +105,12 @@
                   </div>
                 </div>
             {% else %}
-            
               <button class='text-[#bcbdbf] my-1 rounded-md p-2 border w-full' onclick="castVote({{ post.pk }}, '{{ votetopic.title }}')">{{votetopic.title}}</button>
-            
             {% endif %}
           {% endfor %}
           </div>
           {% endif %}
         </div>
-
         
         <!-- 감정표현 및 더보기 -->
         <div class="border-b-2 border-[#393f4f]">
@@ -192,7 +179,6 @@
         </div>
       </div>
     </div>
-
     <form id="comment-create-form" style="display:none" data-planet-name="{{ planet.name }}" data-post-pk="{{ post.pk }}">
       {% csrf_token %}
       {{ commentform }}
@@ -213,10 +199,6 @@
 <script>
   var requestuser = "{{ request.user }}";
   var requestuser_nickname= "{{ user.nickname }}";
-  {% comment %} var votetopicsDiv = document.getElementById("post-votetopics"); {% endcomment %}
-  {% comment %} if (votetopicsDiv.children.length === 0) {
-    votetopicsDiv.style.display = "none";
-  } {% endcomment %}
 </script>
 <script src="{% static 'js/planet_detail.js' %}"></script>
 <script src="{% static 'js/planet_post_more.js' %}"></script>

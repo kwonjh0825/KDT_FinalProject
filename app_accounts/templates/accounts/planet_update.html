@@ -78,11 +78,6 @@ Catsmos
                     <input onchange="readURL1(this);" type="file" id="id_profile_image" name="profile_image" class="form-input" style="display: none;">
                   </div>
                   <br>
-                    {% comment %} <div class="text-right">
-                        <button type="button" onclick="resetImages1()" class="text-gray-400 text-sm" >기존 이미지<span class="material-symbols-outlined">
-                          reset_image
-                        </span></button>
-                    </div> {% endcomment %}
                 </th>
               </tr>
               <tr>
@@ -105,36 +100,18 @@ Catsmos
                       </span>
                     </button>
                     <input onchange="readURL2(this);" type="file" id="id_background_image" name="background_image" class="form-input" style="display: none;">  
-                  </div> 
-                  {% comment %} <div class="text-right">
-                    <button type="button" onclick="resetImages2()" class="text-gray-400 text-sm" >기존 이미지<span class="material-symbols-outlined">
-                      reset_image
-                    </span></button>
-                  </div> {% endcomment %}
+                  </div>
                 </th>
               </tr>
             </table>
-            {% comment %} {{ planet_user_update_form.as_p }} {% endcomment %}
             <div class="grid mt-8">
               <button id="create-profile-btn" class="bg-yellow-400 hover:bg-yellow-500 text-lg text-white font-bold py-1 px-4 rounded shadow" type="submit">제출하기</button>
             </div>
           </div>
         </form>
     </div>
+  </div>
 </div>
-</div>
-
-{% comment %} <div class="grid mt-7">
-  <button type="submit" class="bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded shadow">Submit</button>
-</div>   {% endcomment %}
-
-{% comment %} <button type="button" class="ml-5" onclick="baseImages1()">이미지 삭제<span class="material-symbols-outlined">
-delete
-</span></button> {% endcomment %}
-
-{% comment %} <button type="button" class="ml-5" onclick="baseImages2()">이미지 삭제<span class="material-symbols-outlined">
-delete
-</span></button> {% endcomment %}
 {% endblock content %}
 
 
@@ -180,21 +157,5 @@ delete
         {% endif %}
       }
     }
-
-    {% comment %} function resetImages1() {
-        document.getElementById('profile_id').src = "{{ user_by_planet.profile_image.url }}";
-    }
-    function resetImages2() {
-        document.getElementById('background_id').src = "{{ user_by_planet.background_image.url }}";
-        
-    } {% endcomment %}
-{% comment %} 
-    function baseImages1() {
-        document.getElementById('profile_id').src = "";
-    }
-    function baseImages2() {
-        document.getElementById('background_id').src = "{{ user_by_planet.background_image.url }}";
-    } {% endcomment %}
-  </script>
-
+</script>
 {% endblock script %}

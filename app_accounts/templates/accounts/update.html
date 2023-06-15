@@ -52,10 +52,7 @@ Catsmos
         <br>
         <input type="hidden" name="next" value="{{ request.path }}" />
         <p class="text-slate-300 text-xs">이 계정을 삭제하고 싶으면, <button id="deleteButton" onclick="confirmDelete(event)" type="submit" class="text-red-500 hover:text-red-600 underline">여기</button>를 누르세요. 계정을 삭제하게 되면 돌이킬 수 없습니다.</p>
-        {% comment %} <button onclick="confirmDelete(event)" type="submit" />회원 탈퇴</button> {% endcomment %}
     </form>
-
-
   </div>
 </div>
 
@@ -91,8 +88,5 @@ Catsmos
       
     });
   }
-  
-  // Add event listener to the button
-
   </script>
 {% endblock script %}

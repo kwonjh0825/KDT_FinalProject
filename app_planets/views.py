@@ -58,9 +58,12 @@ def planet_list(request):
 def filter(request, category):
     planets = Planet.objects.filter(category=category, is_public='Public').order_by('-created_at')
     user = request.user
-    user_planets = Accountbyplanet.objects.filter(user=user, planet__in=planets)
-    joined_planets = [user_planet.planet for user_planet in user_planets]
-    joined_planet_list = [joined_planet.name for joined_planet in joined_planets]
+    if user.is_authenticated:
+        user_planets = Accountbyplanet.objects.filter(user=user, planet__in=planets)
+        joined_planets = [user_planet.planet for user_planet in user_planets]
+        joined_planet_list = [joined_planet.name for joined_planet in joined_planets]
+    else:
+        joined_planet_list = None
     
     for planet in planets:
         planet.current_capacity = Accountbyplanet.objects.filter(planet=planet).count()
@@ -74,16 +77,16 @@ def filter(request, category):
 
 # 내가 가입한 행성
 def my_planet_filter(request):
+    planets = Planet.objects.filter(is_public='Public')
     user = request.user
-    user_planets = Accountbyplanet.objects.filter(user=user, planet__is_public='Public')
-    joined_planets = [user_planet.planet for user_planet in user_planets]
-    joined_planet_list = [joined_planet.name for joined_planet in joined_planets]
-    
-    for planet in joined_planets:
-        planet.current_capacity = Accountbyplanet.objects.filter(planet=planet).count()
+    if user.is_authenticated:
+        user_planets = Accountbyplanet.objects.filter(user=user, planet__in=planets)
+        joined_planets = [user_planet.planet for user_planet in user_planets]
+        joined_planet_list = [joined_planet.name for joined_planet in joined_planets]
+    else:
+        joined_planet_list = None
         
     context = {
-        'planets': joined_planets,
         'joined_planet_list': joined_planet_list
     }
     return render(request, 'planets/planet_list.html', context)
