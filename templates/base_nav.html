@@ -118,61 +118,7 @@
             </form>
           </div>
         </div>
-
-
-        {% comment %} <!-- Dropdown button --><div>
-          <a id="dropdownHoverButton" data-dropdown-toggle="dropdownHover" data-dropdown-trigger="hover" class="text-white text-sm px-4 py-2.5 text-center inline-flex items-center" href="#" role="button">추가 정보<svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></a>
-          <!-- Dropdown menu -->
-          <div id="dropdownHover" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44">
-            <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownHoverButton">
-              <li>
-                <a href="#" class="block px-4 py-2 hover:bg-gray-100">블로그</a>
-              </li>
-              <li>
-                <a href="#" class="block px-4 py-2 hover:bg-gray-100">문서</a>
-              </li>
-              <li>
-                <a href="#" class="block px-4 py-2 hover:bg-gray-100">지원</a>
-              </li>
-              <li>
-                <a href="#" class="block px-4 py-2 hover:bg-gray-100">브랜딩</a>
-              </li>
-            </ul>
-          </div>
-          <a href="#" class="text-sm text-white p-3">Verification</a>
-          <!-- Dropdown button -->
-          <a id="dropdownHoverButton2" data-dropdown-toggle="dropdownHover" data-dropdown-trigger="hover" class="text-white text-sm px-4 py-2.5 text-center inline-flex items-center" href="#" role="button">추가 정보<svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></a>
-          <!-- Dropdown menu -->
-          <div id="dropdownHover" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44">
-            <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownHoverButton2">
-              <li>
-                <a href="#" class="block px-4 py-2 hover:bg-gray-100">블로그</a>
-              </li>
-              <li>
-                <a href="#" class="block px-4 py-2 hover:bg-gray-100">문서</a>
-              </li>
-              <li>
-                <a href="#" class="block px-4 py-2 hover:bg-gray-100">지원</a>
-              </li>
-              <li>
-                <a href="#" class="block px-4 py-2 hover:bg-gray-100">브랜딩</a>
-              </li>
-            </ul>
-          </div> {% endcomment %}
-          {% comment %} {% if request.user.is_authenticated %}
-            <a href="{% url 'accounts:profile' user %}">
-              <svg height="28" width="28" style="display: block;" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><path d="M6 10v28c0 2.21 1.79 4 4 4h28c2.21 0 4-1.79 4-4V10c0-2.21-1.79-4-4-4H10c-2.21 0-4 1.79-4 4zm24 8c0 3.32-2.69 6-6 6s-6-2.68-6-6c0-3.31 2.69-6 6-6s6 2.69 6 6zM12 34c0-4 8-6.2 12-6.2S36 30 36 34v2H12v-2z" fill="#bcbdbf" class="fill-000000"></path><path d="M0 0h48v48H0z" fill="none"></path></svg>
-            </a>
-          {% endif %}
-        </div> {% endcomment %}
-        
         <div class="p-1">
-          {% comment %} <button data-collapse-toggle="navbar-hamburger" type="button" class="md:hidden inline-flex items-center p-2 ml-3 text-sm" aria-controls="navbar-hamburger" aria-expanded="false">
-            <svg viewBox="0 0 32 32" width="25" height="25" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 32 32"><path d="M4 10h24a2 2 0 0 0 0-4H4a2 2 0 0 0 0 4zm24 4H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4zm0 8H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4z" fill="#ffd951" class="fill-000000"></path></svg>
-          </button> {% endcomment %}
-          {% comment %} <button class="hidden md:flex inline-flex items-center p-2 ml-3 text-sm" type="button" data-drawer-target="drawer-right-example" data-drawer-show="drawer-right-example" data-drawer-placement="right" aria-controls="drawer-right-example">
-            <svg viewBox="0 0 32 32" width="25" height="25" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 32 32"><path d="M4 10h24a2 2 0 0 0 0-4H4a2 2 0 0 0 0 4zm24 4H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4zm0 8H4a2 2 0 0 0 0 4h24a2 2 0 0 0 0-4z" fill="#ffd951" class="fill-000000"></path></svg>
-          </button> {% endcomment %}
         </div>
       </div>
     </div>
@@ -187,7 +133,6 @@
         </div>
 
         {% if user.is_authenticated %}
-          {% comment %} {% if request.user == user %} {% endcomment %}
         <div>
           <a href="{% url 'accounts:profile_update' %}" class="block py-2 pl-3 pr-4 my-2  text-white text-center rounded hover:bg-[#ffd951]">프로필 수정</a>
         </div>
@@ -228,24 +173,6 @@
     {% endblock content %}
   </div>
 <div style="height:100px;"></div>
-
-
- {% comment %} <footer class="mt-auto bg-[#191b22]">
-    <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
-      <div class="md:flex md:justify-between">
-        <div class="mx-auto max-w-[768px]">
-          <div class='border-b-2 border-[#ffffff] w-full text-base text-[#ffffff] p-3'>
-            <p class='text-xl text-[#ffd951] p-1'>Catsmos</p>
-          </div>
-          <div class='text-base text-[#ffffff] p-3'>
-            <p class="text-sm text-[#bcbdbf]">#Copyright © 2023 Catsmos. 상표 정책 • 개인정보처리방침 • 상태</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </footer> {% endcomment %}
-
-
 </body>
 <script type="text/javascript" src="/static/js/base_nav.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>

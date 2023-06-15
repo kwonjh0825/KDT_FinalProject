@@ -212,6 +212,15 @@ def planet_join(request, planet_name):
     return render(request, 'planets/planet_join.html', context)
 
 
+# 행성 탈퇴
+@login_required
+def planet_withdraw(request, planet_name):
+    planet = Planet.objects.get(name=planet_name)
+    accountbyplanet = Accountbyplanet.objects.get(planet=planet, user=request.user)
+    accountbyplanet.delete()
+    return redirect('planets:planet_list')
+
+
 # 행성 페이지
 def index(request, planet_name):
     planet = Planet.objects.get(name=planet_name)
