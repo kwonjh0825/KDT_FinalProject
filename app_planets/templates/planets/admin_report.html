@@ -28,8 +28,8 @@
             {% if report.post.pk == report_count.post %}
             <p>{{report.content}}</p>
             {% endif %}
+            {% endfor %}
           </div>
-          {% endfor %}
         </div>
         <form class="delete-post-form" data-post-pk="{{report_count.post}}" data-planet-name="{{planet.name}}">
           {% csrf_token %}
