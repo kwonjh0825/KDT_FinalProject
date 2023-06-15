@@ -245,7 +245,7 @@
 
           <p id='sec4' class="text-white text-2xl my-5">행성 둘러보기</p>
           <!-- 메인 제목 부분 md 크기 이하 일 때-->
-          <form method="GET" action="{% url 'planets:search' %}">
+          <form method="POST" action="{% url 'planets:search' %}">
             {% csrf_token %}
             <div class="relative">
               <input type="text" name="q" value="{{ query }}" id="default-search" class="block w-full p-4 mb-5 text-base text-white rounded-lg bg-transparent focus:ring-[#ffc800] focus:border-[#ffc800]" placeholder="행성 검색" required>
@@ -260,7 +260,7 @@
         <div class="hidden md:flex flex-row justify-between border-b-2 border-[#393f4f]">
           <p class="text-white text-2xl my-5">행성 둘러보기</p>
           <!-- 행성 검색 -->
-          <form method="GET" action="{% url 'planets:search' %}">
+          <form method="POST" action="{% url 'planets:search' %}">
             {% csrf_token %}
             <div class="relative">
                 <input type="text" name="q" value="{{ query }}" id="default-search" class="block w-full p-4 mb-5 text-base text-white rounded-lg bg-transparent focus:ring-[#ffc800] focus:border-[#ffc800]" placeholder="행성 검색" required>
