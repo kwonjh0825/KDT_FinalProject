@@ -77,16 +77,16 @@ def filter(request, category):
 
 # 내가 가입한 행성
 def my_planet_filter(request):
-    planets = Planet.objects.filter(is_public='Public')
     user = request.user
     if user.is_authenticated:
+        planets = Planet.objects.filter(is_public='Public')
         user_planets = Accountbyplanet.objects.filter(user=user, planet__in=planets)
         joined_planets = [user_planet.planet for user_planet in user_planets]
         joined_planet_list = [joined_planet.name for joined_planet in joined_planets]
         for planet in joined_planets:
             planet.current_capacity = Accountbyplanet.objects.filter(planet=planet).count()
     else:
-        joined_planet_list = None
+        return redirect('accounts:login')
     
     context = {
         'planets': joined_planets,
