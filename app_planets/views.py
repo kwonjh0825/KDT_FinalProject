@@ -889,10 +889,10 @@ def admin_member(request, planet_name):
     if is_manager:
         if request.method == 'POST':    
             accounts = request.POST.getlist('account_pk')
-            admin_levels = request.POST.getlist('admin_level')
-            for pk, level in zip(accounts, admin_levels):
+            for pk in accounts:
+                admin_levels = request.POST.get('admin_level_' + pk)
                 temp = Accountbyplanet.objects.get(planet=planet, pk=pk)
-                temp.admin_level = level
+                temp.admin_level = admin_levels
                 temp.save()
             return redirect('planets:planet_admin', planet_name)
         else:
