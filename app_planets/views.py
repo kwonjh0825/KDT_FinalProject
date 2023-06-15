@@ -867,7 +867,6 @@ def admin_report(request, planet_name):
         post_reports_count = Report.objects.exclude(post__isnull=True).values('post').annotate(Count('pk'))
         comment_reports_count = Report.objects.exclude(comment__isnull=True).values('comment').annotate(Count('pk'))
         recomment_reports_count = Report.objects.exclude(recomment__isnull=True).values('recomment').annotate(Count('pk'))
-        print(post_reports, post_reports_count)
         context = {
             'planet': planet,
             'post_reports': post_reports,
