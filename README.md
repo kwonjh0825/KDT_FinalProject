@@ -16,3 +16,9 @@ Catsmos 는 개방형뿐만 아니라 폐쇄형 서버도 제공하는 SNS 입�
     - 효율적인 행성 관리를 위해 매니저 권한 부여를 할 수 있습니다.
 6. 다양한 위젯 지원
     - 날씨, 메모 등 여러 가지 위젯을 사용 할 수 있습니다.
+  
+## 시연 화면
+
+1. 메인 페이지
+<img width="1680" alt="Screenshot 2023-07-18 at 5 32 54 PM" src="https://github.com/kwonjh0825/TIL-Today-I-Learned/assets/63788871/7013dc07-8550-40d4-b2c2-885ef79404bd">
+2. 
